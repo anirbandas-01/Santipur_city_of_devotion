@@ -1,9 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* custom rot styles */
-
-:root {
-  font-family: "Inter", system-ui, sans-serif;
-}
