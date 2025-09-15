@@ -1,94 +1,88 @@
-import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { Menu, X } from "lucide-react"; // hamburger icons
 
-
-// export default function Navbar() {
-//     const [isOpen, setIsOpen] = useState(false);
-
-//     return (
-//         <nav className="bg-white shadow-mb sticky top-0 z-50">
-//             <div  className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-//                 <div className="flex justify-between h-16 items-center">
-
-//                     {/*Logo*/}
-//                     <link to="/" className="text-2xl font-playfair text-primary-600">
-//                         DivineSpace
-//                     </link>
-
-//                     {/* Desktop Nav */}
-//                     <div className="hidden md:flex space-x-6">
-//                         {["/", "/gods", "/devotions","/about","/contact"].map((path, i)=>(
-//                             <NavLink 
-//                             key={path}
-//                             to={path}
-//                             className={({isActive})=>
-//                             `px-3 py-2 rounded-md text-sm font-medium ${
-//                             isActive? "text-primary-600 font-semibold": "text-gray-700 hover:text-primary-600"}`
-//                         }
-//                         >
-//                             {["Home", "Gods", "Devotions", "About", "Contact"][i]}
-//                             </NavLink>
-//                         ))}
-//                     </div>
-
-//                     {/* Auth Buttons */}
-//                     <div className="hidden md:flex space-x-4">
-//                         <Link to="/login" className="px-4 py-2 rounded-lg border border-primary-600 text-primary-600 hover:bg-primary-50">
-//                           Login                    
-//                         </Link>
-//                         <Link to="/signup" className="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700">
-//                           Sign Up
-//                         </Link>
-//                     </div>
-
-//                     {/* Mobile Menu Toggle */}
-//                     <button 
-//                     onClick={()=> setIsOpen(!isOpen)}
-//                     className="md:hidden text-gray-700" aria-label="Menu toggle">
-//                         {isOpen? <X size={24} /> : <Menu size={24} />}
-//                     </button>
-//                 </div>
-//             </div>
-
-//                  {/* Mobile Nav */}
-//                  {isOpen && (
-//                     <div className="md:hidden bg-white shadow-md">
-//                         <div className="px-4 pt-2 pb-3 space-y-1">
-//                             {["/", "/gods", "/devotions", "/about", "/contact"].map((path, i)=>(
-//                             <NavLink 
-//                             key={path}
-//                             to={path}
-//                             className={({isActive})=>
-//                             `block px-3 py-2 rounded-md text-base font-medium ${
-//                             isActive? "text-primary-600 font-semibold": "text-gray-700 hover:text-primary-600"}`
-//                           }
-//                            onClick={()=> setIsOpen(false)}
-//                             >
-//                                 {["Home", "Gods", "Devotions", "About", "Contact"][i]}
-//                             </NavLink>
-//                             ))}
-//                             <link to="/login" className="block px-3 py-2">Login</link>
-//                             <link to="/signup" className="block px-3 py-2">signup</link>
-//                         </div>
-//                     </div>
-//                  )}
-
-//         </nav>
-//     );
-// }
 function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <nav className="bg-teal-600 text-white px-6 py-4 flex justify-between items-center">
-      <h1 className="text-2xl font-bold">Santipur City of Devotion</h1>
-      <button className="md:hidden p-2 border rounded-lg">☰</button>
-      <ul className="hidden md:flex space-x-6">
-        <li><a href="/" className="hover:text-gray-200">Home</a></li>
-        <li><a href="/devotions" className="hover:text-gray-200">Devotions</a></li>
-        <li><a href="/culture" className="hover:text-gray-200">Culture</a></li>
-        <li><a href="/about" className="hover:text-gray-200">About</a></li>
-      </ul>
+    <nav className="bg-white shadow-md fixed w-full top-0 left-0 z-50">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Logo / Brand */}
+        <Link to="/" className="text-2xl font-bold text-primary-600">
+          Santipur
+        </Link>
+
+        {/* Desktop Menu */}
+        <div className="hidden md:flex space-x-8 font-inter text-gray-700">
+          <Link to="/" className="hover:text-primary-600">
+            Home
+          </Link>
+          <Link to="/history" className="hover:text-primary-600">
+            History
+          </Link>
+          <Link to="/culture" className="hover:text-primary-600">
+            Culture
+          </Link>
+          <Link to="/devotion" className="hover:text-primary-600">
+            Devotion
+          </Link>
+          <Link to="/contact" className="hover:text-primary-600">
+            Contact
+          </Link>
+        </div>
+
+        {/* Mobile Button */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden text-gray-700"
+        >
+          {isOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden bg-white border-t border-gray-200 px-6 py-4 space-y-4">
+          <Link
+            to="/"
+            className="block text-gray-700 hover:text-primary-600"
+            onClick={() => setIsOpen(false)}
+          >
+            Home
+          </Link>
+          <Link
+            to="/history"
+            className="block text-gray-700 hover:text-primary-600"
+            onClick={() => setIsOpen(false)}
+          >
+            History
+          </Link>
+          <Link
+            to="/culture"
+            className="block text-gray-700 hover:text-primary-600"
+            onClick={() => setIsOpen(false)}
+          >
+            Culture
+          </Link>
+          <Link
+            to="/devotion"
+            className="block text-gray-700 hover:text-primary-600"
+            onClick={() => setIsOpen(false)}
+          >
+            Devotion
+          </Link>
+          <Link
+            to="/contact"
+            className="block text-gray-700 hover:text-primary-600"
+            onClick={() => setIsOpen(false)}
+          >
+            Contact
+          </Link>
+        </div>
+      )}
     </nav>
   );
 }
+
 export default Navbar;

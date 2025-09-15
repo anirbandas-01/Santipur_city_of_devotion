@@ -1,6 +1,7 @@
 import { BrowserRouter as Router ,Routes, Route} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
+import Slideshow from "./components/Slideshow";
 import Home from './pages/Home';
 
 function App() {
