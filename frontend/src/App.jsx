@@ -1,23 +1,20 @@
-import React from "react";
-import { Routes, Route, Link  } from "react-router-dom";
-import './App.css';
-import Temples from './pages/Temples.jsx';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Slideshow from "./components/Slideshow";
+import { Sidebar } from "lucide-react";
 
 function App() {
-
   return (
-      <div className="App">
-      <nav>
-      <Link to="/temples">Temples</Link> 
-     </nav>
-
-      <Routes>
-        <Route path="/temples" element={<Temples />} />
-      </Routes> 
-
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <Sidebar />
+        <main className="flex-1 p-6 bg-gray-50">
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </main>
       </div>
-    
   );
 }
-
 export default App;
