@@ -2,7 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+<<<<<<< HEAD
 
 :root {
 font-family: "Inter", system-ui, sans-serif;
+=======
+/* custom rot styles */
+
+:root {
+  font-family: "Inter", system-ui, sans-serif;
+>>>>>>> 2d74ae233b887728118d5262145299b81cb44a8c
 }
