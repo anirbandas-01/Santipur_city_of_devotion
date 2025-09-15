@@ -5,7 +5,6 @@ import Home from './pages/Home';
 
 function App() {
   return (
-      <Router>
         <div className="min-h-screen flex flex-col">
           <Navbar />
           <div className="flex flex-1">
@@ -17,7 +16,6 @@ function App() {
             </main>
           </div>
         </div>
-      </Router> 
   );
 }
 export default App;
