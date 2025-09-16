@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Navbar from './components/Navbar'
 import HeroSection from './components/HeroSection'
 import HistorySection from './components/HistorySection'
@@ -15,7 +15,7 @@ function App() {
     const observerOptions = {
       threshold: 0.1,
       rootMargin: '0px 0px -50px 0px'
-    }
+    };
     
     const observer = new IntersectionObserver(function(entries) {
       entries.forEach(entry => {
@@ -23,25 +23,25 @@ function App() {
           entry.target.classList.add('visible')
         }
       })
-    }, observerOptions)
+    }, observerOptions);
     
     // Observe all scroll-reveal elements
     document.querySelectorAll('.scroll-reveal').forEach(el => {
       observer.observe(el)
-    })
+    });
     
     // Cleanup observer on component unmount
     return () => {
       observer.disconnect()
     }
-  }, [])
+  }, []);
 
   // Smooth scroll function
   const scrollToSection = (sectionId) => {
     document.getElementById(sectionId)?.scrollIntoView({
       behavior: 'smooth'
-    })
-  }
+    });
+  };
 
   return (
     <div className="bg-gray-50">
@@ -57,4 +57,4 @@ function App() {
 
 }
 
-export default App
+export default App;
