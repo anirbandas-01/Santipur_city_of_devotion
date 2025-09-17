@@ -13,7 +13,8 @@ const HeroSection = ({ scrollToSection }) => {
     <section 
       id="home" 
       className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 overflow-hidden"
-      style={{ transform: `translateY(${offset * 0.5}px)` }}
+      style={{ transform: `translateY(${offset * 0.5}px)`
+       }}
     >
       <div className="absolute inset-0 bg-black/20"></div>
       

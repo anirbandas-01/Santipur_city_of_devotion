@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Navbar from './components/Navbar'
+//import Slideshow from './components/Slideshow'
 import HeroSection from './components/HeroSection'
 import HistorySection from './components/HistorySection'
 import CultureSection from './components/CultureSection'
@@ -46,6 +47,11 @@ function App() {
   return (
     <div className="bg-gray-50">
       <Navbar scrollToSection={scrollToSection} />
+      
+    {/*   <div className='mb-12'>
+      <Slideshow />
+      </div> */}
+
       <HeroSection scrollToSection={scrollToSection} />
       <HistorySection />
       <CultureSection />
