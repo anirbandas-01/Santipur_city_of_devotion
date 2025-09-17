@@ -8,6 +8,7 @@ import SareeSection from './components/SareeSection'
 import DevotionSection from './components/DevotionSection'
 import Footer from './components/Footer'
 import './App.css'
+import SlideshowSection from './components/SlideshowSection'
 
 function App() {
 
@@ -53,6 +54,7 @@ function App() {
       </div> */}
 
       <HeroSection scrollToSection={scrollToSection} />
+      <SlideshowSection scrollToSection={scrollToSection} />
       <HistorySection />
       <CultureSection />
       <SareeSection />
