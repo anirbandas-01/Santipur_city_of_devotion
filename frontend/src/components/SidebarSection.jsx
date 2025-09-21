@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const SidebarSection = ({ isOpen, toggleSidebar, scrollToSection }) => {
+const SidebarSection = ({ isOpen, toggleSidebar}) => {
   const [hoveredItem, setHoveredItem] = useState(null)
 
   const menuItems = [
@@ -16,6 +16,12 @@ const SidebarSection = ({ isOpen, toggleSidebar, scrollToSection }) => {
       label: 'Temples', 
       icon: '🏛️',
       description: 'Sacred places of worship'
+    },
+    { 
+      path: '/festivals', 
+      label: 'Festivals', 
+      icon: '🎪',
+      description: 'Cultural celebrations'
     },
     { 
       path: '/culture', 
@@ -39,13 +45,13 @@ const SidebarSection = ({ isOpen, toggleSidebar, scrollToSection }) => {
 
   return (
     <>
-      {/* Overlay */}
-      {isOpen && (
+       {/* Overlay */}
+      {/*{isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
+          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40 transition-all duration-300"
           onClick={toggleSidebar}
         />
-      )}
+      )} */}
 
       {/* Sidebar */}
       <div className={`
@@ -55,19 +61,27 @@ const SidebarSection = ({ isOpen, toggleSidebar, scrollToSection }) => {
       `}>
         {/* Header */}
         <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 p-6 text-white">
-          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="absolute inset-0 bg-black/20 pointer-events-none"></div>
           
           {/* Close Button */}
           <button 
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
+            onClick={() => {
+              console.log("sidebar close button clicked");
               toggleSidebar();
             }}
-            className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors duration-200 z-10"
+            className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors duration-200 z-50"
+            type="button"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            <svg 
+              className="w-6 h-6" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24">
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth="2" 
+              d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
 
@@ -136,7 +150,7 @@ const SidebarSection = ({ isOpen, toggleSidebar, scrollToSection }) => {
                   </div>
 
                   {/* Arrow */}
-                  <div className={`
+                    <div className={`
                     transition-all duration-300
                     ${hoveredItem === index 
                       ? 'text-blue-600 transform translate-x-1' 
@@ -150,7 +164,7 @@ const SidebarSection = ({ isOpen, toggleSidebar, scrollToSection }) => {
                 </div>
 
                 {/* Hover effect line */}
-                <div className={`
+               <div className={`
                   absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-blue-600 to-purple-600 rounded-r-full
                   transition-all duration-300 origin-top
                   ${hoveredItem === index ? 'scale-y-100' : 'scale-y-0'}
@@ -160,8 +174,9 @@ const SidebarSection = ({ isOpen, toggleSidebar, scrollToSection }) => {
           </div>
         </nav>
 
+
         {/* Footer */}
-        <div className="p-6 border-t border-gray-100">
+          <div className="p-6 border-t border-gray-100">
           <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-xl">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full flex items-center justify-center">
