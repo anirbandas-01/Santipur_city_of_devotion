@@ -297,7 +297,9 @@ export default function Festivals() {
           <div className="flex justify-center mb-12 scroll-reveal">
             <div className="bg-gray-100 p-2 rounded-full">
               <button
-                onClick={() => setActiveTab('all')}
+                onClick={() => {
+                  setActiveTab('all') 
+                  setSelectedFestival(null)}}
                 className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                   activeTab === 'all' 
                     ? 'bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-lg' 
@@ -307,7 +309,9 @@ export default function Festivals() {
                 All Festivals
               </button>
               <button
-                onClick={() => setActiveTab('major')}
+                onClick={() =>{
+                   setActiveTab('major')
+                   setSelectedFestival(null)}}
                 className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ml-2 ${
                   activeTab === 'major' 
                     ? 'bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-lg' 
@@ -317,7 +321,9 @@ export default function Festivals() {
                 Major Festivals
               </button>
               <button
-                onClick={() => setActiveTab('other')}
+                onClick={() =>{ 
+                  setActiveTab('other')
+                  setSelectedFestival(null)}}
                 className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ml-2 ${
                   activeTab === 'other' 
                     ? 'bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-lg' 
@@ -330,7 +336,9 @@ export default function Festivals() {
           </div>
 
           {/* Festival Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div 
+           key={activeTab}
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredFestivals.map((festival, index) => (
               <div
                 key={festival.id}
