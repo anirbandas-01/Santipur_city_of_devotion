@@ -10,21 +10,23 @@ export default function Festivals() {
       threshold: 0.1,
       rootMargin: '0px 0px -50px 0px'
     }
+
+    
     
     const observer = new IntersectionObserver(function(entries) {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible')
+          entry.target.classList.add('visible');
         }
-      })
-    }, observerOptions)
+      });
+    }, observerOptions);
     
     document.querySelectorAll('.scroll-reveal').forEach(el => {
       observer.observe(el)
     })
     
     return () => observer.disconnect()
-  }, [])
+  }, [activeTab]);
 
   const festivals = [
     {
@@ -179,9 +181,14 @@ export default function Festivals() {
     }
   ]
 
-  const filteredFestivals = festivals.filter(festival => 
-    activeTab === 'all' || festival.category === activeTab
-  )
+  const filteredFestivals = festivals.filter(festival => {
+    console.log('Festival:', festival.name, 'Category:', festival.category, 'ActiveTab:', activeTab);
+    
+    return activeTab === 'all' || festival.category.toLowerCase().trim() === activeTab.toLowerCase().trim();
+});
+console.log('Filtered festivals count:', filteredFestivals.length);
+console.log('Active tab:', activeTab);
+
 
   const FestivalModal = ({ festival, onClose }) => {
     if (!festival) return null
@@ -297,9 +304,7 @@ export default function Festivals() {
           <div className="flex justify-center mb-12 scroll-reveal">
             <div className="bg-gray-100 p-2 rounded-full">
               <button
-                onClick={() => {
-                  setActiveTab('all') 
-                  setSelectedFestival(null)}}
+                onClick={() => setActiveTab('all')}
                 className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                   activeTab === 'all' 
                     ? 'bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-lg' 
@@ -309,9 +314,7 @@ export default function Festivals() {
                 All Festivals
               </button>
               <button
-                onClick={() =>{
-                   setActiveTab('major')
-                   setSelectedFestival(null)}}
+                onClick={() => setActiveTab('major')}
                 className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ml-2 ${
                   activeTab === 'major' 
                     ? 'bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-lg' 
@@ -321,9 +324,7 @@ export default function Festivals() {
                 Major Festivals
               </button>
               <button
-                onClick={() =>{ 
-                  setActiveTab('other')
-                  setSelectedFestival(null)}}
+                onClick={() => setActiveTab('other')}
                 className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ml-2 ${
                   activeTab === 'other' 
                     ? 'bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-lg' 
@@ -336,9 +337,7 @@ export default function Festivals() {
           </div>
 
           {/* Festival Grid */}
-          <div 
-           key={activeTab}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredFestivals.map((festival, index) => (
               <div
                 key={festival.id}
