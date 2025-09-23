@@ -11,6 +11,12 @@ const SidebarSection = ({ isOpen, toggleSidebar}) => {
       icon: '🏠',
       description: 'Return to homepage'
     },
+        { 
+      path: '/about', 
+      label: 'About', 
+      icon: 'ℹ️',
+      description: 'Know our History'
+    },
     { 
       path: '/temples', 
       label: 'Temples', 
@@ -40,6 +46,12 @@ const SidebarSection = ({ isOpen, toggleSidebar}) => {
       label: 'Devotion', 
       icon: '🙏',
       description: 'Spiritual journey'
+    },
+     { 
+      path: '/gallery', 
+      label: 'Gallery', 
+      icon: '🙏',
+      description: 'sees our santipur'
     }
   ]
 

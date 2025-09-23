@@ -7,8 +7,10 @@ import './App.css'
 
 //pages
 import Home from './pages/Home';
+import About from './pages/About';
 import Temples  from './pages/Temples';
 import Festivals from './pages/Festivals';
+import Gallery from './pages/Gallery';
 
 
 function App() {
@@ -19,8 +21,11 @@ const router = createBrowserRouter([
       element: <Layout />, // 👈 Common Navbar + Sidebar + Footer
       children: [
         { path: "/", element: <Home /> },
+        { path: "/about", element: <About /> },
         { path: "/temples", element: <Temples /> },
         { path: "/festivals", element: <Festivals /> },
+        { path: "/gallery", element: <Gallery /> }
+        
       ],
     },
   ]);
