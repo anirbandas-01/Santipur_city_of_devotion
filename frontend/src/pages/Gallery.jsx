@@ -69,10 +69,23 @@ export default function Gallery() {
       title: 'Advaita Acharya Temple Complex',
       description: 'Historic temple complex dating back to the 16th century',
       location: 'Central Santipur',
-      year: '16th Century',
-      photographer: 'Heritage Documentation Team',
       gradient: 'from-amber-200 to-orange-300',
-      icon: '🏛️'
+      icon: '🏛️',
+      mediaCount: '12 photos',
+      collection: [
+        { type: 'photo', title: 'Temple Exterior', description: 'Main entrance and architectural facade' },
+        { type: 'photo', title: 'Inner Sanctum', description: 'Sacred altar and deity chamber' },
+        { type: 'photo', title: 'Courtyard View', description: 'Traditional temple courtyard with devotees' },
+        { type: 'photo', title: 'Ancient Carvings', description: 'Detailed stone work and sculptures' },
+        { type: 'photo', title: 'Evening Aarti', description: 'Daily evening prayer ceremony' },
+        { type: 'photo', title: 'Festival Decorations', description: 'Temple adorned during Ras Yatra' },
+        { type: 'photo', title: 'Samadhi Shrine', description: 'Sacred resting place of Advaita Acharya' },
+        { type: 'photo', title: 'Prayer Hall', description: 'Devotees gathered for kirtan' },
+        { type: 'photo', title: 'Temple Bell', description: 'Ancient brass bell used in ceremonies' },
+        { type: 'photo', title: 'Sacred Tulsi Garden', description: 'Holy basil plants in temple premises' },
+        { type: 'photo', title: 'Manuscript Collection', description: 'Ancient texts preserved in temple' },
+        { type: 'photo', title: 'Dawn Prayers', description: 'Early morning devotional activities' }
+      ]
     },
     {
       id: 2,
@@ -80,161 +93,120 @@ export default function Gallery() {
       title: 'Ancient Ghat Architecture',
       description: 'Traditional river ghat with centuries-old stone work',
       location: 'Hooghly River Bank',
-      year: '18th Century',
-      photographer: 'Cultural Heritage Society',
       gradient: 'from-blue-200 to-cyan-300',
-      icon: '🏗️'
-    },
-    {
-      id: 3,
-      category: 'heritage',
-      title: 'Historical Residential Quarter',
-      description: 'Traditional Bengali architecture in old town area',
-      location: 'Heritage District',
-      year: '17th-19th Century',
-      photographer: 'Architecture Documentation',
-      gradient: 'from-green-200 to-teal-300',
-      icon: '🏘️'
+      icon: '🏗️',
+      mediaCount: '8 photos',
+      collection: [
+        { type: 'photo', title: 'Stone Steps', description: 'Ancient stone steps leading to river' },
+        { type: 'photo', title: 'River View', description: 'Panoramic view of Hooghly River' },
+        { type: 'photo', title: 'Morning Rituals', description: 'Devotees performing river prayers' },
+        { type: 'photo', title: 'Sunset Reflection', description: 'Beautiful evening light on water' },
+        { type: 'photo', title: 'Architectural Details', description: 'Intricate stonework and carvings' },
+        { type: 'photo', title: 'Boat Activities', description: 'Traditional boats at the ghat' },
+        { type: 'photo', title: 'Festival Gathering', description: 'Community celebrations at ghat' },
+        { type: 'photo', title: 'Historical Inscriptions', description: 'Ancient text carved in stone' }
+      ]
     },
 
     // Temples
     {
-      id: 4,
-      category: 'temples',
-      title: 'Advaita Acharya Samadhi',
-      description: 'Sacred resting place of the great devotee',
-      location: 'Main Temple Complex',
-      deity: 'Advaita Acharya',
-      gradient: 'from-yellow-200 to-gold-300',
-      icon: '🛕'
-    },
-    {
-      id: 5,
+      id: 3,
       category: 'temples',
       title: 'Madana Gopala Temple',
       description: 'Beautiful temple dedicated to young Krishna',
       location: 'Temple Street',
-      deity: 'Madana Gopala (Krishna)',
       gradient: 'from-purple-200 to-pink-300',
-      icon: '🕌'
+      icon: '🕌',
+      mediaCount: '9 photos',
+      collection: [
+        { type: 'photo', title: 'Main Deity', description: 'Beautiful murti of Madana Gopala' },
+        { type: 'photo', title: 'Temple Architecture', description: 'Traditional Bengali temple design' },
+        { type: 'photo', title: 'Decorative Elements', description: 'Intricate terracotta work' },
+        { type: 'photo', title: 'Prayer Ceremony', description: 'Daily worship rituals' },
+        { type: 'photo', title: 'Festival Celebration', description: 'Janmashtami decorations' },
+        { type: 'photo', title: 'Devotee Gathering', description: 'Community prayers and kirtan' },
+        { type: 'photo', title: 'Temple Gardens', description: 'Beautiful landscaped surroundings' },
+        { type: 'photo', title: 'Sacred Offerings', description: 'Flowers and prasadam preparation' },
+        { type: 'photo', title: 'Evening Lighting', description: 'Temple illuminated at dusk' }
+      ]
     },
     {
-      id: 6,
+      id: 4,
       category: 'temples',
       title: 'Gopal Jiu Mandir',
       description: 'Community temple with regular cultural programs',
       location: 'Community Center',
-      deity: 'Gopal Jiu (Krishna)',
       gradient: 'from-indigo-200 to-blue-300',
-      icon: '🏮'
-    },
-    {
-      id: 7,
-      category: 'temples',
-      title: 'Nityananda Temple',
-      description: 'Sacred temple of Lord Nityananda',
-      location: 'Spiritual Quarter',
-      deity: 'Lord Nityananda',
-      gradient: 'from-rose-200 to-pink-300',
-      icon: '⛩️'
-    },
-
-    // Statues & Monuments
-    {
-      id: 8,
-      category: 'statues',
-      title: 'Sri Chaitanya Mahaprabhu Statue',
-      description: 'Magnificent statue of the great saint',
-      location: 'Town Square',
-      material: 'White Marble',
-      gradient: 'from-gray-200 to-slate-300',
-      icon: '🗿'
-    },
-    {
-      id: 9,
-      category: 'statues',
-      title: 'Advaita Acharya Memorial',
-      description: 'Memorial statue in the temple courtyard',
-      location: 'Temple Courtyard',
-      material: 'Stone Carving',
-      gradient: 'from-orange-200 to-red-300',
-      icon: '⚱️'
-    },
-
-    // Normal Places
-    {
-      id: 10,
-      category: 'places',
-      title: 'Santipur Railway Station',
-      description: 'Historic railway station connecting to Kolkata',
-      location: 'Station Road',
-      built: '1950s',
-      gradient: 'from-blue-200 to-indigo-300',
-      icon: '🚉'
-    },
-    {
-      id: 11,
-      category: 'places',
-      title: 'Local Market Square',
-      description: 'Bustling marketplace with traditional goods',
-      location: 'Market Area',
-      speciality: 'Handloom Products',
-      gradient: 'from-green-200 to-emerald-300',
-      icon: '🏪'
-    },
-    {
-      id: 12,
-      category: 'places',
-      title: 'Hooghly River View',
-      description: 'Scenic view of the holy river',
-      location: 'River Bank',
-      timing: 'Best at Sunrise',
-      gradient: 'from-sky-200 to-blue-300',
-      icon: '🏞️'
+      icon: '🏮',
+      mediaCount: '7 photos',
+      collection: [
+        { type: 'photo', title: 'Temple Facade', description: 'Modern renovation with traditional elements' },
+        { type: 'photo', title: 'Community Hall', description: 'Large space for gatherings' },
+        { type: 'photo', title: 'Cultural Performance', description: 'Dance program during festival' },
+        { type: 'photo', title: 'Kitchen Area', description: 'Community kitchen serving prasadam' },
+        { type: 'photo', title: 'Musical Instruments', description: 'Traditional dhol and khol' },
+        { type: 'photo', title: 'Children\'s Programs', description: 'Young devotees learning' },
+        { type: 'photo', title: 'Community Service', description: 'Volunteer activities and charity' }
+      ]
     },
 
     // Restaurants
     {
-      id: 13,
+      id: 5,
       category: 'restaurants',
       title: 'Bengali Bhojanalaya',
       description: 'Traditional Bengali cuisine restaurant',
       location: 'Main Street',
-      specialty: 'Fish Curry & Rice',
       gradient: 'from-yellow-200 to-orange-300',
-      icon: '🍽️'
+      icon: '🍽️',
+      mediaCount: '6 photos',
+      collection: [
+        { type: 'photo', title: 'Restaurant Interior', description: 'Traditional decor with wooden furniture' },
+        { type: 'photo', title: 'Fish Curry Special', description: 'Famous Bengali fish preparation' },
+        { type: 'photo', title: 'Kitchen Area', description: 'Traditional cooking methods' },
+        { type: 'photo', title: 'Dining Experience', description: 'Families enjoying meals' },
+        { type: 'photo', title: 'Chef at Work', description: 'Master chef preparing specialties' },
+        { type: 'photo', title: 'Local Ingredients', description: 'Fresh fish and vegetables' }
+      ]
     },
     {
-      id: 14,
+      id: 6,
       category: 'restaurants',
       title: 'Sweets Corner',
       description: 'Famous for traditional Bengali sweets',
       location: 'Market Complex',
-      specialty: 'Rasgulla & Sandesh',
       gradient: 'from-pink-200 to-rose-300',
-      icon: '🍰'
+      icon: '🍰',
+      mediaCount: '5 photos',
+      collection: [
+        { type: 'photo', title: 'Sweet Display', description: 'Variety of Bengali sweets showcase' },
+        { type: 'photo', title: 'Rasgulla Making', description: 'Traditional preparation process' },
+        { type: 'photo', title: 'Shop Interior', description: 'Traditional sweet shop atmosphere' },
+        { type: 'photo', title: 'Festival Specials', description: 'Special sweets for celebrations' },
+        { type: 'photo', title: 'Customer Experience', description: 'Locals enjoying fresh sweets' }
+      ]
     },
 
-    // Parks & Gardens
+    // Parks
     {
-      id: 15,
+      id: 7,
       category: 'parks',
       title: 'Community Garden',
       description: 'Peaceful garden for morning walks',
       location: 'Residential Area',
-      features: 'Lotus Pond & Walking Path',
       gradient: 'from-green-200 to-lime-300',
-      icon: '🌳'
-    },
-    {
-      id: 16,
-      category: 'parks',
-      title: 'Children\'s Park',
-      description: 'Family-friendly park with play area',
-      location: 'New Town',
-      features: 'Playground & Open Space',
-      gradient: 'from-teal-200 to-cyan-300',
-      icon: '🎠'
+      icon: '🌳',
+      mediaCount: '8 photos',
+      collection: [
+        { type: 'photo', title: 'Garden Entrance', description: 'Welcome gate and pathway' },
+        { type: 'photo', title: 'Lotus Pond', description: 'Beautiful water feature with lotuses' },
+        { type: 'photo', title: 'Walking Path', description: 'Paved walkway through gardens' },
+        { type: 'photo', title: 'Morning Exercises', description: 'Community yoga and walking' },
+        { type: 'photo', title: 'Flower Beds', description: 'Seasonal flower arrangements' },
+        { type: 'photo', title: 'Meditation Area', description: 'Quiet space for reflection' },
+        { type: 'photo', title: 'Children Playing', description: 'Kids enjoying garden activities' },
+        { type: 'photo', title: 'Evening Gathering', description: 'Community socializing at sunset' }
+      ]
     }
   ]
 
@@ -242,102 +214,50 @@ export default function Gallery() {
     {
       id: 1,
       category: 'festivals',
-      title: 'Ras Yatra Celebration 2023',
+      title: 'Ras Yatra Celebration',
       description: 'Grand Ras Yatra festival with thousands of devotees',
-      duration: '12:45',
-      views: '25K',
       gradient: 'from-purple-200 to-pink-300',
-      icon: '🎭'
+      icon: '🎭',
+      mediaCount: '6 videos',
+      collection: [
+        { type: 'video', title: 'Opening Ceremony', description: 'Festival inauguration and prayers', duration: '8:45' },
+        { type: 'video', title: 'Ras Leela Performance', description: 'Traditional dance drama depicting Krishna\'s life', duration: '15:30' },
+        { type: 'video', title: 'Community Kirtan', description: 'Mass devotional singing', duration: '12:20' },
+        { type: 'video', title: 'Temple Procession', description: 'Decorated chariots through streets', duration: '18:15' },
+        { type: 'video', title: 'Cultural Programs', description: 'Music and dance performances', duration: '22:10' },
+        { type: 'video', title: 'Prasadam Distribution', description: 'Community feast and sharing', duration: '9:30' }
+      ]
     },
     {
       id: 2,
-      category: 'festivals',
-      title: 'Dol Jatra (Holi) Colors',
-      description: 'Vibrant Holi celebration in temple premises',
-      duration: '8:30',
-      views: '18K',
-      gradient: 'from-red-200 to-yellow-300',
-      icon: '🎨'
-    },
-    {
-      id: 3,
       category: 'temples',
       title: 'Advaita Acharya Temple Tour',
       description: 'Complete guided tour of the main temple',
-      duration: '15:20',
-      views: '42K',
       gradient: 'from-amber-200 to-orange-300',
-      icon: '🛕'
+      icon: '🛕',
+      mediaCount: '4 videos',
+      collection: [
+        { type: 'video', title: 'Temple History', description: 'Historical background and significance', duration: '12:45' },
+        { type: 'video', title: 'Architecture Tour', description: 'Detailed look at temple structure', duration: '8:30' },
+        { type: 'video', title: 'Daily Rituals', description: 'Morning and evening ceremonies', duration: '15:20' },
+        { type: 'video', title: 'Devotee Testimonials', description: 'Pilgrims sharing their experiences', duration: '10:15' }
+      ]
     },
     {
-      id: 4,
-      category: 'temples',
-      title: 'Morning Aarti Ceremony',
-      description: 'Daily morning prayers at various temples',
-      duration: '6:15',
-      views: '12K',
-      gradient: 'from-yellow-200 to-gold-300',
-      icon: '🕯️'
-    },
-    {
-      id: 5,
-      category: 'culture',
-      title: 'Traditional Kirtan Session',
-      description: 'Community devotional singing gathering',
-      duration: '22:10',
-      views: '8.5K',
-      gradient: 'from-blue-200 to-indigo-300',
-      icon: '🎵'
-    },
-    {
-      id: 6,
-      category: 'culture',
-      title: 'Classical Dance Performance',
-      description: 'Bharatanatyam performance during festival',
-      duration: '9:45',
-      views: '15K',
-      gradient: 'from-pink-200 to-rose-300',
-      icon: '💃'
-    },
-    {
-      id: 7,
+      id: 3,
       category: 'handloom',
       title: 'Santipuri Saree Weaving',
       description: 'Master weaver demonstrates traditional techniques',
-      duration: '18:30',
-      views: '35K',
       gradient: 'from-teal-200 to-cyan-300',
-      icon: '🧵'
-    },
-    {
-      id: 8,
-      category: 'handloom',
-      title: 'From Thread to Saree',
-      description: 'Complete process of handloom saree creation',
-      duration: '25:15',
-      views: '28K',
-      gradient: 'from-green-200 to-emerald-300',
-      icon: '👗'
-    },
-    {
-      id: 9,
-      category: 'interviews',
-      title: 'Temple Priest Interview',
-      description: 'Pandit shares insights about temple history',
-      duration: '14:20',
-      views: '9K',
-      gradient: 'from-orange-200 to-red-300',
-      icon: '🎤'
-    },
-    {
-      id: 10,
-      category: 'interviews',
-      title: 'Master Artisan Story',
-      description: 'Veteran weaver talks about his craft',
-      duration: '11:40',
-      views: '12K',
-      gradient: 'from-indigo-200 to-purple-300',
-      icon: '👨‍🎨'
+      icon: '🧵',
+      mediaCount: '5 videos',
+      collection: [
+        { type: 'video', title: 'Thread Preparation', description: 'Preparing cotton threads for weaving', duration: '6:20' },
+        { type: 'video', title: 'Loom Setup', description: 'Setting up traditional pit loom', duration: '8:45' },
+        { type: 'video', title: 'Weaving Process', description: 'Master weaver at work', duration: '18:30' },
+        { type: 'video', title: 'Pattern Creation', description: 'Creating intricate border designs', duration: '12:15' },
+        { type: 'video', title: 'Final Product', description: 'Completed saree showcase', duration: '5:40' }
+      ]
     }
   ]
 
@@ -349,11 +269,68 @@ export default function Gallery() {
 
   const MediaModal = ({ media, onClose }) => {
     if (!media) return null
+    const [selectedItem, setSelectedItem] = useState(null)
+
+    const MediaDetailModal = ({ item, onBack }) => {
+      if (!item) return null
+
+      return (
+        <div className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm z-60 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <button
+                  onClick={onBack}
+                  className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <span className="text-xl">←</span>
+                  <span className="font-medium">Back</span>
+                </button>
+                <button
+                  onClick={onClose}
+                  className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                >
+                  <span className="text-lg">&times;</span>
+                </button>
+              </div>
+
+              <div className={`aspect-video bg-gradient-to-br ${media.gradient} rounded-xl flex items-center justify-center mb-4 relative cursor-pointer group`}>
+                <div className="absolute inset-0 bg-black/20 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <div className="w-16 h-16 bg-white/80 rounded-full flex items-center justify-center">
+                    <span className="text-2xl text-gray-800">{item.type === 'video' ? '▶' : '🔍'}</span>
+                  </div>
+                </div>
+                <span className="text-6xl opacity-70">{media.icon}</span>
+                {item.duration && (
+                  <div className="absolute bottom-3 right-3 bg-black/70 text-white px-3 py-1 rounded text-sm">
+                    {item.duration}
+                  </div>
+                )}
+              </div>
+
+              <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
+              <p className="text-gray-600 mb-4">{item.description}</p>
+
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="flex items-center justify-between text-sm text-gray-600">
+                  <span>From: {media.title}</span>
+                  <span>{item.type === 'video' ? '🎥' : '📸'} {item.type}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    if (selectedItem) {
+      return <MediaDetailModal item={selectedItem} onBack={() => setSelectedItem(null)} />
+    }
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-          <div className={`bg-gradient-to-r ${media.gradient} p-8 text-gray-800 rounded-t-3xl relative`}>
+      <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-3xl w-full max-w-5xl max-h-[90vh] overflow-y-auto">
+          <div className={`bg-gradient-to-r ${media.gradient} p-6 text-gray-800 rounded-t-3xl relative`}>
             <button
               onClick={onClose}
               className="absolute top-4 right-4 w-10 h-10 bg-black/20 rounded-full flex items-center justify-center hover:bg-black/30 transition-colors"
@@ -361,83 +338,49 @@ export default function Gallery() {
               <span className="text-2xl text-white">&times;</span>
             </button>
             
-            <div className="flex items-center space-x-4 mb-4">
-              <div className="w-16 h-16 bg-white/30 rounded-full flex items-center justify-center text-3xl">
+            <div className="flex items-center space-x-4">
+              <div className="w-14 h-14 bg-white/30 rounded-full flex items-center justify-center text-2xl">
                 {media.icon}
               </div>
               <div>
-                <h2 className="text-3xl font-bold font-serif">{media.title}</h2>
-                <p className="text-lg opacity-80">{media.description}</p>
+                <h2 className="text-2xl font-bold font-serif">{media.title}</h2>
+                <p className="text-sm opacity-80">{media.description}</p>
+                <p className="text-sm opacity-70 mt-1">{media.location} • {media.mediaCount}</p>
               </div>
             </div>
           </div>
 
-          <div className="p-8">
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <div className={`aspect-video bg-gradient-to-br ${media.gradient} rounded-xl flex items-center justify-center mb-6 relative cursor-pointer group`}>
-                  <div className="absolute inset-0 bg-black/20 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    <div className="w-16 h-16 bg-white/80 rounded-full flex items-center justify-center">
-                      <span className="text-2xl text-gray-800">{activeTab === 'videos' ? '▶' : '🔍'}</span>
+          <div className="p-6">
+            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {media.collection.map((item, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-50 rounded-xl p-3 cursor-pointer hover:shadow-md transition-all duration-300 transform hover:-translate-y-1"
+                  onClick={() => setSelectedItem(item)}
+                >
+                  <div className={`aspect-video bg-gradient-to-br ${media.gradient} rounded-lg flex items-center justify-center mb-3 relative group`}>
+                    <div className="absolute inset-0 bg-black/20 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                      <div className="w-8 h-8 bg-white/80 rounded-full flex items-center justify-center">
+                        <span className="text-sm text-gray-800">{item.type === 'video' ? '▶' : '👁'}</span>
+                      </div>
                     </div>
+                    <span className="text-2xl opacity-60">{item.type === 'video' ? '🎥' : '📸'}</span>
+                    {item.duration && (
+                      <div className="absolute bottom-1 right-1 bg-black/70 text-white px-1 py-0.5 rounded text-xs">
+                        {item.duration}
+                      </div>
+                    )}
                   </div>
-                  <span className="text-6xl opacity-70">{media.icon}</span>
+                  <h4 className="text-sm font-semibold text-gray-800 mb-1 line-clamp-2">{item.title}</h4>
+                  <p className="text-xs text-gray-600 line-clamp-2">{item.description}</p>
                 </div>
-              </div>
+              ))}
+            </div>
 
-              <div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">Details</h3>
-                <div className="space-y-4">
-                  {media.location && (
-                    <div className="flex items-center space-x-3">
-                      <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                      <span className="text-gray-700"><strong>Location:</strong> {media.location}</span>
-                    </div>
-                  )}
-                  {media.year && (
-                    <div className="flex items-center space-x-3">
-                      <span className="w-2 h-2 bg-green-600 rounded-full"></span>
-                      <span className="text-gray-700"><strong>Year:</strong> {media.year}</span>
-                    </div>
-                  )}
-                  {media.deity && (
-                    <div className="flex items-center space-x-3">
-                      <span className="w-2 h-2 bg-purple-600 rounded-full"></span>
-                      <span className="text-gray-700"><strong>Deity:</strong> {media.deity}</span>
-                    </div>
-                  )}
-                  {media.photographer && (
-                    <div className="flex items-center space-x-3">
-                      <span className="w-2 h-2 bg-orange-600 rounded-full"></span>
-                      <span className="text-gray-700"><strong>Photographer:</strong> {media.photographer}</span>
-                    </div>
-                  )}
-                  {media.duration && (
-                    <div className="flex items-center space-x-3">
-                      <span className="w-2 h-2 bg-red-600 rounded-full"></span>
-                      <span className="text-gray-700"><strong>Duration:</strong> {media.duration}</span>
-                    </div>
-                  )}
-                  {media.views && (
-                    <div className="flex items-center space-x-3">
-                      <span className="w-2 h-2 bg-pink-600 rounded-full"></span>
-                      <span className="text-gray-700"><strong>Views:</strong> {media.views}</span>
-                    </div>
-                  )}
-                  {media.specialty && (
-                    <div className="flex items-center space-x-3">
-                      <span className="w-2 h-2 bg-amber-600 rounded-full"></span>
-                      <span className="text-gray-700"><strong>Specialty:</strong> {media.specialty}</span>
-                    </div>
-                  )}
-                  {media.features && (
-                    <div className="flex items-center space-x-3">
-                      <span className="w-2 h-2 bg-teal-600 rounded-full"></span>
-                      <span className="text-gray-700"><strong>Features:</strong> {media.features}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
+            <div className="mt-6 text-center">
+              <p className="text-gray-500 text-sm">
+                Click on any item to view details • Total: {media.collection.length} {activeTab === 'photos' ? 'photos' : 'videos'}
+              </p>
             </div>
           </div>
         </div>
@@ -558,9 +501,9 @@ export default function Gallery() {
                   <p className="text-sm text-gray-600 mb-3 line-clamp-2">{media.description}</p>
                   
                   <div className="flex justify-between items-center text-xs text-gray-500">
-                    <span>{media.location || media.views}</span>
-                    <span className="bg-gray-100 px-2 py-1 rounded capitalize">
-                      {currentCategories.find(cat => cat.id === media.category)?.label.replace(/s$/, '') || media.category}
+                    <span>{media.location}</span>
+                    <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium">
+                      {media.mediaCount}
                     </span>
                   </div>
                 </div>
