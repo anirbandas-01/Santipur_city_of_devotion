@@ -50,8 +50,14 @@ const SidebarSection = ({ isOpen, toggleSidebar}) => {
      { 
       path: '/gallery', 
       label: 'Gallery', 
-      icon: '🙏',
-      description: 'sees our santipur'
+      icon: '🌅',
+      description: 'Photos & videos of Santipur'
+    },
+    { 
+      path: '/restaurants', 
+      label: 'Restaurants', 
+      icon: '🍽️',
+      description: 'Restaurants & Dining'
     }
   ]
 
