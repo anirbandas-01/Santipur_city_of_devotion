@@ -12,6 +12,7 @@ import Temples  from './pages/Temples';
 import Festivals from './pages/Festivals';
 import Gallery from './pages/Gallery';
 import Restaurants from './pages/Restaurants';
+import SareeMarket from './pages/SareeMarket';
 
 
 function App() {
@@ -26,7 +27,8 @@ const router = createBrowserRouter([
         { path: "/temples", element: <Temples /> },
         { path: "/festivals", element: <Festivals /> },
         { path: "/gallery", element: <Gallery /> },
-        { path: "/restaurants", element: <Restaurants /> }
+        { path: "/restaurants", element: <Restaurants /> },
+        { path: "/sareeMarket", element: <SareeMarket /> }
         
       ],
     },

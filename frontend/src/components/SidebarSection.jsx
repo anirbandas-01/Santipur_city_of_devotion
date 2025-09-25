@@ -36,7 +36,7 @@ const SidebarSection = ({ isOpen, toggleSidebar}) => {
       description: 'Rich cultural heritage'
     },
     { 
-      path: '/sarees', 
+      path: '/sareeMarket', 
       label: 'Sarees', 
       icon: '🧵',
       description: 'Traditional handloom art'
