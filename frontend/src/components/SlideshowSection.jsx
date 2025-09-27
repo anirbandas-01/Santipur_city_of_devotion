@@ -162,8 +162,8 @@ const SlideshowSection = () => {
                         alt={slide.title}
                         className="object-cover rounded-2xl shadow-2xl"
                         style={{ 
-                          width: '800px',
-                          height: '450px'
+                          width: '1100px',
+                          height: '500px'
                         }}
                       />
                       {/* Image shadow/glow effect */}
