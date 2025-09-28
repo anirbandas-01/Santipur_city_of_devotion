@@ -1,25 +1,19 @@
-import { useState, useEffect, useRef } from 'react'
 
-import KrishnaImage from '../assets/images/krishna.jpg'
-import MombatiImage from '../assets/images/mombati.jpg'
-import EnviromentImage from '../assets/images/env.jpg'
-import EnviromentImage2 from '../assets/images/env2.jpg'
-import SantipurVideo from '../assets/videos/santipur.mp4'
+import { useState, useEffect, useRef } from 'react'
 
 const SlideshowSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const [isVisible, setIsVisible] = useState(false)
-  const [videoStates, setVideoStates] = useState({}) // Track video play states
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false) // Global video playing state
   const sectionRef = useRef(null)
-  const videoRefs = useRef([])
-  const autoPlayIntervalRef = useRef(null)
+
+/* const [offset, setOffset]= useState(0)
   
-  // Import your local images and videos here
-  // import KrishnaImage from '../assets/images/krishna.jpg'
-  // import TempleVideo from '../assets/videos/temple.mp4'
-  // import FestivalVideo from '../assets/videos/festival.mp4'
+  useEffect(()=> {
+    const handleScroll = () => setOffset(window.pageYOffset)
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, []) */
   
   const slides = [
     {
@@ -27,165 +21,47 @@ const SlideshowSection = () => {
       title: "Sacred Temples of Santipur",
       subtitle: "Divine Architecture & Spiritual Heritage",
       description: "Explore the magnificent temples that have stood as pillars of faith for centuries, each telling a unique story of devotion and architectural brilliance.",
-      type: "image",
-      media: KrishnaImage,
-      backgroundColor: "bg-gradient-to-br from-orange-100 via-red-50 to-pink-100",
-      accentColor: "from-orange-600 to-red-600"
+      image: "https://images.unsplash.com/photo-1580748208068-6e20c7c15a53?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      bgGradient: "from-orange-400 via-red-500 to-pink-500"
     },
     {
       id: 2,
-      title: "Temple Rituals & Ceremonies",
-      subtitle: "Sacred Traditions in Motion",
-      description: "Experience the divine atmosphere of daily prayers, special ceremonies, and spiritual gatherings that bring the community together in devotion.",
-      type: "video",
-      media: SantipurVideo,
-      poster: "https://images.unsplash.com/photo-1580748208068-6e20c7c15a53?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      backgroundColor: "bg-gradient-to-br from-blue-100 via-purple-50 to-indigo-100",
-      accentColor: "from-blue-600 to-purple-600"
+      title: "Artisan Traditions",
+      subtitle: "Handloom Heritage & Craftsmanship",
+      description: "Witness the intricate art of traditional weaving and handloom techniques that have made Santipur famous across the world for its exquisite textiles.",
+      image: "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      bgGradient: "from-blue-400 via-purple-500 to-indigo-600"
     },
     {
       id: 3,
       title: "Festival Celebrations",
       subtitle: "Colors, Music & Community Spirit",
       description: "Experience the vibrant festivals that bring the entire community together in celebration of culture, tradition, and spiritual unity.",
-      type: "video",
-      media: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-      poster: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      backgroundColor: "bg-gradient-to-br from-green-100 via-teal-50 to-blue-100",
-      accentColor: "from-green-600 to-teal-600"
+      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      bgGradient: "from-green-400 via-teal-500 to-blue-500"
     },
     {
       id: 4,
-      title: "Artisan Traditions",
-      subtitle: "Handloom Heritage & Craftsmanship",
-      description: "Witness the intricate art of traditional weaving and handloom techniques that have made Santipur famous across the world for its exquisite textiles.",
-      type: "image",
-      media: EnviromentImage,
-      backgroundColor: "bg-gradient-to-br from-purple-100 via-pink-50 to-red-100",
-      accentColor: "from-purple-600 to-pink-600"
+      title: "Spiritual Gatherings",
+      subtitle: "Devotion & Community Harmony",
+      description: "Join the spiritual congregations where devotees gather to share in prayer, meditation, and the timeless wisdom of ancient traditions.",
+      image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      bgGradient: "from-purple-400 via-pink-500 to-red-500"
     }
   ]
 
-  // Auto-slide functionality - stops when video is playing
+
+
+  // Auto-slide functionality
   useEffect(() => {
-    if (!isAutoPlaying || isVideoPlaying) {
-      if (autoPlayIntervalRef.current) {
-        clearInterval(autoPlayIntervalRef.current)
-      }
-      return
-    }
+    if (!isAutoPlaying) return
     
-    autoPlayIntervalRef.current = setInterval(() => {
-      // Don't auto-advance if current slide is a video that hasn't been played
-      const currentSlideData = slides[currentSlide]
-      if (currentSlideData?.type === 'video' && !videoStates[currentSlide]?.hasPlayed) {
-        return // Stay on video slide until user interacts
-      }
-      
+    const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length)
-      setVideoStates(prev => ({ ...prev, [currentSlide]: { ...prev[currentSlide], hasPlayed: false } }))
     }, 5000)
     
-    return () => {
-      if (autoPlayIntervalRef.current) {
-        clearInterval(autoPlayIntervalRef.current)
-      }
-    }
-  }, [isAutoPlaying, isVideoPlaying, currentSlide, videoStates, slides])
-
-  // Handle keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === 'ArrowLeft') {
-        stopCurrentVideoAndGoToPrev()
-      } else if (event.key === 'ArrowRight') {
-        stopCurrentVideoAndGoToNext()
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [currentSlide])
-
-  // Video event handlers
-  const handleVideoPlay = (slideIndex) => {
-    setIsVideoPlaying(true)
-    setIsAutoPlaying(false)
-    setVideoStates(prev => ({
-      ...prev,
-      [slideIndex]: { ...prev[slideIndex], isPlaying: true, hasPlayed: true }
-    }))
-  }
-
-  const handleVideoEnded = (slideIndex) => {
-    setIsVideoPlaying(false)
-    setIsAutoPlaying(true)
-    setVideoStates(prev => ({
-      ...prev,
-      [slideIndex]: { ...prev[slideIndex], isPlaying: false, hasEnded: true }
-    }))
-    // Auto advance to next slide after video ends
-    setTimeout(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length)
-    }, 1000)
-  }
-
-  const handleVideoPause = (slideIndex) => {
-    setVideoStates(prev => ({
-      ...prev,
-      [slideIndex]: { ...prev[slideIndex], isPlaying: false }
-    }))
-  }
-
-  // Manual video control
-  const toggleVideoPlayback = (slideIndex) => {
-    const video = videoRefs.current[slideIndex]
-    if (video) {
-      if (video.paused) {
-        video.play().catch(error => {
-          console.log('Video play failed:', error)
-        })
-      } else {
-        video.pause()
-        setIsVideoPlaying(false)
-        setIsAutoPlaying(true)
-      }
-    }
-  }
-
-  // Navigation with video control
-  const stopCurrentVideoAndGoToNext = () => {
-    const currentVideo = videoRefs.current[currentSlide]
-    if (currentVideo && !currentVideo.paused) {
-      currentVideo.pause()
-      setIsVideoPlaying(false)
-    }
-    setCurrentSlide((prev) => (prev + 1) % slides.length)
-    setIsAutoPlaying(true)
-  }
-
-  const stopCurrentVideoAndGoToPrev = () => {
-    const currentVideo = videoRefs.current[currentSlide]
-    if (currentVideo && !currentVideo.paused) {
-      currentVideo.pause()
-      setIsVideoPlaying(false)
-    }
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
-    setIsAutoPlaying(true)
-  }
-
-  const goToSlide = (index) => {
-    // Stop current video if playing
-    const currentVideo = videoRefs.current[currentSlide]
-    if (currentVideo && !currentVideo.paused) {
-      currentVideo.pause()
-      setIsVideoPlaying(false)
-    }
-    
-    setCurrentSlide(index)
-    setIsAutoPlaying(true)
-    setVideoStates(prev => ({ ...prev, [index]: { ...prev[index], hasPlayed: false } }))
-  }
+    return () => clearInterval(interval)
+  }, [isAutoPlaying, slides.length])
 
   // Intersection Observer for animations
   useEffect(() => {
@@ -203,11 +79,34 @@ const SlideshowSection = () => {
     return () => observer.disconnect()
   }, [])
 
+  const goToSlide = (index) => {
+    setCurrentSlide(index)
+    setIsAutoPlaying(false)
+    // Resume auto-play after 10 seconds
+    setTimeout(() => setIsAutoPlaying(true), 10000)
+  }
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length)
+    setIsAutoPlaying(false)
+    setTimeout(() => setIsAutoPlaying(true), 10000)
+  }
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+    setIsAutoPlaying(false)
+    setTimeout(() => setIsAutoPlaying(true), 10000)
+  }
+
   return (
     <section 
       ref={sectionRef}
       id="slideshow"
-      className="relative z-0 min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-black overflow-hidden"
+      className="relative z-0 min-h-screen  bg-gradient-to-br from-gray-900 via-slate-800 to-black overflow-hidden"
+      /* style={{
+        transform: `translateY(${offset * 0.5}px)`
+      }}  */   
+     
     >
       {/* Animated background elements */}
       <div className="absolute inset-0">
@@ -250,130 +149,52 @@ const SlideshowSection = () => {
                       : 'opacity-0 scale-105'
                   }`}
                 >
-                  {/* Slide Background Color */}
-                  <div className={`absolute inset-0 ${slide.backgroundColor}`}></div>
-                  
-                  {/* Media Container - Fixed size */}
-                  <div className="absolute inset-0 flex items-center justify-center p-6">
-                    <div className="relative">
-                      {slide.type === 'video' ? (
-                        <div className="relative">
-                          <video
-                            ref={el => videoRefs.current[index] = el}
-                            className="rounded-2xl shadow-2xl"
-                            style={{ 
-                              width: '800px',
-                              height: '450px'
-                            }}
-                            poster={slide.poster}
-                            muted
-                            playsInline
-                            onPlay={() => handleVideoPlay(index)}
-                            onPause={() => handleVideoPause(index)}
-                            onEnded={() => handleVideoEnded(index)}
-                          >
-                            <source src={slide.media} type="video/mp4" />
-                            Your browser does not support the video tag.
-                          </video>
-                          
-                          {/* Custom Video Play Button */}
-                          {!videoStates[index]?.isPlaying && (
-                            <button
-                              type='button' 
-                              className="absolute inset-0 flex items-center justify-center cursor-pointer"
-                              onClick={() => toggleVideoPlayback(index)}
-                            >
-                              <div className="bg-black/60 hover:bg-black/80 
-                              backdrop-blur-sm text-white rounded-full p-6 transition-all duration-300 transform hover:scale-110 group">
-                                <svg className="w-12 h-12 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M8 5v14l11-7z"/>
-                                </svg>
-                              </div>
-                            </button>
-                          )}
-                          
-                          {/* Video Controls Overlay */}
-                          {videoStates[index]?.isPlaying && (
-                            <div className="absolute bottom-4 left-4 right-4 bg-black/50 backdrop-blur-sm rounded-lg p-3 flex items-center justify-between">
-                              <button
-                                onClick={() => toggleVideoPlayback(index)}
-                                className="text-white hover:text-gray-300 transition-colors"
-                              >
-                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                                </svg>
-                              </button>
-                              <span className="text-white text-sm">Playing video...</span>
-                              <span className="text-white/70 text-sm">Use ← → to navigate</span>
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <img
-                          src={slide.media}
-                          alt={slide.title}
-                          className="object-cover rounded-2xl shadow-2xl"
-                          style={{ 
-                            width: '800px',
-                            height: '450px'
-                          }}
-                        />
-                      )}
-                      
-                      {/* Media shadow/glow effect */}
-                      <div className={`absolute -inset-2 bg-gradient-to-r ${slide.accentColor} opacity-25 blur-xl rounded-2xl -z-10`}></div>
-                      
-                      {/* Video indicator */}
-                      {slide.type === 'video' && (
-                        <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full flex items-center gap-2">
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                          </svg>
-                          <span className="text-sm font-medium">Video</span>
-                        </div>
-                      )}
-                    </div>
+                  {/* Background Image with Overlay */}
+                  <div className="absolute inset-0">
+                    <img
+                      src={slide.image}
+                      alt={slide.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-r ${slide.bgGradient} opacity-80`}></div>
+                    <div className="absolute inset-0 bg-black/30"></div>
                   </div>
 
-                  {/* Content Overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-8">
-                    <div className="max-w-4xl mx-auto text-center">
-                      <h3 className={`text-3xl md:text-4xl font-bold text-white mb-2 font-serif transition-all duration-1000 ${
+                  {/* Content */}
+                  <div className="relative z-10 h-full flex items-center">
+                    <div className="max-w-4xl mx-auto px-8 text-center">
+                      <h3 className={`text-4xl md:text-6xl font-bold text-white mb-4 font-serif transition-all duration-1000 ${
                         index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
                       }`}>
                         {slide.title}
                       </h3>
-                      <p className={`text-lg md:text-xl text-gray-200 mb-3 font-medium transition-all duration-1000 delay-200 ${
+                      <p className={`text-xl md:text-2xl text-gray-200 mb-6 font-medium transition-all duration-1000 delay-200 ${
                         index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
                       }`}>
                         {slide.subtitle}
                       </p>
-                      <p className={`text-sm md:text-base text-gray-300 max-w-2xl mx-auto leading-relaxed transition-all duration-1000 delay-400 ${
+                      <p className={`text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-400 ${
                         index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
                       }`}>
                         {slide.description}
                       </p>
                     </div>
                   </div>
-
-                  {/* Decorative corner elements */}
-                  <div className={`absolute top-4 right-4 w-16 h-16 bg-gradient-to-r ${slide.accentColor} opacity-30 rounded-full blur-sm`}></div>
-                  <div className={`absolute bottom-4 left-4 w-12 h-12 bg-gradient-to-r ${slide.accentColor} opacity-25 rounded-full blur-sm`}></div>
                 </div>
               ))}
 
               {/* Navigation Arrows */}
               <button
-                onClick={stopCurrentVideoAndGoToPrev}
-                className="absolute left-6 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 transition-all duration-300 hover:scale-110 group shadow-xl"
+                onClick={prevSlide}
+                className="absolute left-6 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full p-3 transition-all duration-300 hover:scale-110 group"
               >
                 <svg className="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
               <button
-                onClick={stopCurrentVideoAndGoToNext}
-                className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 transition-all duration-300 hover:scale-110 group shadow-xl"
+                onClick={nextSlide}
+                className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full p-3 transition-all duration-300 hover:scale-110 group"
               >
                 <svg className="w-6 h-6 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -383,51 +204,28 @@ const SlideshowSection = () => {
 
             {/* Slide Indicators */}
             <div className="flex justify-center mt-8 space-x-3">
-              {slides.map((slide, index) => (
+              {slides.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`relative overflow-hidden rounded-full transition-all duration-300 flex items-center ${
+                  className={`relative overflow-hidden rounded-full transition-all duration-300 ${
                     index === currentSlide
-                      ? 'w-16 h-3'
-                      : 'w-3 h-3 hover:w-6'
+                      ? 'w-12 h-3 bg-white'
+                      : 'w-3 h-3 bg-white/40 hover:bg-white/60'
                   }`}
-                  title={slide.type === 'video' ? `${slide.title} (Video)` : slide.title}
                 >
-                  <div className={`w-full h-full rounded-full transition-all duration-300 ${
-                    index === currentSlide
-                      ? `bg-gradient-to-r ${slide.accentColor}`
-                      : 'bg-white/40 hover:bg-white/60'
-                  }`}></div>
-                  
-                  {/* Video indicator on dot */}
-                  {slide.type === 'video' && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
+                  {index === currentSlide && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 animate-pulse"></div>
                   )}
                 </button>
               ))}
             </div>
 
-            {/* Status indicator */}
+            {/* Auto-play indicator */}
             <div className="flex justify-center mt-4">
-              <div className="text-sm text-gray-400 flex items-center space-x-4">
-                <div className={`flex items-center space-x-2 ${isAutoPlaying && !isVideoPlaying ? 'opacity-100' : 'opacity-50'}`}>
-                  <div className={`w-2 h-2 rounded-full ${isAutoPlaying && !isVideoPlaying ? 'bg-green-400 animate-pulse' : 'bg-gray-400'}`}></div>
-                  <span>{isAutoPlaying && !isVideoPlaying ? 'Auto-playing' : 'Paused'}</span>
-                </div>
-                
-                {isVideoPlaying && (
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                    <span className="text-red-400">Video Playing</span>
-                  </div>
-                )}
-                
-                <span className="text-gray-500">Use ← → keys to navigate</span>
+              <div className={`text-sm text-gray-400 flex items-center space-x-2 ${isAutoPlaying ? 'opacity-100' : 'opacity-50'}`}>
+                <div className={`w-2 h-2 rounded-full ${isAutoPlaying ? 'bg-green-400 animate-pulse' : 'bg-gray-400'}`}></div>
+                <span>{isAutoPlaying ? 'Auto-playing' : 'Paused'}</span>
               </div>
             </div>
           </div>
@@ -436,7 +234,7 @@ const SlideshowSection = () => {
         {/* Progress bar */}
         <div className="absolute bottom-0 left-0 w-full h-1 bg-white/20">
           <div 
-            className={`h-full bg-gradient-to-r ${slides[currentSlide]?.accentColor || 'from-blue-400 to-purple-500'} transition-all duration-300`}
+            className="h-full bg-gradient-to-r from-blue-400 to-purple-500 transition-all duration-300"
             style={{ 
               width: `${((currentSlide + 1) / slides.length) * 100}%` 
             }}
