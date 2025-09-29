@@ -1,11 +1,12 @@
-
 import { useState, useEffect, useRef } from 'react'
+import santiPurVideo from '../assets/videos/santipur.mp4'
 
 const SlideshowSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const [isVisible, setIsVisible] = useState(false)
-  const sectionRef = useRef(null)
+  const sectionRef = useRef(null) 
+  const videoRefs = useRef([])
 
 /* const [offset, setOffset]= useState(0)
   
@@ -29,7 +30,7 @@ const SlideshowSection = () => {
       title: "Artisan Traditions",
       subtitle: "Handloom Heritage & Craftsmanship",
       description: "Witness the intricate art of traditional weaving and handloom techniques that have made Santipur famous across the world for its exquisite textiles.",
-      image: "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      video: santiPurVideo, 
       bgGradient: "from-blue-400 via-purple-500 to-indigo-600"
     },
     {
@@ -63,6 +64,8 @@ const SlideshowSection = () => {
     return () => clearInterval(interval)
   }, [isAutoPlaying, slides.length])
 
+
+
   // Intersection Observer for animations
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -79,34 +82,54 @@ const SlideshowSection = () => {
     return () => observer.disconnect()
   }, [])
 
-  const goToSlide = (index) => {
-    setCurrentSlide(index)
+
+
+    //Handel play video
+  const handlePlayVideo = (index) => {
     setIsAutoPlaying(false)
-    // Resume auto-play after 10 seconds
-    setTimeout(() => setIsAutoPlaying(true), 10000)
+    const video = videoRefs.current[index]
+    if (video) {
+      video.currentTime = 0
+      video.play()
+    }
+  }
+    
+
+
+ //handle video end -> resume slideshow
+  const handelVideoEnd = () => {
+    setIsAutoPlaying(true)
   }
 
+
+ // Handel slide change -> stop video
+ const goToSlide = ( index ) =>{
+   //stop and playing video
+   videoRefs.current.forEach((video)=> {
+     if(video){
+       video.pause()
+       video.currentTime = 0
+     }
+   })
+
+   setCurrentSlide(index)
+   setIsAutoPlaying(false)
+   setTimeout(() =>  setIsAutoPlaying(true), 8000)
+ } 
+
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length)
-    setIsAutoPlaying(false)
-    setTimeout(() => setIsAutoPlaying(true), 10000)
+    goToSlide(( currentSlide + 1) % slides.length)
   }
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
-    setIsAutoPlaying(false)
-    setTimeout(() => setIsAutoPlaying(true), 10000)
+    goToSlide((currentSlide - 1  + slides.length) % slides.length)
   }
 
   return (
     <section 
       ref={sectionRef}
       id="slideshow"
-      className="relative z-0 min-h-screen  bg-gradient-to-br from-gray-900 via-slate-800 to-black overflow-hidden"
-      /* style={{
-        transform: `translateY(${offset * 0.5}px)`
-      }}  */   
-     
+      className="relative z-0 min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-black overflow-hidden"
     >
       {/* Animated background elements */}
       <div className="absolute inset-0">
@@ -159,6 +182,29 @@ const SlideshowSection = () => {
                     <div className={`absolute inset-0 bg-gradient-to-r ${slide.bgGradient} opacity-80`}></div>
                     <div className="absolute inset-0 bg-black/30"></div>
                   </div>
+
+                  {/* Video overlay if exists */}
+                  {slide.video && index === currentSlide && (
+                    <div className="absolute inset-0 flex items-center justify-center z-20">
+                      <video
+                        ref={(el) => (videoRefs.current[index] = el)}
+                        src={slide.video}
+                        className="w-full h-full object-cover pointer-events-none"
+                        onEnded={handelVideoEnd}
+                        muted
+                        playsInline
+                        controls={false}
+                      />
+                      <button
+                        onClick={() => handlePlayVideo(index)}
+                        className="absolute w-20 h-20 bg-white/70 hover:bg-white rounded-full flex items-center justify-center shadow-lg z-30"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 text-gray-900" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
 
                   {/* Content */}
                   <div className="relative z-10 h-full flex items-center">
