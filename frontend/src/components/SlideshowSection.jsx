@@ -4,7 +4,7 @@ import santiPurVideo from '../assets/videos/santipur.mp4'
 import gopal from '../assets/images/gopal.jpg'
 import jagaDhatri from '../assets/images/jagadhatri.jpg'
 import kali from '../assets/images/ma-agomeshori.jpg'
-
+ 
 const SlideshowSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
@@ -14,66 +14,62 @@ const SlideshowSection = () => {
   const videoRefs = useRef([])
 
   const slides = [
-    {
-      id: 1,
-      title: "Sacred Temples of Santipur",
-      subtitle: "Divine Architecture & Spiritual Heritage",
-      description: "Explore the magnificent temples that have stood as pillars of faith for centuries, each telling a unique story of devotion and architectural brilliance.",
-      image: gopal,
-      objectPosition: 'center',
-      bgGradient: "from-orange-400 via-red-500 to-pink-500"
+    { 
+      id: 1, 
+      title: "Sacred Temples of Santipur", 
+      subtitle: "Divine Architecture & Spiritual Heritage", 
+      description: "Explore the magnificent temples that have stood as pillars of faith for centuries, each telling a unique story of devotion and architectural brilliance.", 
+      image: gopal, 
+      objectPosition: 'center', 
+      bgGradient: "from-orange-400 via-red-500 to-pink-500" 
     },
-    {
-      id: 2,
-      title: "Artisan Traditions",
-      subtitle: "Handloom Heritage & Craftsmanship",
-      description: "Witness the intricate art of traditional weaving and handloom techniques that have made Santipur famous across the world for its exquisite textiles.",
-      image:kali ,
-      objectPosition: 'center top',
-      bgGradient: "from-blue-400 via-purple-500 to-indigo-600"
+    { 
+      id: 2, 
+      title: "Artisan Traditions", 
+      subtitle: "Handloom Heritage & Craftsmanship", 
+      description: "Witness the intricate art of traditional weaving and handloom techniques that have made Santipur famous across the world for its exquisite textiles.", 
+      image: kali, 
+      objectPosition: 'center top', 
+      bgGradient: "from-blue-400 via-purple-500 to-indigo-600" 
     },
-    {
-      id: 3,
-      title: "Festival Celebrations",
-      subtitle: "Colors, Music & Community Spirit",
-      description: "Experience the vibrant festivals that bring the entire community together in celebration of culture, tradition, and spiritual unity.",
-      video: santiPurVideo, // your local test video
+    { 
+      id: 3, 
+      title: "Festival Celebrations", 
+      subtitle: "Colors, Music & Community Spirit", 
+      description: "Experience the vibrant festivals that bring the entire community together in celebration of culture, tradition, and spiritual unity.", 
+      video: santiPurVideo
     },
-    {
-      id: 4,
-      title: "Spiritual Gatherings",
-      subtitle: "Devotion & Community Harmony",
-      description: "Join the spiritual congregations where devotees gather to share in prayer, meditation, and the timeless wisdom of ancient traditions.",
-      image: jagaDhatri,
-      objectPosition: 'center',
-      bgGradient: "from-purple-400 via-pink-500 to-red-500"
+    { 
+      id: 4, 
+      title: "Spiritual Gatherings", 
+      subtitle: "Devotion & Community Harmony", 
+      description: "Join the spiritual congregations where devotees gather to share in prayer, meditation, and the timeless wisdom of ancient traditions.", 
+      image: jagaDhatri, 
+      objectPosition: 'center', 
+      bgGradient: "from-purple-400 via-pink-500 to-red-500" 
     }
   ]
 
   // Auto-slide for image slides
   useEffect(() => {
     if (!isAutoPlaying) return
-    if (slides[currentSlide].video) return // skip auto-play on video slide
+    if (slides[currentSlide].video) return
 
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length)
     }, 5000)
 
     return () => clearInterval(interval)
-  }, [isAutoPlaying, currentSlide, slides.length])
+  }, [isAutoPlaying, currentSlide, slides])
 
-  // Intersection Observer for fade-in animations
+  // Intersection Observer for fade-in
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
-      { threshold: 0.3 }
-    )
-
+    const observer = new IntersectionObserver(([entry]) => setIsVisible(entry.isIntersecting), { threshold: 0.3 })
     if (sectionRef.current) observer.observe(sectionRef.current)
     return () => observer.disconnect()
   }, [])
 
-  // Handle video playback
+  // Play/pause videos for active slide
   useEffect(() => {
     slides.forEach((slide, i) => {
       const video = videoRefs.current[i]
@@ -81,37 +77,25 @@ const SlideshowSection = () => {
 
       if (i === currentSlide && slide.video) {
         video.currentTime = 0
-        video.play().catch(() => {})
+        video.muted = isMuted
+        video.play().catch(err => console.warn('video.play() failed:', err))
         setIsAutoPlaying(false)
-      } else {
+      } else if (slide.video) {
         video.pause()
         video.currentTime = 0
       }
     })
-  }, [currentSlide])
+  }, [currentSlide, isMuted, slides])
 
   const goToSlide = (index) => {
     setCurrentSlide(index)
     setIsAutoPlaying(!slides[index].video)
   }
 
-  const nextSlide = () => {
-    const next = (currentSlide + 1) % slides.length
-    goToSlide(next)
-  }
+  const nextSlide = () => goToSlide((currentSlide + 1) % slides.length)
+  const prevSlide = () => goToSlide((currentSlide - 1 + slides.length) % slides.length)
 
-  const prevSlide = () => {
-    const prev = (currentSlide - 1 + slides.length) % slides.length
-    goToSlide(prev)
-  }
-
-  const toggleMuted = (index) => {
-    const videoEl = videoRefs.current[index]
-    if(videoEl) {
-      videoEl.muted = !isMuted
-    }
-    setIsMuted(!isMuted)
-  }
+  const toggleMuted = () => setIsMuted(prev => !prev)
 
   return (
     <section 
@@ -122,7 +106,7 @@ const SlideshowSection = () => {
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-blue-400/20 to-teal-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-blue-400/20 to-teal-400/20 rounded-full blur-3xl animate-pulse"></div>
       </div>
 
       {/* Header */}
@@ -144,51 +128,51 @@ const SlideshowSection = () => {
         <div className="relative">
           <div className="relative h-[600px] rounded-3xl overflow-hidden shadow-2xl">
             {slides.map((slide, index) => (
-              <div
-                key={slide.id}
+              <div 
+                key={slide.id} 
                 className={`absolute inset-0 transition-all duration-700 ease-in-out ${
-                  index === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+                  index === currentSlide ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-105 z-0'
                 }`}
               >
+                
                 {slide.video ? (
-                   <div className='relative w-full h-full'>
-                  <video
-                    ref={(el) => (videoRefs.current[index] = el)}
-                    src={slide.video}
-                    autoPlay
-                    playsInline
-                    muted={isMuted}
-                    className="w-full h-full object-cover"
-                    onEnded={() => nextSlide()}
-                  />
-
-                  {/* Sound toggle button */}
-                  <button 
-                  onClick={() => toggleMuted(!isMuted)}
-                  className='absolute bottom-4 right-4 bg-black/60 text-white px-3 py-2 rounded-lg text-sm'>
-                    {isMuted ? "🔇 Unmute" : "🔊 Mute"}
-                  </button>
+                  <div className="relative w-full h-full">
+                    <video
+                      ref={el => videoRefs.current[index] = el}
+                      src={slide.video}
+                      autoPlay
+                      playsInline
+                      muted={isMuted}
+                      className="w-full h-full object-cover"
+                      onEnded={nextSlide}
+                    />
+                    {/* Mute/Unmute Button */}
+                    <button
+                      onClick={toggleMuted}
+                      className="absolute bottom-4 right-4 z-20 bg-black/60 text-white px-3 py-2 rounded-lg text-sm hover:bg-black/80 transition-all"
+                    >
+                      {isMuted ? "🔇 Unmute" : "🔊 Mute"}
+                    </button>
                   </div>
                 ) : (
                   <div className="absolute inset-0">
                     <div className='relative w-full h-full'>
-                    <img
-                     src={slide.image}
-                     alt={slide.title} 
-                     className="w-full h-full object-cover"
-                     style={{ objectPosition: slide.objectPosition || 'center'}} 
-                     />
-                     {/* Gradient overlay */}
-                    <div 
-                    className={`absolute inset-0 ${slide.bgGradient} bg-opacity-40`}></div>
-                    {/* Dark overlay for contrast */}
-                    <div className="absolute inset-0 bg-black/20"></div>
-                  </div>
+                      <img 
+                        src={slide.image} 
+                        alt={slide.title} 
+                        className="w-full h-full object-cover" 
+                        style={{ objectPosition: slide.objectPosition || 'center'}} 
+                      />
+                      {/* Gradient overlay */}
+                      <div className={`absolute inset-0 bg-gradient-to-br ${slide.bgGradient} opacity-10`}></div>
+                      {/* Dark overlay for contrast */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
+                    </div>
                   </div>
                 )}
 
-                {/* Content */}
-                <div className="relative z-10 h-full flex items-center">
+                {/* Slide Content */}
+                <div className="relative z-20 h-full flex items-center">
                   <div className="max-w-4xl mx-auto px-8 text-center">
                     <h3 className={`text-4xl md:text-6xl font-bold text-white mb-4 font-serif transition-all duration-1000 ${
                       index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
@@ -211,17 +195,17 @@ const SlideshowSection = () => {
             ))}
 
             {/* Navigation Arrows */}
-            <button
-              onClick={prevSlide}
-              className="absolute left-6 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full p-3 transition-all duration-300 hover:scale-110 group"
+            <button 
+              onClick={prevSlide} 
+              className="absolute left-6 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full p-3 transition-all duration-300 hover:scale-110 group z-30"
             >
               <svg className="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <button
-              onClick={nextSlide}
-              className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full p-3 transition-all duration-300 hover:scale-110 group"
+            <button 
+              onClick={nextSlide} 
+              className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full p-3 transition-all duration-300 hover:scale-110 group z-30"
             >
               <svg className="w-6 h-6 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -248,7 +232,7 @@ const SlideshowSection = () => {
 
           {/* Auto-play indicator */}
           <div className="flex justify-center mt-4">
-            <div className={`text-sm text-gray-400 flex items-center space-x-2 ${isAutoPlaying ? 'opacity-100' : 'opacity-50'}`}>
+            <div className={`text-sm text-gray-400 flex items-center space-x-2 transition-opacity duration-300 ${isAutoPlaying ? 'opacity-100' : 'opacity-50'}`}>
               <div className={`w-2 h-2 rounded-full ${isAutoPlaying ? 'bg-green-400 animate-pulse' : 'bg-gray-400'}`}></div>
               <span>{isAutoPlaying ? 'Auto-playing' : 'Paused'}</span>
             </div>
