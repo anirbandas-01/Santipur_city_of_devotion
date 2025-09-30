@@ -73,7 +73,7 @@ const SidebarSection = ({ isOpen, toggleSidebar}) => {
 
       {/* Sidebar */}
       <div className={`
-        fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 
+        fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 flex flex-col
         transform transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
@@ -84,7 +84,6 @@ const SidebarSection = ({ isOpen, toggleSidebar}) => {
           {/* Close Button */}
           <button 
             onClick={() => {
-              console.log("sidebar close button clicked");
               toggleSidebar();
             }}
             className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors duration-200 z-50"
@@ -122,8 +121,8 @@ const SidebarSection = ({ isOpen, toggleSidebar}) => {
         </div>
 
         {/* Navigation Menu */}
-        <nav className="flex-1 py-8">
-          <div className="px-4 space-y-2">
+        <div className="flex-1 overflow-y-auto">
+          <nav className="py-8 px-4 space-y-2">
             {menuItems.map((item, index) => (
               <Link
                 key={item.path}
@@ -189,8 +188,8 @@ const SidebarSection = ({ isOpen, toggleSidebar}) => {
                 `}></div>
               </Link>
             ))}
-          </div>
-        </nav>
+          </nav>
+        </div>
 
 
         {/* Footer */}
