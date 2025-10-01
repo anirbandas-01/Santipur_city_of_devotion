@@ -2,9 +2,9 @@
 import { useState, useEffect, useRef } from 'react'
 
 import santiPurVideo from '../assets/videos/santipur.mp4'
-import gopal from '../assets/images/gopal.jpg'
-import jagaDhatri from '../assets/images/jagadhatri.jpg'
-import kali from '../assets/images/ma-agomeshori.jpg'
+import gopal from '../assets/images/slide/gopal.jpg'
+import jagaDhatri from '../assets/images/slide/jagadhatri.jpg'
+import kali from '../assets/images/slide/ma-agomeshori.jpg'
  
 const SlideshowSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0)

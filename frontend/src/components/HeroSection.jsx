@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import BgImage from '../assets/images/radhaKrishna.jpg'
+import BgImage from '../assets/images/hero/radhaKrishna.jpg'
 
 const HeroSection = ({ scrollToSection }) => {
   const [offset, setOffset] = useState(0)
