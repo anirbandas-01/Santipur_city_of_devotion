@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 
+import shayamChad from '../assets/images/shyamChad.jpg'
+
 export default function About() {
   const [activeSection, setActiveSection] = useState('history')
 
@@ -208,10 +210,14 @@ export default function About() {
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="relative group cursor-pointer">
                   <div className="aspect-video bg-gradient-to-br from-blue-200 to-indigo-300 rounded-xl flex items-center justify-center">
-                    <span className="text-4xl">🏛️</span>
+                    <img 
+                     src={shayamChad} 
+                     alt="Ancient Temple Architecture"
+                     className='w-full h-full object-cover transform group-hover:scale-110 transition duration-500'
+                       /> 
                   </div>
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-xl flex items-center justify-center">
-                    <span className="text-white opacity-0 group-hover:opacity-100 font-semibold">Ancient Temple Architecture</span>
+                  <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-xl flex items-center justify-center">
+                    <span className="text-black opacity-0 group-hover:opacity-100 font-semibold">Ancient Temple Architecture</span>
                   </div>
                 </div>
                 <div className="relative group cursor-pointer">
