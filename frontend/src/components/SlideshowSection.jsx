@@ -1,10 +1,12 @@
-
 import { useState, useEffect, useRef } from 'react'
 
-import santiPurVideo from '../assets/videos/santipur.mp4'
-import gopal from '../assets/images/slide/gopal.jpg'
-import jagaDhatri from '../assets/images/slide/jagadhatri.jpg'
-import kali from '../assets/images/slide/ma-agomeshori.jpg'
+const santiPurVideoLink = "https://res.cloudinary.com/dwfbtbx8m/video/upload/v1759413833/santipur_zxkgfi.mp4";
+const gopalLink = "https://res.cloudinary.com/dwfbtbx8m/image/upload/v1759413943/gopal_aqxwuj.jpg";
+const jagaDhatriLink = "https://res.cloudinary.com/dwfbtbx8m/image/upload/v1759413959/jagadhatri_qqfyhz.jpg"; 
+const kaliLink = "https://res.cloudinary.com/dwfbtbx8m/image/upload/v1759413947/ma-agomeshori_ikzqje.jpg";
+
+
+
  
 const SlideshowSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -20,7 +22,7 @@ const SlideshowSection = () => {
       title: "Sacred Temples of Santipur", 
       subtitle: "Divine Architecture & Spiritual Heritage", 
       description: "Explore the magnificent temples that have stood as pillars of faith for centuries, each telling a unique story of devotion and architectural brilliance.", 
-      image: gopal, 
+      image: gopalLink, 
       objectPosition: 'center', 
       bgGradient: "from-orange-400 via-red-500 to-pink-500" 
     },
@@ -29,7 +31,7 @@ const SlideshowSection = () => {
       title: "Artisan Traditions", 
       subtitle: "Handloom Heritage & Craftsmanship", 
       description: "Witness the intricate art of traditional weaving and handloom techniques that have made Santipur famous across the world for its exquisite textiles.", 
-      image: kali, 
+      image: kaliLink, 
       objectPosition: 'center top', 
       bgGradient: "from-blue-400 via-purple-500 to-indigo-600" 
     },
@@ -38,14 +40,14 @@ const SlideshowSection = () => {
       title: "Festival Celebrations", 
       subtitle: "Colors, Music & Community Spirit", 
       description: "Experience the vibrant festivals that bring the entire community together in celebration of culture, tradition, and spiritual unity.", 
-      video: santiPurVideo
+      video: santiPurVideoLink
     },
     { 
       id: 4, 
       title: "Spiritual Gatherings", 
       subtitle: "Devotion & Community Harmony", 
       description: "Join the spiritual congregations where devotees gather to share in prayer, meditation, and the timeless wisdom of ancient traditions.", 
-      image: jagaDhatri, 
+      image: jagaDhatriLink, 
       objectPosition: 'center', 
       bgGradient: "from-purple-400 via-pink-500 to-red-500" 
     }

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 
-import shayamChad from '../assets/images/about/shyamChad.jpg'
-import ancientManuscripts from '../assets/images/about/santipur_Ancient_Manuscr.jpg'
-import historicNeighborhoods from '../assets/images/about/santipur_neighbourhood.jpg'
+const shayamChad = "https://res.cloudinary.com/dwfbtbx8m/image/upload/v1759413891/shyamChad_zgcjj9.jpg";
+const ancientManuscripts = "https://res.cloudinary.com/dwfbtbx8m/image/upload/v1759413888/santipur_Ancient_Manuscr_nnpq5a.jpg";
+const historicNeighborhoods= "https://res.cloudinary.com/dwfbtbx8m/image/upload/v1759413889/santipur_neighbourhood_ucmt8j.jpg";
 
 export default function About() {
   const [activeSection, setActiveSection] = useState('history')
