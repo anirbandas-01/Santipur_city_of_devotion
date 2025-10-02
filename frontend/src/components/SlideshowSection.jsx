@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 
-const santiPurVideoLink = "https://res.cloudinary.com/dwfbtbx8m/video/upload/v1759413833/santipur_zxkgfi.mp4";
-const gopalLink = "https://res.cloudinary.com/dwfbtbx8m/image/upload/v1759413943/gopal_aqxwuj.jpg";
-const jagaDhatriLink = "https://res.cloudinary.com/dwfbtbx8m/image/upload/v1759413959/jagadhatri_qqfyhz.jpg"; 
-const kaliLink = "https://res.cloudinary.com/dwfbtbx8m/image/upload/v1759413947/ma-agomeshori_ikzqje.jpg";
+const santiPurVideoLink = "https://res.cloudinary.com/dd5jhb6pf/video/upload/v1759417286/santipur_zxkgfi_lhperh.mp4";
+const gopalLink = "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759417234/gopal_aqxwuj_c1rn4z.jpg";
+const jagaDhatriLink = "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759417253/jagadhatri_qqfyhz_lan8xp.jpg"; 
+const kaliLink = "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759417242/ma-agomeshori_ikzqje_ibofvh.jpg";
 
 
 

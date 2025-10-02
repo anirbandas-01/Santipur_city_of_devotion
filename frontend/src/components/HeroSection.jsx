@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-const BgImage = "https://res.cloudinary.com/dwfbtbx8m/image/upload/v1759414704/DIP_0204_10000_cn294r.jpg";
+const BgImage = "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759417104/DIP_0204_10000_cn294r_omiwz4.jpg";
 
 const HeroSection = ({ scrollToSection }) => {
   const [offset, setOffset] = useState(0)

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 
-const shayamChad = "https://res.cloudinary.com/dwfbtbx8m/image/upload/v1759413891/shyamChad_zgcjj9.jpg";
-const ancientManuscripts = "https://res.cloudinary.com/dwfbtbx8m/image/upload/v1759413888/santipur_Ancient_Manuscr_nnpq5a.jpg";
-const historicNeighborhoods= "https://res.cloudinary.com/dwfbtbx8m/image/upload/v1759413889/santipur_neighbourhood_ucmt8j.jpg";
+const shayamChad = "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759416937/shyamChad_zgcjj9_rljrhj.jpg";
+const ancientManuscripts = "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759416936/santipur_Ancient_Manuscr_nnpq5a_ebdtoi.jpg";
+const historicNeighborhoods= "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759416935/santipur_neighbourhood_ucmt8j_sjkgqw.jpg";
 
 export default function About() {
   const [activeSection, setActiveSection] = useState('history')
