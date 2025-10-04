@@ -4,70 +4,230 @@ import { useState, useEffect } from 'react'
 const allTemples = [
   {
     id: 1,
-    name: "Advaita Acharya Temple",
+    name: "Boro Goswami Bari",
     image: "🏛️",
-    shortDesc: "The most sacred temple dedicated to Advaita Acharya, one of the principal associates of Sri Chaitanya Mahaprabhu.",
+    shortDesc: "One of the oldest and most prominent Goswami families' temple in Santipur, known for its rich heritage and traditional worship.",
     period: "16th Century",
     category: "radhakrishna"
   },
   {
     id: 2,
-    name: "Madana Gopala Temple",
+    name: "Khan Bari Temple",
     image: "🕌",
-    shortDesc: "Beautiful temple housing the deity of Madana Gopala, known for its exquisite Bengal architectural style.",
+    shortDesc: "Historic temple complex with beautiful architecture, preserving centuries of devotional traditions.",
     period: "17th Century",
     category: "radhakrishna"
   },
   {
     id: 3,
-    name: "Gopal Jiu Temple",
+    name: "Pagla Bari",
     image: "🏮",
-    shortDesc: "Renowned for elaborate festivals and community gatherings, serving as a cultural center.",
+    shortDesc: "Sacred temple known for its unique spiritual atmosphere and devotional practices.",
     period: "18th Century",
     category: "radhakrishna"
   },
   {
     id: 4,
-    name: "Nityananda Temple",
+    name: "Madan Gopal Bari",
     image: "⛩️",
-    shortDesc: "Dedicated to Lord Nityananda, known for its spiritual atmosphere and continuous chanting.",
-    period: "16th Century",
-    category: "radhakrishna"
-  },
-  {
-    id: 5,
-    name: "Radha Madhav Temple",
-    image: "🛕",
-    shortDesc: "Ancient temple celebrating the divine love of Radha and Krishna with daily aartis.",
+    shortDesc: "Beautiful temple dedicated to Madan Gopal, featuring traditional Bengal architectural style.",
     period: "17th Century",
     category: "radhakrishna"
   },
   {
+    id: 5,
+    name: "Prosenjit's Mama Bari",
+    image: "🛕",
+    shortDesc: "Family temple with deep cultural significance, maintaining traditional worship practices.",
+    period: "19th Century",
+    category: "radhakrishna"
+  },
+  {
     id: 6,
-    name: "Govinda Temple",
+    name: "Chakfera Goswami Bari",
     image: "🏛️",
-    shortDesc: "Historic temple known for its traditional kirtan and spiritual gatherings.",
-    period: "18th Century",
+    shortDesc: "Renowned Goswami family temple known for its spiritual gatherings and kirtan traditions.",
+    period: "17th Century",
     category: "radhakrishna"
   },
   {
     id: 7,
-    name: "Radha Raman Temple",
+    name: "Bashbuniya Goswami Bari",
     image: "🕌",
-    shortDesc: "Sacred shrine with beautiful gardens and peaceful meditation spaces.",
+    shortDesc: "Ancient temple with beautiful courtyard and traditional architectural elements.",
     period: "16th Century",
     category: "radhakrishna"
   },
   {
     id: 8,
-    name: "Krishna Chandra Temple",
+    name: "Atabuniya Goswami Bari",
     image: "🏮",
-    shortDesc: "Temple featuring intricate terracotta work and classical Bengali architecture.",
-    period: "19th Century",
+    shortDesc: "Historic Goswami family temple featuring intricate terracotta work and daily worship.",
+    period: "17th Century",
     category: "radhakrishna"
   },
   {
     id: 9,
+    name: "Gopalpur Saha Bari",
+    image: "⛩️",
+    shortDesc: "Prominent family temple known for elaborate festivals and community celebrations.",
+    period: "18th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 10,
+    name: "Shyamrai Jiu",
+    image: "🛕",
+    shortDesc: "Sacred shrine dedicated to Lord Krishna in his Shyamrai form, with daily aartis.",
+    period: "16th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 11,
+    name: "Radha Rasa Bihari Jiu",
+    image: "🏛️",
+    shortDesc: "Temple celebrating the divine pastimes of Radha and Krishna with traditional rituals.",
+    period: "17th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 12,
+    name: "Radha Binod Jiu",
+    image: "🕌",
+    shortDesc: "Beautiful temple complex dedicated to the divine couple, known for peaceful ambiance.",
+    period: "18th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 13,
+    name: "Math Bari",
+    image: "🏮",
+    shortDesc: "Monastery-style temple serving as a center for spiritual learning and devotion.",
+    period: "17th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 14,
+    name: "Dindayal Babu's Bari",
+    image: "⛩️",
+    shortDesc: "Historic family temple maintaining traditional worship and cultural programs.",
+    period: "19th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 15,
+    name: "Ashtakali Bhavan",
+    image: "🛕",
+    shortDesc: "Temple complex featuring eight forms of goddess Kali with traditional worship practices.",
+    period: "18th Century",
+    category: "kali"
+  },
+  {
+    id: 16,
+    name: "Roy Bari Temple",
+    image: "🏛️",
+    shortDesc: "Prominent family temple known for its architectural beauty and spiritual significance.",
+    period: "17th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 17,
+    name: "Radha Shyamchand Jiu",
+    image: "🕌",
+    shortDesc: "Sacred temple dedicated to Radha and Shyamchand with elaborate festival celebrations.",
+    period: "16th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 18,
+    name: "Radha Kalachand Jiu",
+    image: "🏮",
+    shortDesc: "Ancient temple featuring beautiful deity of Kalachand Krishna with daily worship.",
+    period: "17th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 19,
+    name: "Saha Bari Temple",
+    image: "⛩️",
+    shortDesc: "Historic family temple known for traditional kirtan and community gatherings.",
+    period: "18th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 20,
+    name: "Madhyam Goswami Bari",
+    image: "🛕",
+    shortDesc: "Middle Goswami family temple with rich spiritual heritage and daily rituals.",
+    period: "17th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 21,
+    name: "Bijaykrishna Goswami Bari",
+    image: "🏛️",
+    shortDesc: "Renowned temple of the Goswami lineage, known for spiritual teachings and devotion.",
+    period: "18th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 22,
+    name: "Goswami Bhattacharya Lane Temple",
+    image: "🕌",
+    shortDesc: "Temple complex in the historic lane, serving as a spiritual hub for the community.",
+    period: "17th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 23,
+    name: "Rasaraj Jiu",
+    image: "🏮",
+    shortDesc: "Temple dedicated to Krishna as the king of divine mellows, with traditional worship.",
+    period: "16th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 24,
+    name: "ISKCON Santipur",
+    image: "⛩️",
+    shortDesc: "Modern ISKCON temple promoting Krishna consciousness with daily programs and festivals.",
+    period: "21st Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 25,
+    name: "Putoputi Jiu",
+    image: "🛕",
+    shortDesc: "Charming temple with unique name, known for its intimate devotional atmosphere.",
+    period: "18th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 26,
+    name: "Ashananda Bari",
+    image: "🏛️",
+    shortDesc: "Historic temple maintaining traditional worship practices and cultural heritage.",
+    period: "17th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 27,
+    name: "Advaita Acharya Temple",
+    image: "🕌",
+    shortDesc: "The most sacred temple dedicated to Advaita Acharya, one of the principal associates of Sri Chaitanya Mahaprabhu.",
+    period: "16th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 28,
+    name: "Nityananda Temple",
+    image: "🏮",
+    shortDesc: "Dedicated to Lord Nityananda, known for its spiritual atmosphere and continuous chanting.",
+    period: "16th Century",
+    category: "radhakrishna"
+  },
+  {
+    id: 29,
     name: "Agameshwari Kali Temple",
     image: "🔱",
     shortDesc: "The principal Kali temple of Santipur, famous for its powerful spiritual energy and annual Kali Puja.",
@@ -75,7 +235,7 @@ const allTemples = [
     category: "kali"
   },
   {
-    id: 10,
+    id: 30,
     name: "Dakshina Kali Mandir",
     image: "🕉️",
     shortDesc: "Ancient temple dedicated to Dakshina Kali with traditional tantric rituals.",
@@ -83,7 +243,7 @@ const allTemples = [
     category: "kali"
   },
   {
-    id: 11,
+    id: 31,
     name: "Bhadra Kali Temple",
     image: "🔱",
     shortDesc: "Historic shrine known for its peaceful ambiance and evening aartis.",
@@ -91,7 +251,7 @@ const allTemples = [
     category: "kali"
   },
   {
-    id: 12,
+    id: 32,
     name: "Shamshan Kali Mandir",
     image: "🕉️",
     shortDesc: "Sacred temple with deep spiritual significance and traditional worship practices.",
@@ -99,7 +259,7 @@ const allTemples = [
     category: "kali"
   },
   {
-    id: 13,
+    id: 33,
     name: "Raksha Kali Temple",
     image: "🔱",
     shortDesc: "Protective deity temple visited by devotees seeking blessings and protection.",
@@ -107,7 +267,7 @@ const allTemples = [
     category: "kali"
   },
   {
-    id: 14,
+    id: 34,
     name: "Mahadev Temple",
     image: "🔱",
     shortDesc: "Ancient Shiva temple with a historic lingam and traditional abhishekam ceremonies.",
@@ -115,7 +275,7 @@ const allTemples = [
     category: "shiv"
   },
   {
-    id: 15,
+    id: 35,
     name: "Kedareshwar Shiv Mandir",
     image: "🕉️",
     shortDesc: "Sacred temple known for Monday worship and Maha Shivaratri celebrations.",
@@ -123,7 +283,7 @@ const allTemples = [
     category: "shiv"
   },
   {
-    id: 16,
+    id: 36,
     name: "Panchanana Shiv Temple",
     image: "🔱",
     shortDesc: "Temple featuring the five-faced form of Lord Shiva with intricate carvings.",
@@ -131,7 +291,7 @@ const allTemples = [
     category: "shiv"
   },
   {
-    id: 17,
+    id: 37,
     name: "Baidyanath Shiv Mandir",
     image: "🕉️",
     shortDesc: "Historic temple known for healing powers and spiritual significance.",
@@ -139,7 +299,7 @@ const allTemples = [
     category: "shiv"
   },
   {
-    id: 18,
+    id: 38,
     name: "Nataraja Temple",
     image: "🔱",
     shortDesc: "Unique temple celebrating Shiva as the cosmic dancer with traditional dance performances.",
@@ -147,7 +307,7 @@ const allTemples = [
     category: "shiv"
   },
   {
-    id: 19,
+    id: 39,
     name: "Bhuteshwar Temple",
     image: "🕉️",
     shortDesc: "Ancient shrine with traditional architecture and daily worship rituals.",
@@ -155,7 +315,7 @@ const allTemples = [
     category: "shiv"
   },
   {
-    id: 20,
+    id: 40,
     name: "Jagadhatri Temple",
     image: "🏛️",
     shortDesc: "Famous temple celebrating Jagadhatri Puja with grand festivities and traditional rituals.",
@@ -163,7 +323,7 @@ const allTemples = [
     category: "durga"
   },
   {
-    id: 21,
+    id: 41,
     name: "Durga Bari",
     image: "🕌",
     shortDesc: "Historic Durga temple known for elaborate Durga Puja celebrations.",
@@ -171,7 +331,7 @@ const allTemples = [
     category: "durga"
   },
   {
-    id: 22,
+    id: 42,
     name: "Mahishasuramardini Temple",
     image: "🏮",
     shortDesc: "Sacred shrine depicting the goddess slaying Mahishasura with powerful iconography.",
@@ -179,7 +339,7 @@ const allTemples = [
     category: "durga"
   },
   {
-    id: 23,
+    id: 43,
     name: "Annapurna Temple",
     image: "⛩️",
     shortDesc: "Temple dedicated to Goddess Annapurna, known for community meals and charity.",
@@ -187,7 +347,7 @@ const allTemples = [
     category: "durga"
   },
   {
-    id: 24,
+    id: 44,
     name: "Chandi Temple",
     image: "🛕",
     shortDesc: "Ancient temple with traditional Bengali architecture and spiritual significance.",
@@ -195,7 +355,7 @@ const allTemples = [
     category: "durga"
   },
   {
-    id: 25,
+    id: 45,
     name: "Lakshmi Narayan Temple",
     image: "🏛️",
     shortDesc: "Beautiful temple dedicated to Lord Vishnu and Goddess Lakshmi with daily rituals.",
@@ -203,7 +363,7 @@ const allTemples = [
     category: "narayan"
   },
   {
-    id: 26,
+    id: 46,
     name: "Narayan Dham",
     image: "🕌",
     shortDesc: "Sacred complex featuring multiple shrines and spiritual learning center.",
@@ -211,7 +371,7 @@ const allTemples = [
     category: "narayan"
   },
   {
-    id: 27,
+    id: 47,
     name: "Jagannath Temple",
     image: "🏮",
     shortDesc: "Temple celebrating Lord Jagannath with annual Rath Yatra celebrations.",
@@ -219,7 +379,7 @@ const allTemples = [
     category: "narayan"
   },
   {
-    id: 28,
+    id: 48,
     name: "Venkateswara Temple",
     image: "⛩️",
     shortDesc: "Modern temple dedicated to Lord Venkateswara with South Indian architectural style.",
@@ -227,7 +387,7 @@ const allTemples = [
     category: "narayan"
   },
   {
-    id: 29,
+    id: 49,
     name: "Narasimha Temple",
     image: "🛕",
     shortDesc: "Temple dedicated to the fierce avatar of Vishnu with traditional worship.",
@@ -235,7 +395,7 @@ const allTemples = [
     category: "narayan"
   },
   {
-    id: 30,
+    id: 50,
     name: "Rama Temple",
     image: "🏛️",
     shortDesc: "Sacred shrine celebrating Lord Rama with regular Ram Katha recitations.",
