@@ -36,10 +36,10 @@ const allTemples = [
   },
   {
     id: 3,
-    name: "Pagla Bari",
+    name: "Pagla Goswami Bari",
     image: "🏮",
     shortDesc: "Sacred temple known for its unique spiritual atmosphere, ecstatic devotional practices, and night-long kirtan sessions during special occasions.",
-    fullDesc: "Pagla Bari carries a fascinating history of ecstatic devotion and spiritual practices. The temple earned its name from the deep devotional fervor displayed by its early devotees. Today, it remains a center of intense bhakti (devotion) where traditional worship methods are preserved with utmost care. The temple is particularly known for its night-long kirtan sessions during special occasions.",
+    fullDesc: "Pagla Goswami Bari carries a fascinating history of ecstatic devotion and spiritual practices. The temple earned its name from the deep devotional fervor displayed by its early devotees. Today, it remains a center of intense bhakti (devotion) where traditional worship methods are preserved with utmost care. The temple is particularly known for its night-long kirtan sessions during special occasions.",
     period: "18th Century",
     category: "radhakrishna",
     specialFeatures: [
@@ -118,8 +118,7 @@ const allTemples = [
 
 // Add remaining temples with basic data structure
 const remainingTemples = [
-  { id: 4, name: "Madan Gopal Bari", image: "⛩️", shortDesc: "Beautiful temple dedicated to Madan Gopal, featuring traditional Bengal architectural style with exquisitely adorned deity and spring festival celebrations.", period: "17th Century", category: "radhakrishna" },
-  { id: 5, name: "Prosenjit's Mama Bari", image: "🛕", shortDesc: "Family temple with deep cultural significance and notable connections, maintaining traditional worship practices with beautiful temple gardens.", period: "19th Century", category: "radhakrishna" },
+  { id: 4, name: "Madan Gopal Giu Bari", image: "⛩️", shortDesc: "Beautiful temple dedicated to Madan Gopal, featuring traditional Bengal architectural style with exquisitely adorned deity and spring festival celebrations.", period: "17th Century", category: "radhakrishna" },
   { id: 6, name: "Chakfera Goswami Bari", image: "🏛️", shortDesc: "Renowned Goswami family temple known for weekly kirtan assemblies, spiritual instruction programs, and rare manuscript collection.", period: "17th Century", category: "radhakrishna" },
   { id: 7, name: "Bashbuniya Goswami Bari", image: "🕌", shortDesc: "Ancient temple with spacious traditional courtyard, multiple shrine complex, and ancient architectural preservation with seasonal festival grounds.", period: "16th Century", category: "radhakrishna" },
   { id: 8, name: "Atabuniya Goswami Bari", image: "🏮", shortDesc: "Historic Goswami family temple featuring masterful terracotta artwork depicting scenes from Krishna's life with traditional worship timings.", period: "17th Century", category: "radhakrishna" },
@@ -262,8 +261,41 @@ export default function Temples() {
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-gray-800 mb-6">Temple Gallery</h3>
               <div className="relative group">
+                {/* Left Arrow Button */}
+                <button
+                  onClick={() => {
+                    const container = document.getElementById(`gallery-${temple.id}`);
+                    if (container) {
+                      container.scrollBy({ left: -350, behavior: 'smooth' });
+                    }
+                  }}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100"
+                >
+                  <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+
+                {/* Right Arrow Button */}
+                <button
+                  onClick={() => {
+                    const container = document.getElementById(`gallery-${temple.id}`);
+                    if (container) {
+                      container.scrollBy({ left: 350, behavior: 'smooth' });
+                    }
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100"
+                >
+                  <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+
                 {/* Scrollable Container */}
-                <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide hover:scrollbar-show scroll-smooth">
+                <div 
+                  id={`gallery-${temple.id}`}
+                  className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide hover:scrollbar-show scroll-smooth"
+                >
                   {temple.gallery?.map((img, index) => (
                     <div
                       key={index}
