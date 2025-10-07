@@ -1,621 +1,484 @@
-import { useState, useEffect } from 'react'
+import React, { useState } from 'react';
+import { ChevronRight, Play, X, Info, Calendar, Heart, Users, Award } from 'lucide-react';
 
-const shayamChad = "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759416937/shyamChad_zgcjj9_rljrhj.jpg";
-const ancientManuscripts = "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759416936/santipur_Ancient_Manuscr_nnpq5a_ebdtoi.jpg";
-const historicNeighborhoods= "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759416935/santipur_neighbourhood_ucmt8j_sjkgqw.jpg";
+// CLOUDINARY VIDEO - FULL ORIGINAL VIDEO (70MB, 7+ minutes)
+const cloudinaryVideo = {
+  santipurJourney: "https://res.cloudinary.com/dd5jhb6pf/video/upload/v1759861536/Santipur_full_umcwd0.mp4"
+};
 
 export default function About() {
-  const [activeSection, setActiveSection] = useState('history')
+  const [activeSection, setActiveSection] = useState('history');
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [lightboxImage, setLightboxImage] = useState(null);
 
-  useEffect(() => {
-    // Scroll reveal animation observer
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    }
-    
-    const observer = new IntersectionObserver(function(entries) {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible')
-        }
-      })
-    }, observerOptions)
-    
-    document.querySelectorAll('.scroll-reveal').forEach(el => {
-      observer.observe(el)
-    })
-    
-    return () => observer.disconnect()
-  }, [])
-
-  // Reset animations when activeSection changes
-  useEffect(() => {
-    setTimeout(() => {
-      document.querySelectorAll('.content-reveal').forEach(el => {
-        el.classList.remove('visible')
-      })
-      
-      setTimeout(() => {
-        document.querySelectorAll('.content-reveal').forEach(el => {
-          el.classList.add('visible')
-        })
-      }, 50)
-    }, 100)
-  }, [activeSection])
-
+  // Navigation sections
   const sections = [
-    {
-      id: 'history',
-      title: 'History',
-      icon: '📜'
-    },
-    {
-      id: 'chaitanya',
-      title: 'Sri Chaitanya Mahaprabhu',
-      icon: '🙏'
-    },
-    {
-      id: 'culture',
-      title: 'Culture & Handloom',
-      icon: '🧵'
-    }
-  ]
+    { id: 'history', label: 'History', icon: Calendar },
+    { id: 'mahaprabhu', label: 'Sri Chaitanya', icon: Heart },
+    { id: 'culture', label: 'Culture & Handloom', icon: Award },
+    { id: 'market', label: 'Saree Market', icon: Users }
+  ];
 
-  const historyContent = {
-    title: "History of Santipur",
-    subtitle: "Ancient Heritage & Spiritual Legacy",
-    content: [
+  // Video data - THUMBNAILS AT DIFFERENT TIMES TO AVOID BLACK FRAMES
+  const videos = {
+    mahaprabhu: [
       {
-        period: "Ancient Origins",
-        description: "Santipur's history dates back to ancient times when it served as a significant center of learning and spirituality in Bengal. The city's strategic location along the Hooghly River made it an important trading hub, attracting merchants, scholars, and spiritual seekers from across the Indian subcontinent."
-      },
-      {
-        period: "Medieval Period",
-        description: "During the medieval period, Santipur flourished as a center of Vaishnava culture. The city became renowned for its temples, ashrams, and the presence of numerous saints and scholars who contributed to the rich spiritual and cultural tapestry of the region."
-      },
-      {
-        period: "Colonial Era",
-        description: "Under British rule, Santipur maintained its cultural identity while adapting to changing times. The handloom industry, particularly the weaving of fine cotton textiles, became a cornerstone of the local economy and gained recognition throughout Bengal and beyond."
-      },
-      {
-        period: "Modern Era",
-        description: "Today, Santipur continues to be a vibrant center of culture, spirituality, and traditional craftsmanship. The city has preserved its ancient traditions while embracing modernity, making it a unique destination for those seeking to experience authentic Bengali culture."
+        id: 1,
+        title: 'Priests Discuss Mahaprabhu\'s Legacy',
+        // Try thumbnail at 90 seconds (1.5 min into video)
+        thumbnail: "https://res.cloudinary.com/dd5jhb6pf/video/upload/so_90,w_400,h_250,c_fill,f_jpg,q_80/v1759861536/Santipur_full_umcwd0.jpg",
+        description: 'Local priests share insights about Sri Chaitanya Mahaprabhu',
+        videoUrl: cloudinaryVideo.santipurJourney
       }
     ],
-    highlights: [
-      "Over 500 years of documented history",
-      "Strategic location on the Hooghly River",
-      "Center of Vaishnava culture and learning",
-      "Preserved architectural heritage",
-      "Continuous tradition of handloom weaving"
+    artisans: [
+      {
+        id: 2,
+        title: 'Master Weaver at Work',
+        // Thumbnail at 180 seconds (3 min)
+        thumbnail: "https://res.cloudinary.com/dd5jhb6pf/video/upload/so_180,w_400,h_250,c_fill,f_jpg,q_80/v1759861536/Santipur_full_umcwd0.jpg",
+        description: 'Watch the intricate process of Tant saree weaving',
+        videoUrl: cloudinaryVideo.santipurJourney
+      },
+      {
+        id: 3,
+        title: 'Stories from the Loom',
+        // Thumbnail at 300 seconds (5 min)
+        thumbnail: "https://res.cloudinary.com/dd5jhb6pf/video/upload/so_300,w_400,h_250,c_fill,f_jpg,q_80/v1759861536/Santipur_full_umcwd0.jpg",
+        description: 'Artisans share their family weaving traditions',
+        videoUrl: cloudinaryVideo.santipurJourney
+      }
+    ],
+    general: [
+      {
+        id: 4,
+        title: 'Santipur: A Journey Through Time',
+        // Thumbnail at 60 seconds (1 min) - should have content
+        thumbnail: "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759867443/WhatsApp_Image_2025-10-08_at_01.31.30_230d8ce8_hrtjbm.jpg",
+        description: 'Explore the heritage and culture of Santipur',
+        videoUrl: cloudinaryVideo.santipurJourney
+      }
     ]
-  }
+  };
 
-  const chaitanyaContent = {
-    title: "Sri Chaitanya Mahaprabhu",
-    subtitle: "The Great Saint & His Divine Connection",
-    content: [
-      {
-        aspect: "Divine Incarnation",
-        description: "Sri Chaitanya Mahaprabhu (1486-1534) is revered as the combined incarnation of Radha and Krishna. His appearance marked a spiritual renaissance in Bengal, emphasizing love, devotion, and the chanting of the holy names as the path to divine realization."
-      },
-      {
-        aspect: "Connection to Santipur",
-        description: "Santipur holds a special place in Chaitanya Mahaprabhu's life through its connection with Advaita Acharya, one of His principal associates. Advaita Acharya's residence and samadhi in Santipur make it a sacred pilgrimage destination for Vaishnavas worldwide."
-      },
-      {
-        aspect: "Advaita Acharya",
-        description: "Advaita Acharya, a great devotee and contemporary of Chaitanya Mahaprabhu, lived in Santipur. His prayers and devotional practices are believed to have played a crucial role in the Lord's appearance. His house and samadhi remain important pilgrimage sites."
-      },
-      {
-        aspect: "Sankirtana Movement",
-        description: "The sankirtana (congregational chanting) movement initiated by Sri Chaitanya found fertile ground in Santipur. The tradition of communal devotional singing and dancing continues to this day, keeping the spiritual legacy alive through centuries."
-      }
-    ],
-    teachings: [
-      "Chanting the Holy Names as the easiest path to God-realization",
-      "Love and devotion (Bhakti) as the highest spiritual practice",
-      "Equality of all beings regardless of caste or creed",
-      "The importance of humble service and surrender",
-      "Community devotional practices (Sankirtana)"
-    ],
-    legacy: "Sri Chaitanya's teachings transformed not just Bengal but influenced spiritual movements across India and eventually the world. His emphasis on love, compassion, and devotional service continues to inspire millions of devotees globally."
-  }
+  // Timeline data
+  const timeline = [
+    { era: 'Ancient Period', period: 'Before 1400', description: 'Early settlements along the Ganges, Hindu cultural development' },
+    { era: 'Medieval Era', period: '1486-1700', description: 'Sri Chaitanya Mahaprabhu\'s movement, Advaita Acharya\'s presence' },
+    { era: 'Colonial Period', period: '1700-1947', description: 'Handloom industry flourishes, cultural renaissance' },
+    { era: 'Modern Era', period: '1947-Present', description: 'Preservation of heritage, continued weaving traditions' }
+  ];
 
-  const cultureContent = {
-    title: "Culture & Handloom",
-    subtitle: "Living Traditions of Art & Craftsmanship",
-    culturalAspects: [
-      {
-        name: "Traditional Music",
-        description: "Santipur is renowned for its devotional music traditions, including kirtan, bhajan, and classical Bengali songs. The city has produced many accomplished musicians and continues to nurture musical talent.",
-        features: ["Devotional Kirtan", "Classical Bengali Songs", "Traditional Instruments", "Music Festivals"]
-      },
-      {
-        name: "Dance & Drama",
-        description: "Classical dance forms and traditional drama depicting religious themes are integral to Santipur's culture. Performances during festivals bring these ancient art forms to life.",
-        features: ["Bharatanatyam", "Folk Dances", "Religious Drama", "Festival Performances"]
-      },
-      {
-        name: "Literature & Poetry",
-        description: "The city has a rich literary tradition with numerous poets and writers contributing to Bengali literature, particularly devotional poetry and spiritual texts.",
-        features: ["Devotional Poetry", "Spiritual Literature", "Bengali Prose", "Scholarly Works"]
-      }
-    ],
-    handloomTradition: {
-      description: "Santipur's handloom industry is legendary, known for producing some of the finest cotton and silk textiles in Bengal. The traditional weaving techniques have been passed down through generations of skilled artisans.",
-      specialties: [
-        "Santipuri Cotton Sarees - Known for their fine quality and intricate borders",
-        "Silk Textiles - Premium silk fabrics with traditional motifs",
-        "Jamdani Work - Delicate hand-woven patterns on fine cotton",
-        "Traditional Borders - Distinctive designs that identify Santipuri textiles"
-      ],
-      process: [
-        "Traditional pit looms operated by skilled weavers",
-        "Natural dyeing techniques using vegetable colors",
-        "Hand-spinning of cotton and silk threads",
-        "Intricate pattern weaving requiring years of experience"
-      ],
-      significance: "The handloom tradition is not just an industry but a way of life that connects the community to its heritage while providing livelihood to thousands of families."
-    }
-  }
+  // Did You Know facts
+  const funFacts = [
+    { icon: '🎵', fact: 'Santipur is birthplace of Sankirtana, the devotional singing movement' },
+    { icon: '🧵', fact: 'Santipur Tant sarees are worn by women across Bengal for their comfort' },
+    { icon: '🏛️', fact: 'Advaita Acharya\'s house still stands as a pilgrimage site' },
+    { icon: '📚', fact: 'The town has produced numerous scholars and literary figures' }
+  ];
 
-  const renderContent = () => {
-    switch (activeSection) {
-      case 'history':
-        return (
-          <div className="space-y-8">
-            <div className="text-center content-reveal">
-              <h2 className="text-4xl font-bold font-serif text-gray-800 mb-4">{historyContent.title}</h2>
-              <p className="text-xl text-gray-600">{historyContent.subtitle}</p>
-            </div>
+  // Historic images with hover info
+  const historicImages = [
+    { url: '/api/placeholder/300/200', caption: 'Advaita Acharya Temple - 15th Century', year: '1486' },
+    { url: '/api/placeholder/300/200', caption: 'Traditional Weaving Workshop', year: '1920s' },
+    { url: '/api/placeholder/300/200', caption: 'Ganges Ghat at Santipur', year: '1890' },
+    { url: '/api/placeholder/300/200', caption: 'Colonial Era Market', year: '1935' }
+  ];
 
-            <div className="grid lg:grid-cols-2 gap-12 content-reveal">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">Timeline of Santipur</h3>
-                <div className="space-y-6">
-                  {historyContent.content.map((item, index) => (
-                    <div key={index} className="border-l-4 border-blue-600 pl-6">
-                      <h4 className="text-lg font-semibold text-blue-700 mb-2">{item.period}</h4>
-                      <p className="text-gray-700 leading-relaxed">{item.description}</p>
-                    </div>
-                  ))}
-                </div>
+  // Weaving process images
+  const weavingImages = [
+    { url: '/api/placeholder/300/200', caption: 'Preparing the yarn with natural dyes' },
+    { url: '/api/placeholder/300/200', caption: 'Setting up the traditional handloom' },
+    { url: '/api/placeholder/300/200', caption: 'Weaving the intricate patterns' },
+    { url: '/api/placeholder/300/200', caption: 'Finished Jamdani saree masterpiece' }
+  ];
+
+  // Scroll to section
+  const scrollToSection = (sectionId) => {
+    setActiveSection(sectionId);
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  // Video Modal Component
+  const VideoModal = ({ video, onClose }) => (
+    <div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4"
+     onClick={onClose}>
+      <div className="relative w-full max-w-4xl"
+       onClick={e => e.stopPropagation()}>
+        <button 
+          onClick={onClose} 
+          className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors"
+        >
+          <X size={32} />
+        </button>
+        <div className="bg-gray-900 rounded-lg overflow-hidden shadow-2xl">
+          <video 
+            controls
+            autoPlay
+            className="w-full"
+          >
+            <source src={video.videoUrl} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div className="p-6 text-white">
+            <h3 className="text-2xl font-bold mb-2">{video.title}</h3>
+            <p className="text-gray-300 text-lg">{video.description}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Image Lightbox Component
+  const ImageLightbox = ({ image, onClose }) => (
+    <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="relative max-w-5xl" onClick={e => e.stopPropagation()}>
+        <button onClick={onClose} className="absolute -top-12 right-0 text-white hover:text-gray-300">
+          <X size={32} />
+        </button>
+        <img src={image.url} alt={image.caption} className="max-h-[80vh] rounded-lg" />
+        <div className="text-white text-center mt-4">
+          <p className="text-xl">{image.caption}</p>
+          {image.year && <p className="text-gray-400 mt-1">{image.year}</p>}
+        </div>
+      </div>
+    </div>
+  );
+
+  // Video Thumbnail Component - WITH VIDEO ELEMENT FOR AUTO THUMBNAIL
+  const VideoThumbnail = ({ video, onClick }) => {
+    const [thumbnailLoaded, setThumbnailLoaded] = useState(false);
+    const [useVideoElement, setUseVideoElement] = useState(false);
+    
+    return (
+      <div 
+        className="relative group cursor-pointer rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 bg-gray-900"
+        onClick={() => onClick(video)}
+      >
+        {!useVideoElement ? (
+          <>
+            {/* Try Cloudinary thumbnail first */}
+            <img 
+              src={video.thumbnail} 
+              alt={video.title} 
+              className={`w-full h-48 object-cover ${thumbnailLoaded ? 'block' : 'hidden'}`}
+              onLoad={() => setThumbnailLoaded(true)}
+              onError={() => setUseVideoElement(true)}
+            />
+            {!thumbnailLoaded && (
+              <div className="w-full h-48 bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600 animate-pulse flex items-center justify-center">
+                <Play size={48} className="text-white opacity-70" />
               </div>
+            )}
+          </>
+        ) : (
+          // Fallback: Use video element to generate thumbnail
+          <video 
+            className="w-full h-48 object-cover"
+            preload="metadata"
+            muted
+            playsInline
+          >
+            <source src={`${video.videoUrl}#t=60`} type="video/mp4" />
+          </video>
+        )}
+        
+        <div className="absolute inset-0  bg-opacity-10 group-hover:bg-opacity-60 transition-all flex items-center justify-center">
+          <div className="bg-white rounded-full p-4 group-hover:scale-110 transition-transform shadow-xl">
+            <Play size={32} className="text-red-600 fill-red-600" />
+          </div>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent p-4">
+          <h4 className="text-white font-semibold text-lg">{video.title}</h4>
+        </div>
+      </div>
+    );
+  };
 
-              <div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">Historical Highlights</h3>
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-2xl">
-                  <ul className="space-y-4">
-                    {historyContent.highlights.map((highlight, index) => (
-                      <li key={index} className="flex items-start space-x-3">
-                        <span className="w-2 h-2 bg-blue-600 rounded-full mt-2"></span>
-                        <span className="text-gray-700">{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mt-8 bg-gradient-to-r from-amber-500 to-orange-500 p-6 rounded-2xl text-white">
-                  <h4 className="text-xl font-bold mb-3">Did You Know?</h4>
-                  <p className="leading-relaxed">
-                    Santipur's name literally means "City of Peace," reflecting its spiritual significance and the tranquil atmosphere that has characterized the city throughout its history.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Historical Images Gallery */}
-            <div className="content-reveal mt-12">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">Historical Images</h3>
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="relative group cursor-pointer">
-                  <div className="aspect-video bg-gradient-to-br from-blue-200 to-indigo-300 rounded-xl flex items-center justify-center">
-                    <img 
-                     src={shayamChad} 
-                     alt="Ancient Temple Architecture"
-                     className='w-full h-full object-cover transform group-hover:scale-110 transition duration-500'
-                       /> 
-                  </div>
-                  <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-xl flex items-center justify-center">
-                    <span className="text-black opacity-0 group-hover:opacity-100 font-semibold">Ancient Temple Architecture</span>
-                  </div>
-                </div>
-                <div className="relative group cursor-pointer">
-                  <div className="aspect-video bg-gradient-to-br from-green-200 to-blue-300 rounded-xl flex items-center justify-center">
-                    <img 
-                     src={historicNeighborhoods} 
-                     alt="Ancient Temple Architecture"
-                     className='w-full h-full object-cover transform group-hover:scale-110 transition duration-500'
-                       /> 
-                  </div>
-                  <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-xl flex items-center justify-center">
-                    <span className="text-black opacity-0 group-hover:opacity-100 font-semibold">Historic Neighborhoods</span>
-                  </div>
-                </div>
-                <div className="relative group cursor-pointer">
-                  <div className="aspect-video bg-gradient-to-br from-purple-200 to-pink-300 rounded-xl flex items-center justify-center">
-                    <img 
-                     src={ancientManuscripts} 
-                     alt="Ancient Temple Architecture"
-                     className='w-full h-full object-cover transform group-hover:scale-110 transition duration-500'
-                       /> 
-                  </div>
-                  <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-xl flex items-center justify-center">
-                    <span className="text-black opacity-0 group-hover:opacity-100 font-semibold">Ancient Manuscripts</span>
-                  </div>
-                </div>
-              </div>
+  // Image with Hover Info Component
+  const HoverInfoImage = ({ image, onClick }) => {
+    const [showInfo, setShowInfo] = useState(false);
+    
+    return (
+      <div 
+        className="relative group cursor-pointer rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all"
+        onMouseEnter={() => setShowInfo(true)}
+        onMouseLeave={() => setShowInfo(false)}
+        onClick={() => onClick(image)}
+      >
+        <img src={image.url} alt={image.caption} className="w-full h-48 object-cover" />
+        {showInfo && (
+          <div className="absolute inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 transition-all">
+            <div className="text-white text-center">
+              <Info className="mx-auto mb-2" size={24} />
+              <p className="text-sm font-medium">{image.caption}</p>
+              {image.year && <p className="text-xs text-gray-300 mt-1">{image.year}</p>}
             </div>
           </div>
-        )
-
-      case 'chaitanya':
-        return (
-          <div className="space-y-8">
-            <div className="text-center content-reveal">
-              <h2 className="text-4xl font-bold font-serif text-gray-800 mb-4">{chaitanyaContent.title}</h2>
-              <p className="text-xl text-gray-600">{chaitanyaContent.subtitle}</p>
-            </div>
-
-            <div className="grid lg:grid-cols-2 gap-12 content-reveal">
-              <div>
-                <div className="bg-gradient-to-br from-yellow-500 to-orange-500 p-8 rounded-3xl text-white text-center mb-8">
-                  <div className="text-6xl mb-4">🙏</div>
-                  <h3 className="text-2xl font-bold mb-2">The Golden Avatar</h3>
-                  <p className="text-lg opacity-90">Sri Chaitanya Mahaprabhu appeared in 1486 CE to spread the message of divine love through the chanting of the holy names.</p>
-                </div>
-
-                <div className="space-y-6">
-                  {chaitanyaContent.content.map((item, index) => (
-                    <div key={index} className="bg-white p-6 rounded-xl shadow-md border-l-4 border-yellow-500">
-                      <h4 className="text-lg font-semibold text-gray-800 mb-3">{item.aspect}</h4>
-                      <p className="text-gray-700 leading-relaxed">{item.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">Core Teachings</h3>
-                <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-2xl mb-8">
-                  <ul className="space-y-3">
-                    {chaitanyaContent.teachings.map((teaching, index) => (
-                      <li key={index} className="flex items-start space-x-3">
-                        <span className="w-2 h-2 bg-purple-600 rounded-full mt-2"></span>
-                        <span className="text-gray-700">{teaching}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-6 rounded-2xl text-white">
-                  <h4 className="text-xl font-bold mb-3">Eternal Legacy</h4>
-                  <p className="leading-relaxed">{chaitanyaContent.legacy}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Video Interview Section */}
-            <div className="content-reveal mt-12">
-              <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">Community Voices</h3>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-white p-6 rounded-2xl shadow-lg">
-                  <div className="aspect-video bg-gradient-to-br from-yellow-200 to-orange-300 rounded-xl flex items-center justify-center mb-4 cursor-pointer group relative">
-                    <div className="absolute inset-0 bg-black bg-opacity-30 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                      <div className="w-16 h-16 bg-white bg-opacity-80 rounded-full flex items-center justify-center">
-                        <span className="text-2xl text-gray-800">▶</span>
-                      </div>
-                    </div>
-                    <span className="text-4xl">👨‍🦳</span>
-                  </div>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-2">Pandit Raghunath Das</h4>
-                  <p className="text-sm text-gray-600 mb-3">Temple Priest & Scholar</p>
-                  <p className="text-gray-700 text-sm leading-relaxed">
-                    "Sri Chaitanya Mahaprabhu's teachings continue to guide our daily lives in Santipur. Every morning, as we perform the temple rituals, we feel His divine presence through Advaita Acharya's legacy."
-                  </p>
-                </div>
-
-                <div className="bg-white p-6 rounded-2xl shadow-lg">
-                  <div className="aspect-video bg-gradient-to-br from-blue-200 to-purple-300 rounded-xl flex items-center justify-center mb-4 cursor-pointer group relative">
-                    <div className="absolute inset-0 bg-black bg-opacity-30 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                      <div className="w-16 h-16 bg-white bg-opacity-80 rounded-full flex items-center justify-center">
-                        <span className="text-2xl text-gray-800">▶</span>
-                      </div>
-                    </div>
-                    <span className="text-4xl">🎓</span>
-                  </div>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-2">Dr. Shyama Charan Goswami</h4>
-                  <p className="text-sm text-gray-600 mb-3">Religious Studies Professor</p>
-                  <p className="text-gray-700 text-sm leading-relaxed">
-                    "The historical significance of Santipur in the Vaishnava movement cannot be overstated. It remains one of the most important pilgrimage sites for understanding Chaitanya's teachings."
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Sacred Sites Images */}
-            <div className="content-reveal mt-12">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">Sacred Sites & Heritage</h3>
-              <div className="grid md:grid-cols-4 gap-4">
-                <div className="relative group cursor-pointer">
-                  <div className="aspect-square bg-gradient-to-br from-yellow-200 to-amber-300 rounded-xl flex items-center justify-center">
-                    <span className="text-3xl">🛕</span>
-                  </div>
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-xl flex items-center justify-center">
-                    <span className="text-white opacity-0 group-hover:opacity-100 font-semibold text-sm text-center px-2">Advaita Acharya Temple</span>
-                  </div>
-                </div>
-                <div className="relative group cursor-pointer">
-                  <div className="aspect-square bg-gradient-to-br from-orange-200 to-red-300 rounded-xl flex items-center justify-center">
-                    <span className="text-3xl">🏺</span>
-                  </div>
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-xl flex items-center justify-center">
-                    <span className="text-white opacity-0 group-hover:opacity-100 font-semibold text-sm text-center px-2">Sacred Artifacts</span>
-                  </div>
-                </div>
-                <div className="relative group cursor-pointer">
-                  <div className="aspect-square bg-gradient-to-br from-green-200 to-teal-300 rounded-xl flex items-center justify-center">
-                    <span className="text-3xl">🌿</span>
-                  </div>
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-xl flex items-center justify-center">
-                    <span className="text-white opacity-0 group-hover:opacity-100 font-semibold text-sm text-center px-2">Sacred Gardens</span>
-                  </div>
-                </div>
-                <div className="relative group cursor-pointer">
-                  <div className="aspect-square bg-gradient-to-br from-purple-200 to-pink-300 rounded-xl flex items-center justify-center">
-                    <span className="text-3xl">📿</span>
-                  </div>
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-xl flex items-center justify-center">
-                    <span className="text-white opacity-0 group-hover:opacity-100 font-semibold text-sm text-center px-2">Prayer Gatherings</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )
-
-      case 'culture':
-        return (
-          <div className="space-y-8">
-            <div className="text-center content-reveal">
-              <h2 className="text-4xl font-bold font-serif text-gray-800 mb-4">{cultureContent.title}</h2>
-              <p className="text-xl text-gray-600">{cultureContent.subtitle}</p>
-            </div>
-
-            {/* Cultural Aspects */}
-            <div className="content-reveal">
-              <h3 className="text-3xl font-bold text-gray-800 mb-8 text-center">Cultural Heritage</h3>
-              <div className="grid md:grid-cols-3 gap-8 mb-12">
-                {cultureContent.culturalAspects.map((aspect, index) => (
-                  <div key={index} className="bg-white p-6 rounded-2xl shadow-lg">
-                    <h4 className="text-xl font-bold text-gray-800 mb-4">{aspect.name}</h4>
-                    <p className="text-gray-700 mb-4">{aspect.description}</p>
-                    <div className="space-y-2">
-                      {aspect.features.map((feature, idx) => (
-                        <span key={idx} className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm mr-2 mb-2">
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Handloom Tradition */}
-            <div className="content-reveal bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-3xl">
-              <h3 className="text-3xl font-bold text-gray-800 mb-6 text-center">Handloom Legacy</h3>
-              
-              <div className="grid lg:grid-cols-2 gap-12">
-                <div>
-                  <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                    {cultureContent.handloomTradition.description}
-                  </p>
-
-                  <h4 className="text-xl font-bold text-gray-800 mb-4">Signature Specialties</h4>
-                  <div className="space-y-4">
-                    {cultureContent.handloomTradition.specialties.map((specialty, index) => (
-                      <div key={index} className="flex items-start space-x-3">
-                        <span className="w-2 h-2 bg-amber-600 rounded-full mt-2"></span>
-                        <span className="text-gray-700">{specialty}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-xl font-bold text-gray-800 mb-4">Traditional Process</h4>
-                  <div className="space-y-4 mb-6">
-                    {cultureContent.handloomTradition.process.map((step, index) => (
-                      <div key={index} className="flex items-start space-x-3">
-                        <div className="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                          {index + 1}
-                        </div>
-                        <span className="text-gray-700">{step}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="bg-gradient-to-r from-amber-600 to-orange-600 p-6 rounded-xl text-white">
-                    <h5 className="text-lg font-bold mb-2">Cultural Significance</h5>
-                    <p className="text-sm leading-relaxed">{cultureContent.handloomTradition.significance}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Artisan Video Interviews */}
-              <div className="mt-12">
-                <h4 className="text-2xl font-bold text-gray-800 mb-8 text-center">Master Artisans Share Their Stories</h4>
-                <div className="grid md:grid-cols-3 gap-6">
-                  <div className="bg-white p-4 rounded-xl shadow-md">
-                    <div className="aspect-video bg-gradient-to-br from-amber-200 to-orange-300 rounded-lg flex items-center justify-center mb-3 cursor-pointer group relative">
-                      <div className="absolute inset-0 bg-black bg-opacity-30 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                        <div className="w-12 h-12 bg-white bg-opacity-80 rounded-full flex items-center justify-center">
-                          <span className="text-lg text-gray-800">▶</span>
-                        </div>
-                      </div>
-                      <span className="text-3xl">👨‍🎨</span>
-                    </div>
-                    <h5 className="text-sm font-semibold text-gray-800 mb-1">Ramesh Kumar Das</h5>
-                    <p className="text-xs text-gray-600 mb-2">Master Weaver - 40 years experience</p>
-                    <p className="text-xs text-gray-700 leading-relaxed">
-                      "My grandfather taught me the art of weaving Santipuri sarees. Each thread carries our family's legacy."
-                    </p>
-                  </div>
-
-                  <div className="bg-white p-4 rounded-xl shadow-md">
-                    <div className="aspect-video bg-gradient-to-br from-pink-200 to-red-300 rounded-lg flex items-center justify-center mb-3 cursor-pointer group relative">
-                      <div className="absolute inset-0 bg-black bg-opacity-30 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                        <div className="w-12 h-12 bg-white bg-opacity-80 rounded-full flex items-center justify-center">
-                          <span className="text-lg text-gray-800">▶</span>
-                        </div>
-                      </div>
-                      <span className="text-3xl">👩‍🎨</span>
-                    </div>
-                    <h5 className="text-sm font-semibold text-gray-800 mb-1">Radha Rani Devi</h5>
-                    <p className="text-xs text-gray-600 mb-2">Pattern Designer</p>
-                    <p className="text-xs text-gray-700 leading-relaxed">
-                      "Creating new patterns while preserving traditional motifs is my passion. Each design tells a story."
-                    </p>
-                  </div>
-
-                  <div className="bg-white p-4 rounded-xl shadow-md">
-                    <div className="aspect-video bg-gradient-to-br from-green-200 to-blue-300 rounded-lg flex items-center justify-center mb-3 cursor-pointer group relative">
-                      <div className="absolute inset-0 bg-black bg-opacity-30 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                        <div className="w-12 h-12 bg-white bg-opacity-80 rounded-full flex items-center justify-center">
-                          <span className="text-lg text-gray-800">▶</span>
-                        </div>
-                      </div>
-                      <span className="text-3xl">👦</span>
-                    </div>
-                    <h5 className="text-sm font-semibold text-gray-800 mb-1">Ankit Mondal</h5>
-                    <p className="text-xs text-gray-600 mb-2">Young Artisan</p>
-                    <p className="text-xs text-gray-700 leading-relaxed">
-                      "I'm learning from my father to continue our family tradition. Technology helps us reach global markets."
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Handloom Process Images */}
-              <div className="mt-8">
-                <h4 className="text-xl font-bold text-gray-800 mb-6 text-center">The Art of Weaving</h4>
-                <div className="grid md:grid-cols-4 gap-4">
-                  <div className="relative group cursor-pointer">
-                    <div className="aspect-square bg-gradient-to-br from-blue-200 to-indigo-300 rounded-lg flex items-center justify-center">
-                      <span className="text-2xl">🧶</span>
-                    </div>
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-lg flex items-center justify-center">
-                      <span className="text-white opacity-0 group-hover:opacity-100 font-semibold text-xs text-center px-2">Thread Preparation</span>
-                    </div>
-                  </div>
-                  <div className="relative group cursor-pointer">
-                    <div className="aspect-square bg-gradient-to-br from-purple-200 to-pink-300 rounded-lg flex items-center justify-center">
-                      <span className="text-2xl">⚙️</span>
-                    </div>
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-lg flex items-center justify-center">
-                      <span className="text-white opacity-0 group-hover:opacity-100 font-semibold text-xs text-center px-2">Loom Setup</span>
-                    </div>
-                  </div>
-                  <div className="relative group cursor-pointer">
-                    <div className="aspect-square bg-gradient-to-br from-green-200 to-teal-300 rounded-lg flex items-center justify-center">
-                      <span className="text-2xl">✋</span>
-                    </div>
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-lg flex items-center justify-center">
-                      <span className="text-white opacity-0 group-hover:opacity-100 font-semibold text-xs text-center px-2">Hand Weaving</span>
-                    </div>
-                  </div>
-                  <div className="relative group cursor-pointer">
-                    <div className="aspect-square bg-gradient-to-br from-yellow-200 to-orange-300 rounded-lg flex items-center justify-center">
-                      <span className="text-2xl">👗</span>
-                    </div>
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-lg flex items-center justify-center">
-                      <span className="text-white opacity-0 group-hover:opacity-100 font-semibold text-xs text-center px-2">Finished Sarees</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )
-
-      default:
-        return null
-    }
-  }
+        )}
+      </div>
+    );
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      {/* Header Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 text-white">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 py-20">
-          <div className="text-center scroll-reveal">
-            <h1 className="text-5xl md:text-6xl font-bold font-serif mb-6">
-              About Santipur
-            </h1>
-            <p className="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed">
-              Discover the rich history, spiritual heritage, and cultural traditions that make 
-              Santipur a unique center of devotion and craftsmanship in Bengal.
-            </p>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-pink-50">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-orange-600 to-pink-600 text-white py-20">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-5xl font-bold mb-4">Discover Santipur</h1>
+          <p className="text-xl opacity-90">Where Heritage Weaves Stories Through Time</p>
+        </div>
+      </div>
+
+      {/* Featured Videos Section */}
+      <div className="container mx-auto px-4 -mt-12 mb-12">
+        <div className="bg-white rounded-2xl shadow-2xl p-8">
+          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Experience Santipur</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {videos.general.map(video => (
+              <VideoThumbnail key={video.id} video={video} onClick={setSelectedVideo} />
+            ))}
           </div>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <section className="py-8 bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex justify-center">
-            <div className="flex space-x-2 bg-gray-100 p-2 rounded-full">
-              {sections.map((section) => (
+      <div className="sticky top-0 z-40 bg-white shadow-md">
+        <div className="container mx-auto px-4">
+          <div className="flex space-x-1 overflow-x-auto">
+            {sections.map(section => {
+              const Icon = section.icon;
+              return (
                 <button
                   key={section.id}
-                  onClick={() => setActiveSection(section.id)}
-                  className={`flex items-center space-x-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                  onClick={() => scrollToSection(section.id)}
+                  className={`flex items-center space-x-2 px-6 py-4 font-semibold transition-all whitespace-nowrap ${
                     activeSection === section.id
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                      : 'text-gray-600 hover:text-blue-600 hover:bg-white'
+                      ? 'text-orange-600 border-b-4 border-orange-600'
+                      : 'text-gray-600 hover:text-orange-500'
                   }`}
                 >
-                  <span className="text-lg">{section.icon}</span>
-                  <span>{section.title}</span>
+                  <Icon size={20} />
+                  <span>{section.label}</span>
                 </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-12 space-y-20">
+        
+        {/* History Section */}
+        <section id="history" className="scroll-mt-20">
+          <h2 className="text-4xl font-bold text-gray-800 mb-8 text-center">History of Santipur</h2>
+          
+          {/* Timeline */}
+          <div className="relative">
+            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-orange-300"></div>
+            {timeline.map((item, index) => (
+              <div key={index} className={`flex items-center mb-12 ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
+                <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'text-left pl-8'}`}>
+                  <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                    <h3 className="text-2xl font-bold text-orange-600 mb-2">{item.era}</h3>
+                    <p className="text-gray-600 font-semibold mb-2">{item.period}</p>
+                    <p className="text-gray-700">{item.description}</p>
+                  </div>
+                </div>
+                <div className="w-2/12 flex justify-center">
+                  <div className="w-8 h-8 bg-orange-600 rounded-full border-4 border-white shadow-lg z-10"></div>
+                </div>
+                <div className="w-5/12"></div>
+              </div>
+            ))}
+          </div>
+
+          {/* Did You Know Cards */}
+          <div className="mt-12">
+            <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">Did You Know?</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {funFacts.map((fact, index) => (
+                <div key={index} className="bg-gradient-to-br from-orange-100 to-pink-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-all hover:-translate-y-1">
+                  <div className="text-4xl mb-3 text-center">{fact.icon}</div>
+                  <p className="text-gray-700 text-center">{fact.fact}</p>
+                </div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Content Section */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          {renderContent()}
-        </div>
-      </section>
-
-      {/* Call to Action */}
-      <section className="py-20 bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900 text-white">
-        <div className="max-w-4xl mx-auto px-6 text-center scroll-reveal">
-          <h2 className="text-4xl md:text-5xl font-bold font-serif mb-6">
-            Experience Santipur's Heritage
-          </h2>
-          <p className="text-xl text-purple-200 mb-10">
-            Visit the sacred temples, witness traditional craftsmanship, and immerse yourself 
-            in the spiritual atmosphere that has defined Santipur for centuries.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 bg-white text-purple-700 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
-              Plan Your Visit
-            </button>
-            <button className="px-8 py-4 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-purple-700 transition-all duration-300">
-              Explore More
-            </button>
+          {/* Historic Images Gallery */}
+          <div className="mt-12">
+            <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">Historic Glimpses</h3>
+            <div className="flex space-x-4 overflow-x-auto pb-4">
+              {historicImages.map((image, index) => (
+                <div key={index} className="flex-shrink-0 w-80">
+                  <HoverInfoImage image={image} onClick={setLightboxImage} />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* Sri Chaitanya Mahaprabhu Section */}
+        <section id="mahaprabhu" className="scroll-mt-20">
+          <h2 className="text-4xl font-bold text-gray-800 mb-8 text-center">Sri Chaitanya Mahaprabhu</h2>
+          
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <div className="bg-white p-8 rounded-lg shadow-lg">
+              <h3 className="text-2xl font-bold text-orange-600 mb-4">Connection to Santipur</h3>
+              <p className="text-gray-700 mb-4">
+                Santipur holds immense spiritual significance as the home of Advaita Acharya, one of the principal associates of Sri Chaitanya Mahaprabhu. It was here that the seeds of the Bhakti movement were nurtured, and the divine love of Lord Krishna was celebrated through Sankirtana.
+              </p>
+              <p className="text-gray-700">
+                The town became a major center for Vaishnavism, attracting devotees from across Bengal and beyond. Advaita Acharya's house remains a sacred pilgrimage site where thousands gather to experience the divine atmosphere.
+              </p>
+            </div>
+            
+            <div className="bg-white p-8 rounded-lg shadow-lg">
+              <h3 className="text-2xl font-bold text-orange-600 mb-4">Core Teachings</h3>
+              <ul className="space-y-3 text-gray-700">
+                <li className="flex items-start">
+                  <ChevronRight className="text-orange-600 mt-1 flex-shrink-0" />
+                  <span><strong>Bhakti (Devotion):</strong> Pure devotional love as the path to divine realization</span>
+                </li>
+                <li className="flex items-start">
+                  <ChevronRight className="text-orange-600 mt-1 flex-shrink-0" />
+                  <span><strong>Sankirtana:</strong> Congregational chanting of the holy names</span>
+                </li>
+                <li className="flex items-start">
+                  <ChevronRight className="text-orange-600 mt-1 flex-shrink-0" />
+                  <span><strong>Universal Love:</strong> Breaking social barriers through spiritual unity</span>
+                </li>
+                <li className="flex items-start">
+                  <ChevronRight className="text-orange-600 mt-1 flex-shrink-0" />
+                  <span><strong>Humility:</strong> Considering oneself lower than a blade of grass</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Scholar Videos */}
+          <div className="mt-8">
+            <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">Voices of Devotion</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {videos.mahaprabhu.map(video => (
+                <VideoThumbnail key={video.id} video={video} onClick={setSelectedVideo} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Culture & Handloom Section */}
+        <section id="culture" className="scroll-mt-20">
+          <h2 className="text-4xl font-bold text-gray-800 mb-8 text-center">Culture & Handloom Heritage</h2>
+          
+          <div className="bg-white p-8 rounded-lg shadow-lg mb-12">
+            <h3 className="text-2xl font-bold text-orange-600 mb-4">Living Traditions</h3>
+            <div className="grid md:grid-cols-3 gap-6 text-center">
+              <div className="p-4">
+                <div className="text-4xl mb-3">🎵</div>
+                <h4 className="font-bold text-lg mb-2">Music & Dance</h4>
+                <p className="text-gray-700">Kirtan, Baul songs, and classical Bengali music form the soul of Santipur</p>
+              </div>
+              <div className="p-4">
+                <div className="text-4xl mb-3">📖</div>
+                <h4 className="font-bold text-lg mb-2">Literature</h4>
+                <p className="text-gray-700">Rich tradition of Bengali poetry, devotional literature, and folk tales</p>
+              </div>
+              <div className="p-4">
+                <div className="text-4xl mb-3">🎭</div>
+                <h4 className="font-bold text-lg mb-2">Festivals</h4>
+                <p className="text-gray-700">Durga Puja, Rash Yatra, and various religious celebrations</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Handloom Legacy */}
+          <div className="bg-gradient-to-r from-orange-100 to-pink-100 p-8 rounded-lg shadow-lg mb-12">
+            <h3 className="text-2xl font-bold text-orange-600 mb-6 text-center">The Handloom Legacy</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <h4 className="font-bold text-lg text-orange-600 mb-3">Tant Sarees</h4>
+                <p className="text-gray-700">Light, comfortable cotton sarees perfect for Bengal's climate. Known for their vibrant colors and traditional borders.</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <h4 className="font-bold text-lg text-orange-600 mb-3">Jamdani</h4>
+                <p className="text-gray-700">Intricate hand-woven patterns creating stunning motifs. A UNESCO recognized heritage craft.</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <h4 className="font-bold text-lg text-orange-600 mb-3">Dhakai Sarees</h4>
+                <p className="text-gray-700">Fine muslin sarees with elaborate designs, representing centuries of weaving excellence.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Weaving Process Gallery */}
+          <div className="mt-12">
+            <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">The Art of Weaving</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {weavingImages.map((image, index) => (
+                <HoverInfoImage key={index} image={image} onClick={setLightboxImage} />
+              ))}
+            </div>
+          </div>
+
+          {/* Artisan Videos */}
+          <div className="mt-12">
+            <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">Stories from the Loom</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {videos.artisans.map(video => (
+                <VideoThumbnail key={video.id} video={video} onClick={setSelectedVideo} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Saree Market Section */}
+        <section id="market" className="scroll-mt-20">
+          <h2 className="text-4xl font-bold text-gray-800 mb-8 text-center">Saree Market & Weaver Stories</h2>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-white p-8 rounded-lg shadow-lg">
+              <h3 className="text-2xl font-bold text-orange-600 mb-4">Famous Markets</h3>
+              <ul className="space-y-4">
+                <li className="border-l-4 border-orange-600 pl-4">
+                  <h4 className="font-bold text-lg">Santipur Haat</h4>
+                  <p className="text-gray-700">Traditional weekly market showcasing authentic handloom sarees</p>
+                </li>
+                <li className="border-l-4 border-orange-600 pl-4">
+                  <h4 className="font-bold text-lg">Tantuja Stores</h4>
+                  <p className="text-gray-700">Government emporium supporting local weavers</p>
+                </li>
+                <li className="border-l-4 border-orange-600 pl-4">
+                  <h4 className="font-bold text-lg">Local Cooperatives</h4>
+                  <p className="text-gray-700">Direct purchase from weaver collectives ensuring fair prices</p>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="bg-gradient-to-br from-orange-100 to-pink-100 p-8 rounded-lg shadow-lg">
+              <h3 className="text-2xl font-bold text-orange-600 mb-4">Supporting Weavers</h3>
+              <p className="text-gray-700 mb-4">
+                Behind every saree is a family's legacy, passed down through generations. Today's weavers face challenges from mechanization, but their dedication to craft remains unwavering.
+              </p>
+              <div className="bg-white p-4 rounded-lg">
+                <p className="font-semibold text-orange-600 mb-2">How You Can Help:</p>
+                <ul className="text-gray-700 space-y-2">
+                  <li>✓ Buy directly from weavers or cooperatives</li>
+                  <li>✓ Choose handloom over powerloom products</li>
+                  <li>✓ Share their stories and craftsmanship</li>
+                  <li>✓ Support fair trade initiatives</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* Modals */}
+      {selectedVideo && <VideoModal video={selectedVideo} onClose={() => setSelectedVideo(null)} />}
+      {lightboxImage && <ImageLightbox image={lightboxImage} onClose={() => setLightboxImage(null)} />}
     </div>
-  )
+  );
 }
