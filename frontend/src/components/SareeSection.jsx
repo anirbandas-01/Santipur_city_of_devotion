@@ -1,4 +1,8 @@
-const SareeSection = () => {
+const cloudinaryImg =  {
+  sareeImg: "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759867443/WhatsApp_Image_2025-10-08_at_01.31.30_12717eea_wzodjt.jpg"
+}
+
+  const SareeSection = () => {
   const features = [
     {
       number: "1",
@@ -51,7 +55,13 @@ const SareeSection = () => {
           <div className="scroll-reveal">
             <div className="relative">
               <div className="w-full h-96 bg-gradient-to-br from-amber-200 to-orange-300 rounded-3xl flex items-center justify-center">
-                <div className="text-8xl opacity-50">🧵</div>
+                {/*<div className="text-8xl opacity-50">🧵</div>*/}
+
+                <img 
+                 src={cloudinaryImg.sareeImg}
+                 alt="Santi puri Saree"
+                 className="w-full h-full object-cover"
+                 />
               </div>
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-amber-600 rounded-full flex items-center justify-center">
                 <span className="text-3xl text-white">✨</span>
