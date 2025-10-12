@@ -149,25 +149,6 @@ const HistorySection = () => {
             </div>
           ))}
         </div>
-
-        {/* Timeline connector */}
-        <div className="hidden lg:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl">
-          <div className="relative">
-            {[0, 1, 2].map((index) => (
-              <div 
-                key={index}
-                className={`absolute top-0 bg-gradient-to-r from-gray-300 to-gray-400 h-px transition-all duration-1000 ${
-                  visibleCards.includes(index + 1) ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
-                }`}
-                style={{
-                  left: `${(index + 1) * 25 - 12.5}%`,
-                  width: '25%',
-                  transitionDelay: `${(index + 1) * 300}ms`
-                }}
-              ></div>
-            ))}
-          </div>
-        </div>
       </div>
 
       <style jsx>{`
