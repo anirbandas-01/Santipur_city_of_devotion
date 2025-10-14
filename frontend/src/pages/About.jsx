@@ -3,7 +3,8 @@ import { ChevronRight, Play, X, Info, Calendar, Heart, Users, Award } from 'luci
 
 // CLOUDINARY VIDEO - FULL ORIGINAL VIDEO (70MB, 7+ minutes)
 const cloudinaryVideo = {
-  santipurJourney: "https://res.cloudinary.com/dd5jhb6pf/video/upload/v1759861536/Santipur_full_umcwd0.mp4"
+  santipurJourney: "https://res.cloudinary.com/dd5jhb6pf/video/upload/v1759861536/Santipur_full_umcwd0.mp4",
+  santipurtath: "https://res.cloudinary.com/dd5jhb6pf/video/upload/v1760456854/santipur_tath.mp4"
 };
 
 export default function About() {
@@ -36,9 +37,9 @@ export default function About() {
         id: 2,
         title: 'Master Weaver at Work',
         // Thumbnail at 180 seconds (3 min)
-        thumbnail: "https://res.cloudinary.com/dd5jhb6pf/video/upload/so_180,w_400,h_250,c_fill,f_jpg,q_80/v1759861536/Santipur_full_umcwd0.jpg",
+        thumbnail: "https://res.cloudinary.com/dd5jhb6pf/video/upload//so_180,w_400,h_250,c_fill,f_jpg,q_80/v1760456854/santipur_tath.jpg",
         description: 'Watch the intricate process of Tant saree weaving',
-        videoUrl: cloudinaryVideo.santipurJourney
+        videoUrl: cloudinaryVideo.santipurtath
       },
       {
         id: 3,
