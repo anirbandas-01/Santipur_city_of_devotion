@@ -254,6 +254,7 @@ const santiPurVideoLink = "https://res.cloudinary.com/dd5jhb6pf/video/upload/v17
 const gopalLink = "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759417234/gopal_aqxwuj_c1rn4z.jpg";
 const jagaDhatriLink = "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759417253/jagadhatri_qqfyhz_lan8xp.jpg"; 
 const kaliLink = "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1759417242/ma-agomeshori_ikzqje_ibofvh.jpg";
+const handloom = "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1760455894/Weaving_Tant_Saree_by_Handloom_Santipur.jpg"
 
 const SlideshowSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -278,7 +279,7 @@ const SlideshowSection = () => {
       title: "Artisan Traditions", 
       subtitle: "Handloom Heritage & Craftsmanship", 
       description: "Witness the intricate art of traditional weaving and handloom techniques that have made Santipur famous across the world for its exquisite textiles.", 
-      image: kaliLink, 
+      image: handloom, 
       objectPosition: 'center top', 
       bgGradient: "from-blue-400 via-purple-500 to-indigo-600" 
     },
