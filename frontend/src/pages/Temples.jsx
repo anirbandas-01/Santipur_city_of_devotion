@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react'
 
+
+const boroGhosmai= "https://res.cloudinary.com/dd5jhb6pf/image/upload/v1760819860/boroGhosamiBari_dxgukv.jpg";
+const paglaGhosami = 'https://res.cloudinary.com/dd5jhb6pf/image/upload/v1760822869/paglaGhosami_oxjbyp.webp';
+
+
 // Enhanced Temple data with full descriptions and features
 const allTemples = [
   {
     id: 1,
     name: "Boro Goswami Bari",
-    image: "🏛️",
+    image: boroGhosmai,
     shortDesc: "One of the oldest and most prominent Goswami families' temple in Santipur, maintaining centuries of unbroken devotional traditions and spiritual teachings.",
     fullDesc: "Boro Goswami Bari stands as a testament to centuries of devotional tradition in Santipur. This ancient temple complex has been the spiritual home of one of the most respected Goswami families, maintaining unbroken lineages of worship and scholarship. The temple features traditional Bengali architecture with intricate terracotta work and a peaceful courtyard where devotees gather for daily kirtans and spiritual discussions.",
     period: "16th Century",
@@ -16,7 +21,7 @@ const allTemples = [
       "Traditional manuscript library",
       "Annual Ras Yatra celebrations"
     ],
-    gallery: ["🏛️", "📿", "🕉️", "🎭", "📚", "🌺"]
+    gallery: [boroGhosmai, "📿", "🕉️", "🎭", "📚", "🌺"]
   },
   {
     id: 2,
@@ -37,7 +42,7 @@ const allTemples = [
   {
     id: 3,
     name: "Pagla Goswami Bari",
-    image: "🏮",
+    image: paglaGhosami,
     shortDesc: "Sacred temple known for its unique spiritual atmosphere, ecstatic devotional practices, and night-long kirtan sessions during special occasions.",
     fullDesc: "Pagla Goswami Bari carries a fascinating history of ecstatic devotion and spiritual practices. The temple earned its name from the deep devotional fervor displayed by its early devotees. Today, it remains a center of intense bhakti (devotion) where traditional worship methods are preserved with utmost care. The temple is particularly known for its night-long kirtan sessions during special occasions.",
     period: "18th Century",
@@ -48,7 +53,7 @@ const allTemples = [
       "Historic spiritual artifacts",
       "Monthly full moon celebrations"
     ],
-    gallery: ["🏮", "🎵", "🌙", "💫", "🕯️", "🎶"]
+    gallery: [paglaGhosami, "🎵", "🌙", "💫", "🕯️", "🎶"]
   },
   {
     id: 29,
@@ -292,7 +297,7 @@ export default function Temples() {
                 </button>
 
                 {/* Scrollable Container */}
-                <div 
+               {/*  <div 
                   id={`gallery-${temple.id}`}
                   className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide hover:scrollbar-show scroll-smooth"
                 >
@@ -304,7 +309,28 @@ export default function Temples() {
                       {img}
                     </div>
                   ))}
-                </div>
+                </div> */}
+                <div 
+  id={`gallery-${temple.id}`}
+  className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide hover:scrollbar-show scroll-smooth"
+>
+  {temple.gallery?.map((img, index) => (
+    <div
+      key={index}
+      className="flex-shrink-0 w-80 h-64 bg-gradient-to-br from-amber-100 to-orange-200 rounded-2xl flex items-center justify-center hover:scale-105 hover:shadow-2xl transition-all duration-300 cursor-pointer snap-start overflow-hidden"
+    >
+      {img.startsWith('http') ? (
+        <img 
+          src={img} 
+          alt={`${temple.name} gallery ${index + 1}`}
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <span className="text-8xl">{img}</span>
+      )}
+    </div>
+  ))}
+</div>
                 
                 {/* Scroll Indicator */}
                 <div className="flex justify-center mt-4 gap-2">
@@ -509,9 +535,21 @@ export default function Temples() {
                   {/* Temple Image - Larger */}
                   <div className="h-64 bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent"></div>
-                    <span className="text-8xl relative z-10 transform group-hover:scale-110 transition-transform duration-300">
+                  {/*   <span className="text-8xl relative z-10 transform group-hover:scale-110 transition-transform duration-300">
                       {temple.image}
-                    </span>
+                    </span> */}
+                      {/* Check if image is a URL or emoji */}
+                    {temple.image.startsWith('http') ? (
+                      <img 
+                        src={temple.image} 
+                        alt={temple.name}
+                        className="w-full h-full object-cover relative z-10 transform group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <span className="text-8xl relative z-10 transform group-hover:scale-110 transition-transform duration-300">
+                        {temple.image}
+                      </span>
+                    )}
                     
                     {/* Period Badge */}
                     <div className="absolute top-4 right-4">
