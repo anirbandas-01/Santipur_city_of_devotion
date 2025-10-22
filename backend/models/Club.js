@@ -4,12 +4,12 @@ const clubSchema = new mongoose.Schema({
     clubName:  
       {
          type: String, 
-         require: true
+         required: true
       },
       festivalType:
       {
         type: String, 
-        require: true
+        required: true
       },
       description: String,
       images: [String],

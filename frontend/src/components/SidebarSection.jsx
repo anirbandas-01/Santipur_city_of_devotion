@@ -58,6 +58,12 @@ const SidebarSection = ({ isOpen, toggleSidebar}) => {
       label: 'Restaurants', 
       icon: '🍽️',
       description: 'Restaurants & Dining'
+    },
+    { 
+      path: '/reviews', 
+      label: 'Review', 
+      icon: '🍽️',
+      description: 'Add your Review Here'
     }
   ]
 
