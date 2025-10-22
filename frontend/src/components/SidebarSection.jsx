@@ -62,7 +62,7 @@ const SidebarSection = ({ isOpen, toggleSidebar}) => {
     { 
       path: '/reviews', 
       label: 'Review', 
-      icon: '🍽️',
+      icon: '⭐',
       description: 'Add your Review Here'
     }
   ]

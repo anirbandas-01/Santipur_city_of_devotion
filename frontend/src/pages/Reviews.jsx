@@ -18,7 +18,7 @@ export default function Reviews() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("http://localhost:5000/api/reviews", formData);
+    await axios.post(`${import.meta.env.VITE_API_URL}/reviews`, formData);
     setFormData({ name: "", email: "", rating: 5, message: "", suggestion: "" });
     setSubmitted(true);
     fetchReviews();
@@ -26,7 +26,7 @@ export default function Reviews() {
   };
 
   const fetchReviews = async () => {
-    const res = await axios.get("http://localhost:5000/api/reviews");
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/reviews`);
     setReviews(res.data);
   };
 
