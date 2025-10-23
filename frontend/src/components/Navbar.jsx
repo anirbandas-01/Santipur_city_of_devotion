@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Menu, X } from "lucide-react";
-
+import { Menu, X, User, ChevronDown } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ scrollToSection, sidebarOpen , toggleSidebar }) => {
   //const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+  const [scrolled, setScrolled] = useState(false);
+  
+  const [ menuOpen, setMenuOpen ] = useState(false);
+  const [user, setUser] = useState(null);
 
   //navbar style on scroll
   useEffect(() => {
@@ -16,6 +19,27 @@ const Navbar = ({ scrollToSection, sidebarOpen , toggleSidebar }) => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+ 
+  
+  // simulate login check (later, replace with token logic)
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) setUser(JSON.parse(savedUser));
+  }, []);
+
+  /* const handleNavClick = (href) => {
+    const sectionId = href.substring(1);
+    scrollToSection(sectionId);
+  }; */
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setUser(null);
+  };
+  
+  
 
   const navItems = [
     { href: '#home', label: 'Home' },
@@ -34,24 +58,21 @@ const Navbar = ({ scrollToSection, sidebarOpen , toggleSidebar }) => {
 
   return (
     <nav className={`fixed w-full top-0 z-40 transition-all duration-300 ${
-     scrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' 
-                : 'bg-white/90 backdrop-blur-md shadow-lg'
-     }`}>
-
-    <div className="w-full mx-auto px-10 py-4 flex items-center justify-between">
+ scrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' 
+            : 'bg-white/90 backdrop-blur-md shadow-lg'
+ }`}>
+  <div className="w-full mx-auto px-8 py-4 flex items-center justify-between">
     
-     {/* Left side: Menu Button + Logo together */}
-      <div className="flex items-center space-x-6">
-       <button
-        onClick={(e) =>{
+    {/* Left side: Menu Button + Logo together */}
+    <div className="flex items-center space-x-6">
+      <button
+        onClick={(e) => {
           e.preventDefault();
-          console.log("navbar toggle clicked, current state:", sidebarOpen);
           toggleSidebar();
-        }
-      }
+        }}
         className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
       >
-         <Menu size={28} />
+        <Menu size={28} />
       </button>
 
       <div className="flex items-center space-x-3">
@@ -62,27 +83,80 @@ const Navbar = ({ scrollToSection, sidebarOpen , toggleSidebar }) => {
       </div>
     </div>
 
-    {/* Right side: Desktop Navigation Menu */}
-    <div className="hidden md:flex space-x-8">
-      {navItems.map((item) => (
-        <button
-          key={item.href}
-          onClick={() => handleNavClick(item.href)}
-          className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium"
-        >
-          {item.label}
-        </button>
-      ))}
-    </div>
+    {/* Right side: Desktop Navigation + Profile together */}
+    <div className="flex items-center space-x-6">
+      {/* Desktop Navigation Menu */}
+      <div className="hidden md:flex space-x-6">
+        {navItems.map((item) => (
+          <button
+            key={item.href}
+            onClick={() => handleNavClick(item.href)}
+            className="text-gray-600 hover:text-blue-600 transition-colors duration-300 font-medium"
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
 
-    <div className="md:hidden"></div>
+      {/* Profile Icon */}
+      <div className="relative">
+        <button
+          className="flex items-center space-x-2 focus:outline-none"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {user ? (
+            <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center text-lg font-bold">
+              {user.name.charAt(0).toUpperCase()}
+            </div>
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+              <User size={22} className="text-gray-600" />
+            </div>
+          )}
+          <ChevronDown size={18} className="text-gray-500" />
+        </button>
+
+        {menuOpen && (
+          <div className="absolute right-0 mt-3 w-48 bg-white shadow-lg rounded-lg border border-gray-100 py-2">
+            {!user ? (
+              <>
+                  <Link
+                      to="/signup"
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      Club Signup
+                    </Link>
+                 <Link
+                      to="/login"
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      Club Login
+                    </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      My Profile
+                    </Link>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                >
+                  Logout
+                </button>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
   </div>
 </nav>
-  )
-}
+  );
+};
 
-
-
-
-export default Navbar
+export default Navbar;
 

@@ -15,6 +15,12 @@ import Restaurants from './pages/Restaurants';
 import SareeMarket from './pages/SareeMarket';
 import Reviews from './pages/Reviews';
 
+//signup and login 
+import Signup from './components/auth/Signup';
+import Login from './components/auth/Login';
+
+
+
 function App() {
 
 const router = createBrowserRouter([
@@ -33,6 +39,8 @@ const router = createBrowserRouter([
         
       ],
     },
+      { path: "/signup", element: <Signup /> },
+      { path: "/login", element: <Login /> },
   ]);
 
 
