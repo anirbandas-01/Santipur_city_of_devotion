@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import FestivalCard from '../components/festivals/FestivalCard.jsx'
 import FestivalDetailModal from '../components/festivals/FestivalDetailModal.jsx'
-import { festivalsData } from '../data/festivalsData.jsx'
+import { festivalsData } from '../data/festivalsData.js'
 
 import ImageGallery from '../components/festivals/ImageGallery.jsx';
 import FairInformation from '../components/festivals/FairInformation.jsx';

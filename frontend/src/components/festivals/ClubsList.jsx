@@ -1,6 +1,8 @@
 // COMPONENT 5: ClubsList.jsx
 // ============================================
-function ClubsList({ clubs }) {
+import ClubCard from './ClubCard.jsx'
+
+export default function ClubsList({ clubs }) {
   return (
     <div className="mb-8">
       <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">

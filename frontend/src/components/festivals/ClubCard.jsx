@@ -1,6 +1,8 @@
 // COMPONENT 4: ClubCard.jsx
 // ============================================
-function ClubCard({ club }) {
+import { useState } from 'react'
+
+export default function ClubCard({ club }) {
   const [showDetails, setShowDetails] = useState(false)
 
   return (

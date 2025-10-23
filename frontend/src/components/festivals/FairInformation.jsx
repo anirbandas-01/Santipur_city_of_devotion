@@ -1,4 +1,7 @@
-function FairInformation({ fairInfo }) {
+// COMPONENT 3: FairInformation.jsx
+// ============================================
+
+export default function FairInformation({ fairInfo }) {
   return (
     <div className="mb-8 bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-xl">
       <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">

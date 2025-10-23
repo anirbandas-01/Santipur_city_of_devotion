@@ -1,6 +1,8 @@
 // COMPONENT 2: ImageGallery.jsx
 // ============================================
-function ImageGallery({ images }) {
+import { useState } from 'react'
+
+export default function ImageGallery({ images }) {
   const [selectedImage, setSelectedImage] = useState(0)
 
   return (
