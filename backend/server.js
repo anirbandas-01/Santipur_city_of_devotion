@@ -2,8 +2,8 @@ import express from 'express';
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from './config/db.js';
-//import clubRoutes from './routes/clubRoutes.js';
-//import userRoutes from './routes/userRoutes.js';
+import clubRoutes from './routes/clubRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js'
 import mongoose from 'mongoose';
 
@@ -16,8 +16,8 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
 
-//app.use("/api/clubs", clubRoutes);
-//app.use("/api/users", userRoutes);
+app.use("/api/clubs", clubRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/reviews", reviewRoutes);
 
 
