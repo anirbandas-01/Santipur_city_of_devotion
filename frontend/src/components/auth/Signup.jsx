@@ -30,8 +30,15 @@ export default function Signup() {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center p-4 z-50 animate-fadeIn">
-      {/* Frosted Glass Backdrop - Blurs the page content behind */}
-      <div className="absolute inset-0 backdrop-blur-md bg-black/30"></div>
+      {/* Blurred Background */}
+      <div className="absolute inset-0 bg-white/30 backdrop-blur-3xl"></div>
+      
+      {/* Animated Gradient Blobs */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full blur-3xl opacity-40 animate-blob"></div>
+        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-to-br from-pink-400 to-orange-500 rounded-full blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-1/2 right-1/3 w-96 h-96 bg-gradient-to-br from-orange-400 to-red-500 rounded-full blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
+      </div>
 
       {/* Signup Card */}
       <div className="relative bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden animate-slideUp">

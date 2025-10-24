@@ -33,8 +33,15 @@ export default function Login() {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center p-4 z-50 animate-fadeIn">
-      {/* Blurred Background Overlay - shows page content underneath */}
-      <div className="absolute inset-0 backdrop-blur-lg bg-black/20"></div>
+      {/* Blurred Background */}
+      <div className="absolute inset-0 bg-white/30 backdrop-blur-3xl"></div>
+      
+      {/* Animated Gradient Blobs */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full blur-3xl opacity-40 animate-blob"></div>
+        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-gradient-to-br from-pink-400 to-orange-500 rounded-full blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
+      </div>
 
       {/* Login Card */}
       <div className="relative bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden animate-slideUp">
@@ -172,12 +179,36 @@ export default function Login() {
           }
         }
         
+        @keyframes blob {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+        }
+        
         .animate-fadeIn {
           animation: fadeIn 0.3s ease-out;
         }
         
         .animate-slideUp {
           animation: slideUp 0.4s ease-out;
+        }
+        
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        
+        .animation-delay-4000 {
+          animation-delay: 4s;
         }
       `}</style>
     </div>
