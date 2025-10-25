@@ -1,5 +1,6 @@
+// frontend/src/components/Navbar.jsx
 import { useState, useEffect } from 'react';
-import { Menu, X, User, ChevronDown, LogOut, UserCircle, Settings } from "lucide-react";
+import { Menu, X, User, ChevronDown, LogOut, UserCircle, Settings, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Navbar = ({ scrollToSection, sidebarOpen, toggleSidebar }) => {
@@ -18,7 +19,7 @@ const Navbar = ({ scrollToSection, sidebarOpen, toggleSidebar }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Simulate login check
+  // Check login status
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) setUser(JSON.parse(savedUser));
@@ -40,6 +41,7 @@ const Navbar = ({ scrollToSection, sidebarOpen, toggleSidebar }) => {
     localStorage.removeItem("token");
     setUser(null);
     setMenuOpen(false);
+    window.location.reload();
   };
 
   const navItems = [
@@ -208,6 +210,21 @@ const Navbar = ({ scrollToSection, sidebarOpen, toggleSidebar }) => {
 
                     {/* Logged-in Menu Items */}
                     <div className="p-3">
+                      {/* My Club Option - NEW */}
+                      <Link
+                        to="/club-management"
+                        className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 rounded-xl transition-all duration-300 group mb-2"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        <div className="w-10 h-10 bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                          <Upload size={20} className="text-purple-600" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-semibold text-gray-800">My Club</p>
+                          <p className="text-xs text-gray-500">Manage your club</p>
+                        </div>
+                      </Link>
+
                       <Link
                         to="/profile"
                         className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 rounded-xl transition-all duration-300 group mb-2"
@@ -220,7 +237,7 @@ const Navbar = ({ scrollToSection, sidebarOpen, toggleSidebar }) => {
                       </Link>
 
                       <button
-                        className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 rounded-xl transition-all duration-300 group mb-2 w-full"
+                        className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 rounded-xl transition-all duration-300 group mb-2 w-full text-left"
                         onClick={() => setMenuOpen(false)}
                       >
                         <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -233,7 +250,7 @@ const Navbar = ({ scrollToSection, sidebarOpen, toggleSidebar }) => {
                       
                       <button
                         onClick={handleLogout}
-                        className="flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-all duration-300 group w-full"
+                        className="flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-all duration-300 group w-full text-left"
                       >
                         <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                           <LogOut size={20} className="text-red-600" />

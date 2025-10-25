@@ -14,7 +14,7 @@ const clubSchema = new mongoose.Schema({
       description: String,
       images: [String],
       email: String,
-      status: 
+      /* status: 
       {
         type: String,
         default: "pending"
@@ -23,7 +23,7 @@ const clubSchema = new mongoose.Schema({
       {
         type: Date,
         default: Date.now
-      }
-})
+      } */
+}, { timestamps: true});
 
 export default mongoose.model("Club", clubSchema);

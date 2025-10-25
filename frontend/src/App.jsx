@@ -14,7 +14,7 @@ import Gallery from './pages/Gallery';
 import Restaurants from './pages/Restaurants';
 import SareeMarket from './pages/SareeMarket';
 import Reviews from './pages/Reviews';
-
+import ClubManagement from './components/ClubManagement';
 //signup and login 
 import Signup from './components/auth/Signup';
 import Login from './components/auth/Login';
@@ -35,7 +35,8 @@ const router = createBrowserRouter([
         { path: "/gallery", element: <Gallery /> },
         { path: "/restaurants", element: <Restaurants /> },
         { path: "/sareeMarket", element: <SareeMarket /> },
-        {path: "/reviews", element: <Reviews />}
+        {path: "/reviews", element: <Reviews />},
+        { path: "/club-management", element: <ClubManagement /> } 
         
       ],
     },
