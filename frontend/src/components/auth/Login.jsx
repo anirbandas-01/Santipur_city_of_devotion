@@ -2,26 +2,36 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { X, Mail, Lock, Eye, EyeOff, ArrowLeft, LogIn } from "lucide-react";
+import Toast from "../common/Toast";
 
 export default function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState(null);
+
+  const showToast = (message, type) => {
+    setToast({ message, type });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", formData);
+      const res = await axios.post("http://localhost:5000/api/users/login", formData);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user || { name: formData.email.split('@')[0], email: formData.email }));
-      alert("Login successful!");
-      navigate("/");
-      window.location.reload();
+      
+      showToast("Login successful! Redirecting...", "success");
+      
+      setTimeout(() => {
+        navigate("/");
+        window.location.reload();
+      }, 1500);
     } catch (error) {
-      alert(error.response?.data?.message || "Login failed");
+      showToast(error.response?.data?.message || "Login failed. Please try again.", "error");
     } finally {
       setLoading(false);
     }
@@ -33,15 +43,8 @@ export default function Login() {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center p-4 z-50 animate-fadeIn">
-      {/* Blurred Background */}
-      <div className="absolute inset-0 bg-white/30 backdrop-blur-3xl"></div>
-      
-      {/* Animated Gradient Blobs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full blur-3xl opacity-40 animate-blob"></div>
-        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-gradient-to-br from-pink-400 to-orange-500 rounded-full blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
-      </div>
+      {/* Frosted Glass Backdrop - Blurs the page content behind */}
+      <div className="absolute inset-0 backdrop-blur-md bg-black/30"></div>
 
       {/* Login Card */}
       <div className="relative bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden animate-slideUp">
@@ -162,6 +165,15 @@ export default function Login() {
         </form>
       </div>
 
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; }
@@ -179,36 +191,12 @@ export default function Login() {
           }
         }
         
-        @keyframes blob {
-          0%, 100% {
-            transform: translate(0, 0) scale(1);
-          }
-          33% {
-            transform: translate(30px, -50px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
-        }
-        
         .animate-fadeIn {
           animation: fadeIn 0.3s ease-out;
         }
         
         .animate-slideUp {
           animation: slideUp 0.4s ease-out;
-        }
-        
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        
-        .animation-delay-4000 {
-          animation-delay: 4s;
         }
       `}</style>
     </div>

@@ -230,7 +230,7 @@ const Navbar = ({ scrollToSection, sidebarOpen, toggleSidebar }) => {
                       </button>
 
                       <div className="border-t border-gray-100 my-2"></div>
-
+                      
                       <button
                         onClick={handleLogout}
                         className="flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-all duration-300 group w-full"

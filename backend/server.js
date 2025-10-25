@@ -4,8 +4,7 @@ import cors from "cors";
 import connectDB from './config/db.js';
 import clubRoutes from './routes/clubRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-import reviewRoutes from './routes/reviewRoutes.js'
-import mongoose from 'mongoose';
+import reviewRoutes from './routes/reviewRoutes.js';
 
 dotenv.config();
 connectDB();
