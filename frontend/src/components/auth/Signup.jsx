@@ -22,7 +22,7 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/users/register`, formData);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/register`, formData);
       
       // Store user data and token
       localStorage.setItem("token", res.data.token);
