@@ -62,7 +62,7 @@ export default function ClubManagement() {
 
   const fetchExistingClub = async (email) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/clubs?email=${email}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/clubs?email=${email}`);
       if (res.data && res.data.length > 0) {
         const club = res.data[0];
         setExistingClub(club);
@@ -135,8 +135,8 @@ export default function ClubManagement() {
       });
 
       const endpoint = existingClub 
-        ? `http://localhost:5000/api/clubs/${existingClub._id}` 
-        : 'http://localhost:5000/api/clubs/add';
+        ? `${import.meta.env.VITE_API_URL}/clubs/${existingClub._id}` 
+        : `${import.meta.env.VITE_API_URL}/clubs/add`;
       
       const method = existingClub ? 'put' : 'post';
 
@@ -169,7 +169,7 @@ export default function ClubManagement() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/clubs/${existingClub._id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/clubs/${existingClub._id}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
