@@ -1,6 +1,4 @@
-// ============================================
-// FILE: components/ClubManagement.jsx (MAIN COMPONENT)
-// ============================================
+// frontend/src/pages/ClubManagement.jsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -149,16 +147,6 @@ export default function ClubManagement() {
 
       setUploadSuccess(true);
       showToast(existingClub ? 'Club updated successfully!' : 'Club submitted for review!', 'success');
-      
-      setTimeout(() => {
-        setUploadSuccess(false);
-        if (!existingClub) {
-          navigate('/');
-        } else {
-          setIsEditing(false);
-          fetchExistingClub(formData.email);
-        }
-      }, 2000);
 
     } catch (error) {
       showToast(error.response?.data?.message || 'Upload failed. Please try again.', 'error');
@@ -190,19 +178,27 @@ export default function ClubManagement() {
     }
   };
 
-  // Show success screen
+  const handleGoHome = () => {
+    setUploadSuccess(false);
+    if (!existingClub) {
+      navigate('/');
+    } else {
+      setIsEditing(false);
+      fetchExistingClub(formData.email);
+    }
+  };
+
+  const handleViewFestivals = () => {
+    navigate('/festivals');
+  };
+
+  // Show success screen - user must click button to navigate
   if (uploadSuccess) {
     return (
       <SuccessScreen 
         isUpdate={!!existingClub}
-        onGoHome={() => {
-          setUploadSuccess(false);
-          if (!existingClub) {
-            navigate('/');
-          } else {
-            setIsEditing(false);
-          }
-        }}
+        onGoHome={handleGoHome}
+        onViewFestivals={handleViewFestivals}
       />
     );
   }

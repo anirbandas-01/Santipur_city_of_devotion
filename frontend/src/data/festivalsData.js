@@ -25,6 +25,7 @@ export const festivalsData = [
     ],
     icon: "🎭",
     color: "from-purple-600 to-pink-600",
+    festivalTypes: [], // No direct mapping - can add 'cultural' or 'other' type clubs
     detailedDescription: `Ras Yatra is the most magnificent festival celebrated in Santipur, drawing thousands of devotees from across Bengal and beyond. This three-day extravaganza transforms the entire town into a divine celebration of love, devotion, and spiritual ecstasy.
 
 The festival commemorates Lord Krishna's Ras Leela - the divine dance with the Gopis under the full moon. Each evening, elaborate performances recreate these celestial events, with talented artists portraying the divine love story through classical dance, music, and theatrical performances.
@@ -64,84 +65,7 @@ The streets come alive with colorful decorations, traditional music echoing thro
         "Food Court", 
         "Kids Play Zone"
       ]
-    },
-    clubs: [
-      {
-        id: 1,
-        name: "Santipur Ras Mandir Samiti",
-        description: "The oldest and most renowned club organizing the main Ras Yatra celebrations since 1875.",
-        location: "Central Santipur",
-        deity: "Radha Krishna",
-        images: ["https://images.unsplash.com/photo-1603794052293-36f3ad06d0a7?w=600"],
-        specialties: [
-          "100+ member kirtan team", 
-          "Traditional Ras Mandap", 
-          "24-hour continuous programs"
-        ],
-        contactPerson: "Shri Gopal Chatterjee",
-        established: "1875"
-      },
-      {
-        id: 2,
-        name: "Palpara Ras Utsav Committee",
-        description: "Known for their spectacular light decorations and modern presentation while maintaining traditional values.",
-        location: "Palpara Area",
-        deity: "Radha Madhav",
-        images: ["https://images.unsplash.com/photo-1604608672516-f1b9b1a3a854?w=600"],
-        specialties: [
-          "Modern light installations", 
-          "Cultural competitions", 
-          "Youth participation programs"
-        ],
-        contactPerson: "Sri Amit Banerjee",
-        established: "1920"
-      },
-      {
-        id: 3,
-        name: "Fulia Ras Mandali",
-        description: "Famous for their authentic traditional performances and preservation of ancient Ras Leela styles.",
-        location: "Fulia",
-        deity: "Radha Govinda",
-        images: ["https://images.unsplash.com/photo-1593969321516-f6296990d771?w=600"],
-        specialties: [
-          "Traditional dance forms", 
-          "Classical music performances", 
-          "Heritage documentation"
-        ],
-        contactPerson: "Pandit Radhakanta Das",
-        established: "1902"
-      },
-      {
-        id: 4,
-        name: "Nagar Sankirtan Mandal",
-        description: "Specializes in organizing massive sankirtan processions through the town streets.",
-        location: "Market Area",
-        deity: "Gauranga Mahaprabhu",
-        images: ["https://images.unsplash.com/photo-1570231982776-1c0d6f4fead7?w=600"],
-        specialties: [
-          "Grand processions", 
-          "Street performances", 
-          "Community feasts"
-        ],
-        contactPerson: "Baba Hari Das",
-        established: "1895"
-      },
-      {
-        id: 5,
-        name: "Mahila Samiti Ras Utsav",
-        description: "Women-led organization known for their elegant decorations and community welfare activities.",
-        location: "Station Road",
-        deity: "Radha Rani",
-        images: ["https://images.unsplash.com/photo-1574604275896-1e8f5be00c5f?w=600"],
-        specialties: [
-          "Women empowerment programs", 
-          "Traditional crafts exhibition", 
-          "Educational workshops"
-        ],
-        contactPerson: "Srimati Anjali Devi",
-        established: "1965"
-      }
-    ]
+    }
   },
   {
     id: 2,
@@ -167,6 +91,7 @@ The streets come alive with colorful decorations, traditional music echoing thro
     ],
     icon: "🎨",
     color: "from-red-500 to-yellow-500",
+    festivalTypes: ['dol-yatra'], // Maps to dol-yatra clubs
     detailedDescription: `Dol Jatra, also known as Holi, marks the arrival of spring with an explosion of colors, joy, and celebration. In Santipur, this festival takes on a special spiritual significance as devotees celebrate Lord Krishna's playful nature.
 
 The festivities begin early morning with special prayers at temples, followed by the traditional throwing of colored powders (abir). The entire town transforms into a canvas of vibrant colors as people of all ages participate in the celebrations.
@@ -202,54 +127,7 @@ Traditional Holi songs and dhol beats fill the air, creating an atmosphere of pu
         "Food Festival", 
         "Children's Games"
       ]
-    },
-    clubs: [
-      {
-        id: 1,
-        name: "Santipur Dol Utsav Samiti",
-        description: "Organizes the largest Dol celebrations with eco-friendly colors and cultural programs.",
-        location: "Town Square",
-        deity: "Radha Krishna",
-        images: ["https://images.unsplash.com/photo-1528825871115-3581a5387919?w=600"],
-        specialties: [
-          "Eco-friendly celebrations", 
-          "Cultural performances", 
-          "Community unity programs"
-        ],
-        contactPerson: "Sri Narayan Ghosh",
-        established: "1888"
-      },
-      {
-        id: 2,
-        name: "Yuva Dol Mandali",
-        description: "Youth-focused organization bringing modern energy to traditional celebrations.",
-        location: "College Road",
-        deity: "Krishna Balaram",
-        images: ["https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600"],
-        specialties: [
-          "DJ music integration", 
-          "Social media campaigns", 
-          "Youth engagement activities"
-        ],
-        contactPerson: "Rohit Chakraborty",
-        established: "2005"
-      },
-      {
-        id: 3,
-        name: "Parivar Dol Sangh",
-        description: "Family-oriented celebrations focusing on traditional values and children's participation.",
-        location: "Residential Area",
-        deity: "Radha Madhav",
-        images: ["https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600"],
-        specialties: [
-          "Family programs", 
-          "Children's activities", 
-          "Safe celebrations"
-        ],
-        contactPerson: "Tapan Kumar Roy",
-        established: "1978"
-      }
-    ]
+    }
   },
   {
     id: 3,
@@ -275,6 +153,7 @@ Traditional Holi songs and dhol beats fill the air, creating an atmosphere of pu
     ],
     icon: "🚂",
     color: "from-orange-600 to-red-600",
+    festivalTypes: ['rath-yatra'], // Maps to rath-yatra clubs
     detailedDescription: "The magnificent Rath Yatra is a week-long celebration featuring grand chariot processions through the streets of Santipur. This ancient tradition brings together thousands of devotees who pull the decorated chariots carrying the deities.",
     images: [
       { 
@@ -291,24 +170,7 @@ Traditional Holi songs and dhol beats fill the air, creating an atmosphere of pu
         "Daily Cultural Programs", 
         "Mahaprasad Distribution"
       ]
-    },
-    clubs: [
-      {
-        id: 1,
-        name: "Santipur Rath Yatra Committee",
-        description: "Main organizer of the grand Rath Yatra with historical significance.",
-        location: "Main Road",
-        deity: "Jagannath, Balabhadra, Subhadra",
-        images: ["https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=600"],
-        specialties: [
-          "Historic chariots", 
-          "Traditional rituals", 
-          "Large-scale organization"
-        ],
-        contactPerson: "Sri Bimal Das",
-        established: "1850"
-      }
-    ]
+    }
   },
   {
     id: 4,
@@ -333,7 +195,8 @@ Traditional Holi songs and dhol beats fill the air, creating an atmosphere of pu
       "108 names chanting"
     ],
     icon: "👶",
-    color: "from-blue-600 to-purple-600"
+    color: "from-blue-600 to-purple-600",
+    festivalTypes: ['janmashtami'] // Maps to janmashtami clubs
   },
   {
     id: 5,
@@ -358,7 +221,8 @@ Traditional Holi songs and dhol beats fill the air, creating an atmosphere of pu
       "Community singing"
     ],
     icon: "🙏",
-    color: "from-yellow-500 to-orange-500"
+    color: "from-yellow-500 to-orange-500",
+    festivalTypes: [] // No direct mapping
   },
   {
     id: 6,
@@ -383,6 +247,82 @@ Traditional Holi songs and dhol beats fill the air, creating an atmosphere of pu
       "Sindur khela ceremony"
     ],
     icon: "🏺",
-    color: "from-pink-600 to-purple-600"
+    color: "from-pink-600 to-purple-600",
+    festivalTypes: ['durga-puja'] // Maps to durga-puja clubs
+  },
+  {
+    id: 7,
+    name: "Kali Puja",
+    category: "other",
+    season: "Autumn",
+    duration: "1 Day",
+    description: "Worshipping the fierce form of Goddess Kali on the new moon night.",
+    highlights: [
+      "Nighttime worship ceremonies",
+      "Traditional offerings",
+      "Cultural programs",
+      "Community participation"
+    ],
+    date: "October-November (Kartik Amavasya)",
+    significance: "Celebrates the power of divine mother in her fierce protective form.",
+    traditions: [
+      "Midnight puja rituals",
+      "Animal-shaped sweets",
+      "Oil lamp lighting",
+      "Community feasting"
+    ],
+    icon: "🌙",
+    color: "from-indigo-600 to-purple-600",
+    festivalTypes: ['kali-puja']
+  },
+  {
+    id: 8,
+    name: "Saraswati Puja",
+    category: "other",
+    season: "Spring",
+    duration: "1 Day",
+    description: "Honoring the goddess of knowledge, music, and arts.",
+    highlights: [
+      "Student participation",
+      "Book and instrument worship",
+      "Cultural performances",
+      "Educational celebrations"
+    ],
+    date: "January-February (Maghi Panchami)",
+    significance: "Seeking blessings for knowledge, wisdom, and artistic talents.",
+    traditions: [
+      "Yellow clothing tradition",
+      "Placing books at goddess feet",
+      "Cultural programs",
+      "Prasad distribution"
+    ],
+    icon: "📚",
+    color: "from-yellow-400 to-orange-500",
+    festivalTypes: ['saraswati-puja']
+  },
+  {
+    id: 9,
+    name: "Lakshmi Puja",
+    category: "other",
+    season: "Autumn",
+    duration: "1 Day",
+    description: "Worshipping Goddess Lakshmi for prosperity and wealth.",
+    highlights: [
+      "Home decorations",
+      "Oil lamp lighting",
+      "Business community participation",
+      "Traditional rituals"
+    ],
+    date: "October-November (Kojagari Purnima)",
+    significance: "Seeking divine blessings for prosperity, wealth, and well-being.",
+    traditions: [
+      "Cleaning and decorating homes",
+      "Alpana (rangoli) designs",
+      "Lighting diyas",
+      "Offering lotus flowers"
+    ],
+    icon: "💰",
+    color: "from-pink-500 to-red-500",
+    festivalTypes: ['lakshmi-puja']
   }
 ]

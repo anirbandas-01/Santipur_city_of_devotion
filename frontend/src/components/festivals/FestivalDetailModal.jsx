@@ -1,14 +1,87 @@
-// src/components/festivals/FestivalDetailModal.jsx
+// frontend/src/components/festivals/FestivalDetailModal.jsx
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import ImageGallery from './ImageGallery'
 import FairInformation from './FairInformation'
 import ClubsList from './ClubsList'
 
 export default function FestivalDetailModal({ festival, onClose }) {
   const [activeTab, setActiveTab] = useState('overview')
+  const [clubs, setClubs] = useState([])
+  const [loadingClubs, setLoadingClubs] = useState(false)
+  const [error, setError] = useState(null)
+
+  // Fetch clubs when festival changes and clubs tab might be visible
+  useEffect(() => {
+    if (festival && festival.festivalTypes && festival.festivalTypes.length > 0) {
+      fetchClubsForFestival()
+    } else {
+      setClubs([])
+    }
+  }, [festival])
+
+  const fetchClubsForFestival = async () => {
+    if (!festival || !festival.festivalTypes || festival.festivalTypes.length === 0) {
+      console.log('No festival types to fetch')
+      setClubs([])
+      return
+    }
+
+    console.log('Fetching clubs for festival types:', festival.festivalTypes)
+    setLoadingClubs(true)
+    setError(null)
+    
+    try {
+      // Fetch clubs for each festival type
+      const allClubs = []
+      
+      for (const festivalType of festival.festivalTypes) {
+        const url = `${import.meta.env.VITE_API_URL}/clubs?festivalType=${festivalType}`
+        console.log('Fetching from:', url)
+        
+        const response = await axios.get(url)
+        console.log(`Clubs for ${festivalType}:`, response.data)
+        
+        if (response.data && Array.isArray(response.data)) {
+          allClubs.push(...response.data)
+        } else {
+          console.warn(`Invalid response for ${festivalType}:`, response.data)
+        }
+      }
+
+      console.log('All clubs fetched:', allClubs.length)
+
+      // Remove duplicates based on _id
+      const uniqueClubs = allClubs.filter(
+        (club, index, self) => 
+          club && club._id && index === self.findIndex(c => c && c._id === club._id)
+      )
+
+      console.log('Unique clubs:', uniqueClubs.length)
+
+      // Only show approved clubs (if status field exists)
+      const approvedClubs = uniqueClubs.filter(
+        club => club && (!club.status || club.status === 'approved')
+      )
+
+      console.log('Approved clubs:', approvedClubs.length)
+      console.log('Club data:', approvedClubs)
+
+      setClubs(approvedClubs)
+    } catch (error) {
+      console.error('Error fetching clubs:', error)
+      console.error('Error details:', error.response?.data || error.message)
+      setError('Failed to load clubs. Please try again.')
+      setClubs([])
+    } finally {
+      setLoadingClubs(false)
+    }
+  }
 
   if (!festival) return null
+
+  const hasClubs = festival.festivalTypes && festival.festivalTypes.length > 0
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -36,10 +109,10 @@ export default function FestivalDetailModal({ festival, onClose }) {
 
         {/* Tabs */}
         <div className="border-b border-gray-200 bg-gray-50 flex-shrink-0">
-          <div className="flex space-x-1 px-8">
+          <div className="flex space-x-1 px-8 overflow-x-auto">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`px-6 py-3 font-semibold transition-all ${
+              className={`px-6 py-3 font-semibold transition-all whitespace-nowrap ${
                 activeTab === 'overview'
                   ? 'border-b-2 border-red-600 text-red-600'
                   : 'text-gray-600 hover:text-red-600'
@@ -50,7 +123,7 @@ export default function FestivalDetailModal({ festival, onClose }) {
             {festival.images && (
               <button
                 onClick={() => setActiveTab('gallery')}
-                className={`px-6 py-3 font-semibold transition-all ${
+                className={`px-6 py-3 font-semibold transition-all whitespace-nowrap ${
                   activeTab === 'gallery'
                     ? 'border-b-2 border-red-600 text-red-600'
                     : 'text-gray-600 hover:text-red-600'
@@ -62,7 +135,7 @@ export default function FestivalDetailModal({ festival, onClose }) {
             {festival.fairInfo && (
               <button
                 onClick={() => setActiveTab('fair')}
-                className={`px-6 py-3 font-semibold transition-all ${
+                className={`px-6 py-3 font-semibold transition-all whitespace-nowrap ${
                   activeTab === 'fair'
                     ? 'border-b-2 border-red-600 text-red-600'
                     : 'text-gray-600 hover:text-red-600'
@@ -71,16 +144,16 @@ export default function FestivalDetailModal({ festival, onClose }) {
                 Fair Info
               </button>
             )}
-            {festival.clubs && (
+            {hasClubs && (
               <button
                 onClick={() => setActiveTab('clubs')}
-                className={`px-6 py-3 font-semibold transition-all ${
+                className={`px-6 py-3 font-semibold transition-all whitespace-nowrap ${
                   activeTab === 'clubs'
                     ? 'border-b-2 border-red-600 text-red-600'
                     : 'text-gray-600 hover:text-red-600'
                 }`}
               >
-                Clubs ({festival.clubs?.length || 0})
+                Clubs {clubs.length > 0 && `(${clubs.length})`}
               </button>
             )}
           </div>
@@ -109,7 +182,7 @@ export default function FestivalDetailModal({ festival, onClose }) {
                   <ul className="space-y-2">
                     {festival.highlights.map((highlight, index) => (
                       <li key={index} className="flex items-start space-x-2">
-                        <span className="w-2 h-2 bg-blue-600 rounded-full mt-2"></span>
+                        <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
                         <span className="text-gray-700">{highlight}</span>
                       </li>
                     ))}
@@ -121,7 +194,7 @@ export default function FestivalDetailModal({ festival, onClose }) {
                   <ul className="space-y-2">
                     {festival.traditions.map((tradition, index) => (
                       <li key={index} className="flex items-start space-x-2">
-                        <span className="w-2 h-2 bg-orange-600 rounded-full mt-2"></span>
+                        <span className="w-2 h-2 bg-orange-600 rounded-full mt-2 flex-shrink-0"></span>
                         <span className="text-gray-700">{tradition}</span>
                       </li>
                     ))}
@@ -144,8 +217,47 @@ export default function FestivalDetailModal({ festival, onClose }) {
             <FairInformation fairInfo={festival.fairInfo} />
           )}
 
-          {activeTab === 'clubs' && festival.clubs && (
-            <ClubsList clubs={festival.clubs} />
+          {activeTab === 'clubs' && hasClubs && (
+            <div>
+              {loadingClubs ? (
+                <div className="flex flex-col justify-center items-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mb-4"></div>
+                  <p className="text-gray-600">Loading clubs...</p>
+                </div>
+              ) : error ? (
+                <div className="text-center py-12">
+                  <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-4xl">⚠️</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Error Loading Clubs</h3>
+                  <p className="text-gray-600 mb-6">{error}</p>
+                  <button
+                    onClick={fetchClubsForFestival}
+                    className="px-6 py-3 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
+                  >
+                    Try Again
+                  </button>
+                </div>
+              ) : clubs.length > 0 ? (
+                <ClubsList clubs={clubs} />
+              ) : (
+                <div className="text-center py-12">
+                  <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-4xl">🏛️</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">No Clubs Yet</h3>
+                  <p className="text-gray-600 mb-6">
+                    Be the first to register your club for this festival!
+                  </p>
+                  <button
+                    onClick={() => window.location.href = '/club-management'}
+                    className="px-6 py-3 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
+                  >
+                    Register Your Club
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>
