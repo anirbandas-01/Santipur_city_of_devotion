@@ -1,7 +1,7 @@
 import Club from "../models/clubModel.js";
 import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
-
+  
 // Upload images to Cloudinary
 const uploadImagesToCloudinary = async (files) => {
   const uploadPromises = files.map(async (file) => {
@@ -12,9 +12,9 @@ const uploadImagesToCloudinary = async (files) => {
     return result.secure_url;
   });
   return Promise.all(uploadPromises);
-};
+}; 
 
-// ➕ Add new club
+ // ➕ Add new club
 export const addClub = async (req, res) => {
   try {
      console.log("📩 /api/clubs/add called");
@@ -40,7 +40,9 @@ export const addClub = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+};  
+
+
 
 // 📖 Get all clubs (filtered)
 export const getClubs = async (req, res) => {
@@ -57,6 +59,8 @@ export const getClubs = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 // ✏️ Update a club
 export const updateClub = async (req, res) => {
@@ -78,6 +82,8 @@ export const updateClub = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 // ❌ Delete a club
 export const deleteClub = async (req, res) => {

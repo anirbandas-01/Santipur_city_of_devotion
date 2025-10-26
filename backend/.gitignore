@@ -118,3 +118,49 @@ dist
 .pnp.*
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Node
+
+
+
+
+export const addClub = async (req, res) => {
+  try {
+    console.log("📩 /api/clubs/add called");
+    console.log("Body:", req.body);
+    console.log("Files:", req.files);
+
+    const { clubName, festivalType, description, email } = req.body;
+    const files = req.files || [];
+
+    if (!files.length) {
+      return res.status(400).json({ success: false, message: "No images uploaded" });
+    }
+// ✅ Upload images to Cloudinary
+    const uploadedImages = await Promise.all(
+      files.map(async (file) => {
+        
+         console.log("⏫ Uploading to Cloudinary:", file.path);
+
+        const result = await cloudinary.uploader.upload(file.path, {
+          folder: "clubs",
+        });
+        return result.secure_url;
+      })
+    );
+
+    // ✅ Save form data to MongoDB
+    const club = new Club({
+      clubName,
+      festivalType,
+      description,
+      email,
+      images: uploadedImages,
+    });
+
+    await club.save();
+
+    res.status(201).json({ success: true, message: "Club added successfully", club });
+  } catch (error) {
+    console.error("❌ Error adding club:", error);
+    res.status(500).json({ success: false, message: "Upload failed", error: error.message });
+  }
+};
