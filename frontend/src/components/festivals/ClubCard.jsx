@@ -1,15 +1,29 @@
 // frontend/src/components/festivals/ClubCard.jsx
-import { useState } from 'react'
-import { Mail, Calendar } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Mail, Calendar, Eye } from 'lucide-react'
 
-export default function ClubCard({ club }) {
+export default function ClubCard({ club, onViewDetails }) {
   const [showDetails, setShowDetails] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   // Guard clause - return null if club is undefined
   if (!club) {
     console.error('ClubCard: club prop is undefined')
     return null
   }
+
+  // Auto-rotate images every 3 seconds
+  useEffect(() => {
+    if (!club.images || club.images.length <= 1) return
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === club.images.length - 1 ? 0 : prevIndex + 1
+      )
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [club.images])
 
   // Format date for display
   const formatDate = (dateString) => {
@@ -56,20 +70,24 @@ export default function ClubCard({ club }) {
 
   // Get default image
   const defaultImage = 'https://images.unsplash.com/photo-1583309122708-cde2cd665952?w=800';
-  const primaryImage = (club.images && club.images.length > 0) ? club.images[0] : defaultImage;
+  const images = club.images && club.images.length > 0 ? club.images : [defaultImage];
+  const currentImage = images[currentImageIndex];
 
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all">
-      {/* Club Image */}
+      {/* Club Image with Carousel */}
       <div className="relative h-48 overflow-hidden bg-gray-200">
         <img 
-          src={primaryImage}
-          alt={club.clubName || 'Club'}
-          className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+          key={currentImageIndex}
+          src={currentImage}
+          alt={`${club.clubName} - Image ${currentImageIndex + 1}`}
+          className="w-full h-full object-cover hover:scale-110 transition-transform duration-300 animate-fadeIn"
           onError={(e) => {
             e.target.src = defaultImage;
           }}
         />
+        
+        {/* Status Badge */}
         <div className="absolute top-3 right-3">
           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
             club.status === 'approved' 
@@ -81,6 +99,33 @@ export default function ClubCard({ club }) {
             {club.status || 'Active'}
           </span>
         </div>
+
+        {/* Image Counter */}
+        {images.length > 1 && (
+          <div className="absolute bottom-3 right-3 bg-black/60 text-white px-2 py-1 rounded-full text-xs">
+            {currentImageIndex + 1} / {images.length}
+          </div>
+        )}
+
+        {/* Navigation Dots */}
+        {images.length > 1 && (
+          <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1">
+            {images.map((_, index) => (
+              <button
+                key={index}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentImageIndex(index);
+                }}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  index === currentImageIndex 
+                    ? 'bg-white w-4' 
+                    : 'bg-white/50 hover:bg-white/75'
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
       
       <div className="p-5">
@@ -109,13 +154,23 @@ export default function ClubCard({ club }) {
           {club.description || 'No description provided'}
         </p>
 
-        {/* Toggle Details Button */}
-        <button
-          onClick={() => setShowDetails(!showDetails)}
-          className="text-red-600 font-semibold text-sm hover:text-red-700 transition-colors"
-        >
-          {showDetails ? 'Show Less ▲' : 'Show More ▼'}
-        </button>
+        {/* Action Buttons */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowDetails(!showDetails)}
+            className="flex-1 text-red-600 font-semibold text-sm hover:text-red-700 transition-colors"
+          >
+            {showDetails ? 'Show Less ▲' : 'Show More ▼'}
+          </button>
+          
+          <button
+            onClick={() => onViewDetails && onViewDetails(club)}
+            className="flex items-center space-x-1 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg text-sm font-semibold hover:shadow-lg transition-all"
+          >
+            <Eye size={16} />
+            <span>View Full</span>
+          </button>
+        </div>
 
         {/* Expanded Details */}
         {showDetails && (
@@ -134,44 +189,33 @@ export default function ClubCard({ club }) {
               </div>
             )}
 
-            {/* Image Gallery */}
-            {club.images && club.images.length > 1 && (
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">Gallery:</p>
-                <div className="grid grid-cols-3 gap-2">
-                  {club.images.slice(1, 4).map((img, index) => (
-                    <img 
-                      key={index}
-                      src={img} 
-                      alt={`${club.clubName} ${index + 2}`}
-                      className="w-full h-20 object-cover rounded-lg hover:opacity-80 transition-opacity cursor-pointer"
-                      onClick={() => window.open(img, '_blank')}
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                      }}
-                    />
-                  ))}
-                </div>
-                {club.images.length > 4 && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    +{club.images.length - 4} more images
-                  </p>
-                )}
-              </div>
-            )}
-
-            {/* Full Description */}
-            {showDetails && club.description && club.description.length > 100 && (
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-1">Full Description:</p>
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {club.description}
-                </p>
+            {/* Image Count */}
+            {images.length > 1 && (
+              <div className="text-sm text-gray-600">
+                <strong className="text-gray-700">Gallery:</strong> {images.length} images
               </div>
             )}
           </div>
         )}
       </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        .animate-fadeIn {
+          animation: fadeIn 0.5s ease-in;
+        }
+        
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      `}</style>
     </div>
   )
 }
