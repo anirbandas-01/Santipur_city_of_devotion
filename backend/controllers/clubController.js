@@ -1,3 +1,4 @@
+// backend/controllers/clubController.js
 import Club from "../models/clubModel.js";
 import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
@@ -14,10 +15,10 @@ const uploadImagesToCloudinary = async (files) => {
   return Promise.all(uploadPromises);
 }; 
 
- // ➕ Add new club
+// ➕ Add new club
 export const addClub = async (req, res) => {
   try {
-     console.log("📩 /api/clubs/add called");
+    console.log("📩 /api/clubs/add called");
     console.log("Body:", req.body);
     console.log("Files:", req.files);
     
@@ -42,8 +43,6 @@ export const addClub = async (req, res) => {
   }
 };  
 
-
-
 // 📖 Get all clubs (filtered)
 export const getClubs = async (req, res) => {
   try {
@@ -60,18 +59,31 @@ export const getClubs = async (req, res) => {
   }
 };
 
-
-
 // ✏️ Update a club
 export const updateClub = async (req, res) => {
   try {
-    const { clubName, festivalType, description, email } = req.body;
+    const { clubName, festivalType, description, email, existingImages } = req.body;
     let updateData = { clubName, festivalType, description, email };
 
-    if (req.files && req.files.length > 0) {
-      const imageUrls = await uploadImagesToCloudinary(req.files);
-      updateData.images = imageUrls;
+    // Parse existing images that should be kept
+    let keptImages = [];
+    if (existingImages) {
+      try {
+        keptImages = JSON.parse(existingImages);
+      } catch (e) {
+        console.log("Error parsing existingImages:", e);
+        keptImages = [];
+      }
     }
+
+    // Upload new images if any
+    let newImageUrls = [];
+    if (req.files && req.files.length > 0) {
+      newImageUrls = await uploadImagesToCloudinary(req.files);
+    }
+
+    // Combine kept existing images with new uploads
+    updateData.images = [...keptImages, ...newImageUrls];
 
     const updated = await Club.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
@@ -79,11 +91,10 @@ export const updateClub = async (req, res) => {
 
     res.json(updated);
   } catch (error) {
+    console.error("Update error:", error);
     res.status(500).json({ error: error.message });
   }
 };
-
-
 
 // ❌ Delete a club
 export const deleteClub = async (req, res) => {

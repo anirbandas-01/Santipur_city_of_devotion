@@ -1,6 +1,4 @@
-// ============================================
-// FILE: components/club/ClubForm.jsx
-// ============================================
+// frontend/src/components/club/ClubForm.jsx
 import { Upload, FileText, Mail, Save } from 'lucide-react';
 import FestivalTypeSelector from './FestivalTypeSelector';
 import ImageUploader from './ImageUploader';
@@ -12,6 +10,8 @@ const ClubForm = ({
   loading, 
   existingClub,
   festivalTypes,
+  existingImagesCount = 0,
+  newImagesCount = 0,
   onFormChange,
   onImageUpload,
   onRemoveImage,
@@ -100,6 +100,8 @@ const ClubForm = ({
               previewImages={previewImages}
               onImageUpload={onImageUpload}
               onRemoveImage={onRemoveImage}
+              existingImagesCount={existingImagesCount}
+              newImagesCount={newImagesCount}
             />
 
             {/* Submit Button */}
@@ -127,8 +129,9 @@ const ClubForm = ({
             {/* Info Note */}
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
               <p className="text-sm text-blue-800">
-                <strong>Note:</strong> Your club submission will be reviewed by our team. 
-                You'll be notified once it's approved and visible on the website.
+                <strong>Note:</strong> {existingClub 
+                  ? 'Changes will be saved when you click "Update Club".'
+                  : 'Your club submission will be reviewed by our team. You\'ll be notified once it\'s approved and visible on the website.'}
               </p>
             </div>
           </div>

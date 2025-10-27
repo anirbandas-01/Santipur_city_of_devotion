@@ -24,6 +24,8 @@ export default function ClubManagement() {
   });
   
   const [previewImages, setPreviewImages] = useState([]);
+  const [existingImages, setExistingImages] = useState([]); // Track existing images from server
+  const [newImageFiles, setNewImageFiles] = useState([]); // Track new files to upload
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const festivalTypes = [
@@ -71,7 +73,9 @@ export default function ClubManagement() {
           email: club.email,
           images: []
         });
+        setExistingImages(club.images || []);
         setPreviewImages(club.images || []);
+        setNewImageFiles([]);
       }
     } catch (error) {
       console.log('No existing club found');
@@ -81,14 +85,17 @@ export default function ClubManagement() {
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     
-    if (files.length + previewImages.length > 10) {
-      showToast('You can upload maximum 10 images', 'error');
+    // Check total image count (existing + new)
+    const totalImages = previewImages.length + files.length;
+    if (totalImages > 10) {
+      showToast(`You can upload maximum 10 images. You have ${previewImages.length} images already.`, 'error');
       return;
     }
 
-    const newImages = [...formData.images, ...files];
-    setFormData({ ...formData, images: newImages });
+    // Add new files to the array
+    setNewImageFiles(prev => [...prev, ...files]);
     
+    // Create preview for new files
     files.forEach(file => {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -99,11 +106,21 @@ export default function ClubManagement() {
   };
 
   const removeImage = (index) => {
+    const imageUrl = previewImages[index];
+    
+    // Check if this is an existing image or a new one
+    if (existingImages.includes(imageUrl)) {
+      // Remove from existing images
+      setExistingImages(prev => prev.filter((_, i) => i !== index));
+    } else {
+      // Find and remove from new image files
+      const existingCount = existingImages.length;
+      const newImageIndex = index - existingCount;
+      setNewImageFiles(prev => prev.filter((_, i) => i !== newImageIndex));
+    }
+    
+    // Remove from preview
     setPreviewImages(prev => prev.filter((_, i) => i !== index));
-    setFormData(prev => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index)
-    }));
   };
 
   const handleSubmit = async (e) => {
@@ -114,7 +131,7 @@ export default function ClubManagement() {
       return;
     }
 
-    if (formData.images.length === 0 && previewImages.length === 0) {
+    if (previewImages.length === 0) {
       showToast('Please upload at least one image', 'error');
       return;
     }
@@ -128,7 +145,13 @@ export default function ClubManagement() {
       submitData.append('description', formData.description);
       submitData.append('email', formData.email);
       
-      formData.images.forEach(image => {
+      // Add existing images that weren't deleted
+      if (existingClub) {
+        submitData.append('existingImages', JSON.stringify(existingImages));
+      }
+      
+      // Add new image files
+      newImageFiles.forEach(image => {
         submitData.append('images', image);
       });
 
@@ -173,6 +196,10 @@ export default function ClubManagement() {
   const handleBack = () => {
     if (existingClub && isEditing) {
       setIsEditing(false);
+      // Reset to original images
+      setPreviewImages(existingClub.images || []);
+      setExistingImages(existingClub.images || []);
+      setNewImageFiles([]);
     } else {
       navigate('/');
     }
@@ -229,6 +256,8 @@ export default function ClubManagement() {
         loading={loading}
         existingClub={existingClub}
         festivalTypes={festivalTypes}
+        existingImagesCount={existingImages.length}
+        newImagesCount={newImageFiles.length}
         onFormChange={setFormData}
         onImageUpload={handleImageUpload}
         onRemoveImage={removeImage}
