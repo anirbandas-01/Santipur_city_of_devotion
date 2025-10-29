@@ -3,9 +3,6 @@ import Club from "../models/clubModel.js";
 import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
   
-/**
- * Helper: Upload images to Cloudinary
- */
 const uploadImagesToCloudinary = async (files) => {
   const uploadPromises = files.map(async (file) => {
     const result = await cloudinary.uploader.upload(file.path, {
@@ -15,25 +12,18 @@ const uploadImagesToCloudinary = async (files) => {
         { quality: "auto" }
       ]
     });
-    fs.unlinkSync(file.path); // Delete local temp file
+    fs.unlinkSync(file.path);
     return result.secure_url;
   });
   return Promise.all(uploadPromises);
 }; 
 
-/**
- * Add new club
- * POST /api/clubs/add
- * PROTECTED - Club users only
- */
 export const addClub = async (req, res) => {
   try {
     console.log("📩 POST /api/clubs/add - Adding new club");
-    console.log("User:", req.user?.name, req.user?.userType);
     
     const { clubName, festivalType, description, email } = req.body;
     
-    // Validation
     if (!clubName || !festivalType) {
       return res.status(400).json({ 
         message: "Club name and festival type are required" 
@@ -48,7 +38,6 @@ export const addClub = async (req, res) => {
       });
     }
 
-    // Upload images if provided
     let imageUrls = [];
     if (req.files && req.files.length > 0) {
       if (req.files.length > 10) {
@@ -59,19 +48,18 @@ export const addClub = async (req, res) => {
       imageUrls = await uploadImagesToCloudinary(req.files);
     }
 
-    // Create club with user reference
     const newClub = await Club.create({
       clubName: clubName.trim(),
       festivalType,
       description: description || '',
       email: email || req.user.email,
       images: imageUrls,
-      userId: req.user.id, // Link to authenticated user
+      userId: req.user.id,
       owner: {
         name: req.user.name,
         email: req.user.email
       },
-      status: 'approved' // Auto-approve for now
+      status: 'approved'
     });
 
     console.log("✅ Club created successfully:", newClub.clubName);
@@ -88,47 +76,54 @@ export const addClub = async (req, res) => {
       error: error.message 
     });
   }
-};  
+};
 
 /**
  * Get all clubs (with filters)
  * GET /api/clubs
- * PUBLIC or filtered by userId
+ * PUBLIC - Returns array directly for consistency
  */
 export const getClubs = async (req, res) => {
   try {
-    const { festivalType, userId, status } = req.query;
+    const { festivalType, userId, email, status } = req.query;
     let filter = {};
 
-    // Filter by festival type
-    if (festivalType) {
-      filter.festivalType = festivalType;
-    }
-    
-    // Filter by user (get specific user's clubs)
+    console.log('📊 GET /api/clubs with filters:', { festivalType, userId, email, status });
+
+    // Priority 1: Filter by userId (for user's own clubs)
     if (userId) {
       filter.userId = userId;
-    } else {
-      // Public view: only show approved clubs
+    } 
+    // Priority 2: Filter by email (for backward compatibility)
+    else if (email) {
+      filter.email = email;
+    } 
+    // Priority 3: Public view - only approved clubs
+    else {
       filter.status = 'approved';
     }
 
-    // Admin can filter by status
+    // Add festival type filter if provided
+    if (festivalType) {
+      filter.festivalType = festivalType;
+    }
+
+    // Admin can override status filter
     if (status && req.user?.userType === 'admin') {
       filter.status = status;
     }
 
     const clubs = await Club.find(filter)
       .sort({ createdAt: -1 })
-      .populate('userId', 'name email userType'); // Populate owner info
+      .populate('userId', 'name email userType');
 
-    res.json({
-      count: clubs.length,
-      clubs
-    });
+    console.log(`✅ Found ${clubs.length} clubs with filter:`, filter);
+
+    // ALWAYS return clubs array directly for consistency
+    res.json(clubs);
 
   } catch (error) {
-    console.error('Get clubs error:', error);
+    console.error('❌ Get clubs error:', error);
     res.status(500).json({ 
       message: "Failed to fetch clubs",
       error: error.message 
@@ -136,11 +131,6 @@ export const getClubs = async (req, res) => {
   }
 };
 
-/**
- * Get single club by ID
- * GET /api/clubs/:id
- * PUBLIC
- */
 export const getClubById = async (req, res) => {
   try {
     const club = await Club.findById(req.params.id)
@@ -150,7 +140,6 @@ export const getClubById = async (req, res) => {
       return res.status(404).json({ message: 'Club not found' });
     }
 
-    // Increment view count (only for approved clubs)
     if (club.status === 'approved') {
       await club.incrementViews();
     }
@@ -166,11 +155,6 @@ export const getClubById = async (req, res) => {
   }
 };
 
-/**
- * Update club
- * PUT /api/clubs/:id
- * PROTECTED - Owner only
- */
 export const updateClub = async (req, res) => {
   try {
     console.log("📝 PUT /api/clubs/:id - Updating club");
@@ -181,7 +165,6 @@ export const updateClub = async (req, res) => {
       return res.status(404).json({ message: 'Club not found' });
     }
 
-    // Check ownership
     if (!club.isOwnedBy(req.user.id)) {
       return res.status(403).json({ 
         message: 'Access denied. You can only update your own club.' 
@@ -190,14 +173,12 @@ export const updateClub = async (req, res) => {
 
     const { clubName, festivalType, description, email, existingImages } = req.body;
     
-    // Validate required fields
     if (!clubName || !festivalType) {
       return res.status(400).json({ 
         message: "Club name and festival type are required" 
       });
     }
 
-    // Parse existing images that should be kept
     let keptImages = [];
     if (existingImages) {
       try {
@@ -208,7 +189,6 @@ export const updateClub = async (req, res) => {
       }
     }
 
-    // Upload new images if provided
     let newImageUrls = [];
     if (req.files && req.files.length > 0) {
       const totalImages = keptImages.length + req.files.length;
@@ -220,7 +200,6 @@ export const updateClub = async (req, res) => {
       newImageUrls = await uploadImagesToCloudinary(req.files);
     }
 
-    // Update club data
     club.clubName = clubName.trim();
     club.festivalType = festivalType;
     club.description = description || '';
@@ -245,11 +224,6 @@ export const updateClub = async (req, res) => {
   }
 };
 
-/**
- * Delete club
- * DELETE /api/clubs/:id
- * PROTECTED - Owner only
- */
 export const deleteClub = async (req, res) => {
   try {
     console.log("🗑️ DELETE /api/clubs/:id - Deleting club");
@@ -260,16 +234,12 @@ export const deleteClub = async (req, res) => {
       return res.status(404).json({ message: 'Club not found' });
     }
 
-    // Check ownership
     if (!club.isOwnedBy(req.user.id)) {
       return res.status(403).json({ 
         message: 'Access denied. You can only delete your own club.' 
       });
     }
 
-    // Delete club images from Cloudinary (optional)
-    // TODO: Implement cloudinary image deletion if needed
-    
     await Club.findByIdAndDelete(req.params.id);
 
     console.log("✅ Club deleted successfully");
@@ -287,19 +257,12 @@ export const deleteClub = async (req, res) => {
   }
 };
 
-/**
- * Get clubs by authenticated user
- * GET /api/clubs/my-clubs
- * PROTECTED - Club users only
- */
 export const getMyClubs = async (req, res) => {
   try {
     const clubs = await Club.getByUser(req.user.id);
 
-    res.json({
-      count: clubs.length,
-      clubs
-    });
+    // Return array directly for consistency
+    res.json(clubs);
 
   } catch (error) {
     console.error('Get my clubs error:', error);
@@ -309,142 +272,3 @@ export const getMyClubs = async (req, res) => {
     });
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* // backend/controllers/clubController.js
-import Club from "../models/clubModel.js";
-import cloudinary from "../config/cloudinary.js";
-import fs from "fs";
-  
-// Upload images to Cloudinary
-const uploadImagesToCloudinary = async (files) => {
-  const uploadPromises = files.map(async (file) => {
-    const result = await cloudinary.uploader.upload(file.path, {
-      folder: "clubs",
-    });
-    fs.unlinkSync(file.path); // delete local temp file
-    return result.secure_url;
-  });
-  return Promise.all(uploadPromises);
-}; 
-
-// ➕ Add new club
-export const addClub = async (req, res) => {
-  try {
-    console.log("📩 /api/clubs/add called");
-    console.log("Body:", req.body);
-    console.log("Files:", req.files);
-    
-    const { clubName, festivalType, description, email } = req.body;
-    let imageUrls = [];
-
-    if (req.files && req.files.length > 0) {
-      imageUrls = await uploadImagesToCloudinary(req.files);
-    }
-
-    const newClub = await Club.create({
-      clubName,
-      festivalType,
-      description,
-      email,
-      images: imageUrls,
-    });
-
-    res.status(201).json(newClub);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};  
-
-// 📖 Get all clubs (filtered)
-export const getClubs = async (req, res) => {
-  try {
-    const { festivalType, email } = req.query;
-    let filter = {};
-
-    if (festivalType) filter.festivalType = festivalType;
-    if (email) filter.email = email;
-
-    const clubs = await Club.find(filter);
-    res.json(clubs);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// ✏️ Update a club
-export const updateClub = async (req, res) => {
-  try {
-    const { clubName, festivalType, description, email, existingImages } = req.body;
-    let updateData = { clubName, festivalType, description, email };
-
-    // Parse existing images that should be kept
-    let keptImages = [];
-    if (existingImages) {
-      try {
-        keptImages = JSON.parse(existingImages);
-      } catch (e) {
-        console.log("Error parsing existingImages:", e);
-        keptImages = [];
-      }
-    }
-
-    // Upload new images if any
-    let newImageUrls = [];
-    if (req.files && req.files.length > 0) {
-      newImageUrls = await uploadImagesToCloudinary(req.files);
-    }
-
-    // Combine kept existing images with new uploads
-    updateData.images = [...keptImages, ...newImageUrls];
-
-    const updated = await Club.findByIdAndUpdate(req.params.id, updateData, {
-      new: true,
-    });
-
-    res.json(updated);
-  } catch (error) {
-    console.error("Update error:", error);
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// ❌ Delete a club
-export const deleteClub = async (req, res) => {
-  try {
-    await Club.findByIdAndDelete(req.params.id);
-    res.json({ message: "Club deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}; */

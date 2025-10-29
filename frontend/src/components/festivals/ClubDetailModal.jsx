@@ -1,273 +1,261 @@
-// frontend/src/components/festivals/FestivalDetailModal.jsx
+// frontend/src/components/festivals/ClubDetailModal.jsx
+import { useState } from 'react'
+import { X, Mail, Calendar, Image as ImageIcon, ArrowLeft, ExternalLink } from 'lucide-react'
 
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-import ImageGallery from './ImageGallery'
-import FairInformation from './FairInformation'
-import ClubsList from './ClubsList'
+export default function ClubDetailModal({ club, onClose }) {
+  const [selectedImage, setSelectedImage] = useState(0)
 
-export default function FestivalDetailModal({ festival, onClose }) {
-  const [activeTab, setActiveTab] = useState('overview')
-  const [clubs, setClubs] = useState([])
-  const [loadingClubs, setLoadingClubs] = useState(false)
-  const [error, setError] = useState(null)
+  if (!club) return null
 
-  // Fetch clubs when festival changes and clubs tab might be visible
-  useEffect(() => {
-    if (festival && festival.festivalTypes && festival.festivalTypes.length > 0) {
-      fetchClubsForFestival()
-    } else {
-      setClubs([])
-    }
-  }, [festival])
-
-  const fetchClubsForFestival = async () => {
-    if (!festival || !festival.festivalTypes || festival.festivalTypes.length === 0) {
-      console.log('No festival types to fetch')
-      setClubs([])
-      return
-    }
-
-    console.log('Fetching clubs for festival types:', festival.festivalTypes)
-    setLoadingClubs(true)
-    setError(null)
-    
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
     try {
-      // Fetch clubs for each festival type
-      const allClubs = []
-      
-      for (const festivalType of festival.festivalTypes) {
-        const url = `${import.meta.env.VITE_API_URL}/clubs?festivalType=${festivalType}`
-        console.log('Fetching from:', url)
-        
-        const response = await axios.get(url)
-        console.log(`Clubs for ${festivalType}:`, response.data)
-        
-        // Handle both response formats: direct array or {clubs: [...]}
-        if (response.data) {
-          if (Array.isArray(response.data)) {
-            // Direct array format
-            allClubs.push(...response.data)
-          } else if (response.data.clubs && Array.isArray(response.data.clubs)) {
-            // Nested format: {count, clubs}
-            allClubs.push(...response.data.clubs)
-          } else {
-            console.warn(`Invalid response for ${festivalType}:`, response.data)
-          }
-        }
-      }
-
-      console.log('All clubs fetched:', allClubs.length)
-
-      // Remove duplicates based on _id
-      const uniqueClubs = allClubs.filter(
-        (club, index, self) => 
-          club && club._id && index === self.findIndex(c => c && c._id === club._id)
-      )
-
-      console.log('Unique clubs:', uniqueClubs.length)
-
-      // Only show approved clubs (if status field exists)
-      const approvedClubs = uniqueClubs.filter(
-        club => club && (!club.status || club.status === 'approved')
-      )
-
-      console.log('Approved clubs:', approvedClubs.length)
-      console.log('Club data:', approvedClubs)
-
-      setClubs(approvedClubs)
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-IN', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
     } catch (error) {
-      console.error('Error fetching clubs:', error)
-      console.error('Error details:', error.response?.data || error.message)
-      setError('Failed to load clubs. Please try again.')
-      setClubs([])
-    } finally {
-      setLoadingClubs(false)
+      return 'N/A';
     }
   }
 
-  if (!festival) return null
+  const getFestivalIcon = (festivalType) => {
+    const icons = {
+      'durga-puja': '🏺',
+      'kali-puja': '🌙',
+      'saraswati-puja': '📚',
+      'lakshmi-puja': '💰',
+      'jagaddhatri-puja': '🦁',
+      'kartik-puja': '🏹',
+      'rath-yatra': '🚂',
+      'dol-yatra': '🎨',
+      'janmashtami': '🪈',
+      'ganesh-puja': '🐘',
+      'cultural': '🎭',
+      'other': '🎊'
+    };
+    return icons[festivalType] || '🎉';
+  }
 
-  const hasClubs = festival.festivalTypes && festival.festivalTypes.length > 0
+  const formatFestivalType = (festivalType) => {
+    if (!festivalType) return 'Other';
+    return festivalType
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
+  const defaultImage = 'https://images.unsplash.com/photo-1583309122708-cde2cd665952?w=800';
+  const images = club.images && club.images.length > 0 ? club.images : [defaultImage];
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl max-w-7xl w-full max-h-[95vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-slideUp">
         {/* Header */}
-        <div className={`bg-gradient-to-r ${festival.color} p-8 text-white relative flex-shrink-0`}>
+        <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 p-6 text-white relative">
+          <button
+            onClick={onClose}
+            className="absolute top-4 left-4 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+          >
+            <ArrowLeft size={20} />
+          </button>
+          
           <button
             onClick={onClose}
             className="absolute top-4 right-4 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
           >
-            <span className="text-2xl">&times;</span>
+            <X size={20} />
           </button>
-          
-          <div className="flex items-center space-x-4">
-            <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-4xl">
-              {festival.icon}
+
+          <div className="text-center pt-8">
+            <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl">
+              {getFestivalIcon(club.festivalType)}
             </div>
-            <div>
-              <h2 className="text-4xl font-bold font-serif">{festival.name}</h2>
-              <p className="text-xl opacity-90 mt-1">{festival.date}</p>
-              <p className="text-sm opacity-75 mt-1">{festival.duration} • {festival.season}</p>
-            </div>
+            <h2 className="text-3xl font-bold mb-2">{club.clubName}</h2>
+            <p className="text-pink-100">{formatFestivalType(club.festivalType)}</p>
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="border-b border-gray-200 bg-gray-50 flex-shrink-0">
-          <div className="flex space-x-1 px-8 overflow-x-auto">
-            <button
-              onClick={() => setActiveTab('overview')}
-              className={`px-6 py-3 font-semibold transition-all whitespace-nowrap ${
-                activeTab === 'overview'
-                  ? 'border-b-2 border-red-600 text-red-600'
-                  : 'text-gray-600 hover:text-red-600'
-              }`}
-            >
-              Overview
-            </button>
-            {festival.images && (
-              <button
-                onClick={() => setActiveTab('gallery')}
-                className={`px-6 py-3 font-semibold transition-all whitespace-nowrap ${
-                  activeTab === 'gallery'
-                    ? 'border-b-2 border-red-600 text-red-600'
-                    : 'text-gray-600 hover:text-red-600'
-                }`}
-              >
-                Gallery
-              </button>
-            )}
-            {festival.fairInfo && (
-              <button
-                onClick={() => setActiveTab('fair')}
-                className={`px-6 py-3 font-semibold transition-all whitespace-nowrap ${
-                  activeTab === 'fair'
-                    ? 'border-b-2 border-red-600 text-red-600'
-                    : 'text-gray-600 hover:text-red-600'
-                }`}
-              >
-                Fair Info
-              </button>
-            )}
-            {hasClubs && (
-              <button
-                onClick={() => setActiveTab('clubs')}
-                className={`px-6 py-3 font-semibold transition-all whitespace-nowrap ${
-                  activeTab === 'clubs'
-                    ? 'border-b-2 border-red-600 text-red-600'
-                    : 'text-gray-600 hover:text-red-600'
-                }`}
-              >
-                Clubs {clubs.length > 0 && `(${clubs.length})`}
-              </button>
-            )}
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {/* Status Badge */}
+          <div className="mb-6 flex justify-center">
+            <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
+              club.status === 'approved' 
+                ? 'bg-green-100 text-green-700' 
+                : club.status === 'pending'
+                ? 'bg-yellow-100 text-yellow-700'
+                : 'bg-gray-100 text-gray-700'
+            }`}>
+              Status: {club.status || 'Active'}
+            </span>
           </div>
-        </div>
 
-        {/* Content Area */}
-        <div className="flex-1 overflow-y-auto p-8">
-          {activeTab === 'overview' && (
-            <div>
-              <div className="mb-8">
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">About the Festival</h3>
-                <div className="prose max-w-none">
-                  {festival.detailedDescription ? (
-                    festival.detailedDescription.split('\n\n').map((para, i) => (
-                      <p key={i} className="text-gray-700 leading-relaxed mb-4">{para}</p>
-                    ))
-                  ) : (
-                    <p className="text-gray-700 leading-relaxed mb-4">{festival.description}</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-8 mb-8">
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-3">Festival Highlights</h4>
-                  <ul className="space-y-2">
-                    {festival.highlights.map((highlight, index) => (
-                      <li key={index} className="flex items-start space-x-2">
-                        <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
-                        <span className="text-gray-700">{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-3">Traditional Practices</h4>
-                  <ul className="space-y-2">
-                    {festival.traditions.map((tradition, index) => (
-                      <li key={index} className="flex items-start space-x-2">
-                        <span className="w-2 h-2 bg-orange-600 rounded-full mt-2 flex-shrink-0"></span>
-                        <span className="text-gray-700">{tradition}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <div className="bg-blue-50 p-6 rounded-xl">
-                <h4 className="text-lg font-semibold text-gray-800 mb-3">Significance</h4>
-                <p className="text-gray-700">{festival.significance}</p>
+          {/* Main Image Gallery */}
+          <div className="mb-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
+              <ImageIcon size={24} className="mr-2 text-purple-600" />
+              Club Gallery
+            </h3>
+            
+            {/* Selected Image */}
+            <div className="relative rounded-xl overflow-hidden mb-4 bg-gray-100">
+              <img 
+                src={images[selectedImage]}
+                alt={`${club.clubName} - Image ${selectedImage + 1}`}
+                className="w-full h-80 object-cover"
+                onError={(e) => {
+                  e.target.src = defaultImage;
+                }}
+              />
+              <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm">
+                {selectedImage + 1} / {images.length}
               </div>
             </div>
-          )}
 
-          {activeTab === 'gallery' && festival.images && (
-            <ImageGallery images={festival.images} />
-          )}
-
-          {activeTab === 'fair' && festival.fairInfo && (
-            <FairInformation fairInfo={festival.fairInfo} />
-          )}
-
-          {activeTab === 'clubs' && hasClubs && (
-            <div>
-              {loadingClubs ? (
-                <div className="flex flex-col justify-center items-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mb-4"></div>
-                  <p className="text-gray-600">Loading clubs...</p>
-                </div>
-              ) : error ? (
-                <div className="text-center py-12">
-                  <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-4xl">⚠️</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">Error Loading Clubs</h3>
-                  <p className="text-gray-600 mb-6">{error}</p>
-                  <button
-                    onClick={fetchClubsForFestival}
-                    className="px-6 py-3 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
+            {/* Thumbnail Grid */}
+            {images.length > 1 && (
+              <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
+                {images.map((img, index) => (
+                  <div
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                      selectedImage === index 
+                        ? 'border-purple-600 scale-105 shadow-lg' 
+                        : 'border-gray-200 hover:border-purple-400'
+                    }`}
                   >
-                    Try Again
-                  </button>
-                </div>
-              ) : clubs.length > 0 ? (
-                <ClubsList clubs={clubs} />
-              ) : (
-                <div className="text-center py-12">
-                  <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-4xl">🏛️</span>
+                    <img 
+                      src={img}
+                      alt={`Thumbnail ${index + 1}`}
+                      className="w-full h-16 object-cover"
+                      onError={(e) => {
+                        e.target.src = defaultImage;
+                      }}
+                    />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">No Clubs Yet</h3>
-                  <p className="text-gray-600 mb-6">
-                    Be the first to register your club for this festival!
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Club Details */}
+          <div className="space-y-6">
+            {/* Description */}
+            <div>
+              <h3 className="text-xl font-bold text-gray-800 mb-3">About the Club</h3>
+              <div className="bg-gray-50 p-4 rounded-xl">
+                <p className="text-gray-700 leading-relaxed">
+                  {club.description || 'No description provided for this club.'}
+                </p>
+              </div>
+            </div>
+
+            {/* Contact Information */}
+            <div>
+              <h3 className="text-xl font-bold text-gray-800 mb-3">Contact Information</h3>
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl space-y-3">
+                {club.email && (
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                      <Mail size={20} className="text-purple-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 font-medium">Email Address</p>
+                      <a 
+                        href={`mailto:${club.email}`}
+                        className="text-purple-600 hover:text-purple-700 font-semibold flex items-center space-x-1"
+                      >
+                        <span>{club.email}</span>
+                        <ExternalLink size={14} />
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
+                    <Calendar size={20} className="text-pink-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 font-medium">Registered On</p>
+                    <p className="text-gray-800 font-semibold">{formatDate(club.createdAt)}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Info */}
+            <div>
+              <h3 className="text-xl font-bold text-gray-800 mb-3">Additional Information</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-blue-50 p-4 rounded-xl">
+                  <p className="text-sm text-gray-600 mb-1">Festival Category</p>
+                  <p className="text-gray-800 font-semibold flex items-center">
+                    <span className="mr-2">{getFestivalIcon(club.festivalType)}</span>
+                    {formatFestivalType(club.festivalType)}
                   </p>
-                  <button
-                    onClick={() => window.location.href = '/club-management'}
-                    className="px-6 py-3 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
-                  >
-                    Register Your Club
-                  </button>
                 </div>
-              )}
+
+                <div className="bg-green-50 p-4 rounded-xl">
+                  <p className="text-sm text-gray-600 mb-1">Total Images</p>
+                  <p className="text-gray-800 font-semibold">
+                    {images.length} {images.length === 1 ? 'Photo' : 'Photos'}
+                  </p>
+                </div>
+              </div>
             </div>
-          )}
+
+            {/* Last Updated */}
+            {club.updatedAt && club.updatedAt !== club.createdAt && (
+              <div className="bg-gray-50 p-4 rounded-xl text-center">
+                <p className="text-sm text-gray-600">
+                  Last updated on <span className="font-semibold text-gray-800">{formatDate(club.updatedAt)}</span>
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="border-t border-gray-200 p-4 bg-gray-50">
+          <button
+            onClick={onClose}
+            className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
+          >
+            Close
+          </button>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .animate-fadeIn {
+          animation: fadeIn 0.2s ease-out;
+        }
+        
+        .animate-slideUp {
+          animation: slideUp 0.3s ease-out;
+        }
+      `}</style>
     </div>
   )
 }
