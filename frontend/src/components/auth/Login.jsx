@@ -1,8 +1,10 @@
+// frontend/src/components/auth/Login.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { X, Mail, Lock, Eye, EyeOff, ArrowLeft, LogIn } from "lucide-react";
 import Toast from "../common/Toast";
+import { saveAuth, redirectByUserType } from "../../utils/auth";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,21 +19,31 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!formData.email || !formData.password) {
+      showToast('Please enter email and password', 'error');
+      return;
+    }
+
     setLoading(true);
 
     try {
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/users/login`, formData);
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user || { name: formData.email.split('@')[0], email: formData.email }));
+      
+      // Store token and user data
+      saveAuth(res.data.token, res.data.user);
       
       showToast("Login successful! Redirecting...", "success");
       
+      // Redirect based on user type
       setTimeout(() => {
-        navigate("/");
+        redirectByUserType(navigate, res.data.user);
         window.location.reload();
       }, 1500);
+
     } catch (error) {
-      showToast(error.response?.data?.message || "Login failed. Please try again.", "error");
+      const message = error.response?.data?.message || "Login failed. Please try again.";
+      showToast(message, "error");
     } finally {
       setLoading(false);
     }
@@ -43,12 +55,9 @@ export default function Login() {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center p-4 z-50 animate-fadeIn">
-      {/* Frosted Glass Backdrop - Blurs the page content behind */}
       <div className="absolute inset-0 backdrop-blur-md bg-black/30"></div>
 
-      {/* Login Card */}
       <div className="relative bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden animate-slideUp">
-        {/* Back Button */}
         <button
           onClick={handleBack}
           className="absolute top-6 left-6 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all z-10 group"
@@ -56,7 +65,6 @@ export default function Login() {
           <ArrowLeft size={20} className="text-gray-600 group-hover:-translate-x-1 transition-transform" />
         </button>
 
-        {/* Close Button */}
         <button
           onClick={handleBack}
           className="absolute top-6 right-6 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all hover:rotate-90 duration-300 z-10"
@@ -64,18 +72,15 @@ export default function Login() {
           <X size={20} className="text-gray-600" />
         </button>
 
-        {/* Header */}
         <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 p-10 text-center relative">
           <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
             <LogIn size={40} className="text-white" />
           </div>
           <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
-          <p className="text-white/90 text-sm">Sign in to manage your club</p>
+          <p className="text-white/90 text-sm">Sign in to your account</p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="p-8 space-y-5">
-          {/* Email Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
             <div className="relative">
@@ -91,7 +96,6 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Password Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
             <div className="relative">
@@ -114,7 +118,6 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Remember & Forgot */}
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center space-x-2 cursor-pointer">
               <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500" />
@@ -125,7 +128,6 @@ export default function Login() {
             </button>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -144,7 +146,6 @@ export default function Login() {
             )}
           </button>
 
-          {/* Divider */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-200"></div>
@@ -154,7 +155,6 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Signup Link */}
           <button
             type="button"
             onClick={() => navigate("/signup")}
@@ -165,7 +165,6 @@ export default function Login() {
         </form>
       </div>
 
-      {/* Toast Notification */}
       {toast && (
         <Toast
           message={toast.message}

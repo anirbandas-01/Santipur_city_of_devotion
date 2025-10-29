@@ -15,9 +15,11 @@ import Restaurants from './pages/Restaurants';
 import SareeMarket from './pages/SareeMarket';
 import Reviews from './pages/Reviews';
 import ClubManagement from './pages/ClubManagement';
+import ClubDashboard from './pages/ClubDashboard';
 //signup and login 
 import Signup from './components/auth/Signup';
 import Login from './components/auth/Login';
+
 
 
 
@@ -36,6 +38,7 @@ const router = createBrowserRouter([
         { path: "/restaurants", element: <Restaurants /> },
         { path: "/sareeMarket", element: <SareeMarket /> },
         {path: "/reviews", element: <Reviews />},
+        { path: "/club-dashboard", element: <ClubDashboard /> },
         { path: "/club-management", element: <ClubManagement /> } 
         
       ],
