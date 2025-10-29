@@ -49,8 +49,15 @@ export default function ClubDashboard() {
         { headers: getAuthHeader() }
       );
 
-      if (res.data.clubs && res.data.clubs.length > 0) {
-        setClub(res.data.clubs[0]);
+      console.log('Club data response:', res.data); // Debug log
+
+      // Backend returns array directly, not wrapped in { clubs: [...] }
+      if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+        setClub(res.data[0]);
+        console.log('Club set:', res.data[0]); // Debug log
+      } else {
+        console.log('No clubs found for user'); // Debug log
+        setClub(null);
       }
     } catch (error) {
       console.error('Failed to fetch club:', error);
