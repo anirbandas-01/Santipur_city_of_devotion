@@ -16,6 +16,9 @@ import SareeMarket from './pages/SareeMarket';
 import Reviews from './pages/Reviews';
 import ClubManagement from './pages/ClubManagement';
 import ClubDashboard from './pages/ClubDashboard';
+import Profile from './pages/Profile';
+import Settings from './pages/Settings';
+
 //signup and login 
 import Signup from './components/auth/Signup';
 import Login from './components/auth/Login';
@@ -39,8 +42,9 @@ const router = createBrowserRouter([
         { path: "/sareeMarket", element: <SareeMarket /> },
         {path: "/reviews", element: <Reviews />},
         { path: "/club-dashboard", element: <ClubDashboard /> },
-        { path: "/club-management", element: <ClubManagement /> } 
-        
+        { path: "/club-management", element: <ClubManagement /> }, 
+        { path: "/profile", element: <Profile /> },
+        { path: "/settings", element: <Settings /> },
       ],
     },
       { path: "/signup", element: <Signup /> },
