@@ -125,7 +125,7 @@ const Navbar = ({ scrollToSection, sidebarOpen, toggleSidebar }) => {
                   <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-[2px] group-hover:shadow-lg transition-all duration-300">
                     <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
                       <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                        {user.name.charAt(0).toUpperCase()}
+                        {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                       </span>
                     </div>
                   </div>
@@ -193,7 +193,7 @@ const Navbar = ({ scrollToSection, sidebarOpen, toggleSidebar }) => {
                     <div className="p-5 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 border-b border-gray-100">
                       <div className="flex items-center space-x-3">
                         <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
-                          {user.name.charAt(0).toUpperCase()}
+                          {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                         </div>
                         <div className="flex-1">
                           <p className="font-bold text-gray-800 text-lg">{user.name}</p>
