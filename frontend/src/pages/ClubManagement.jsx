@@ -23,6 +23,10 @@ export default function ClubManagement() {
     email: '',
     phone: '',
     address: '',
+    location: {
+      latitude: '',
+      longitude: ''
+    },
     establishedYear: '',
     memberCount: '',
     otherEvents: '',
@@ -99,6 +103,10 @@ export default function ClubManagement() {
           email: club.email,
           phone: club.phone || '',
           address: club.address || '',
+          location: {
+            latitude: club.location?.latitude || '',
+            longitude: club.location?.longitude || ''
+          },
           establishedYear: club.establishedYear || '',
           memberCount: club.memberCount || '',
           otherEvents: club.otherEvents || '',
@@ -186,6 +194,12 @@ export default function ClubManagement() {
       // Add new fields
       if (formData.phone) submitData.append('phone', formData.phone);
       if (formData.address) submitData.append('address', formData.address);
+      
+      // Add location if available
+      if (formData.location?.latitude && formData.location?.longitude) {
+        submitData.append('location', JSON.stringify(formData.location));
+      }
+      
       if (formData.establishedYear) submitData.append('establishedYear', formData.establishedYear);
       if (formData.memberCount) submitData.append('memberCount', formData.memberCount);
       if (formData.otherEvents) submitData.append('otherEvents', formData.otherEvents);

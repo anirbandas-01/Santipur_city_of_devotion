@@ -29,6 +29,7 @@ export const addClub = async (req, res) => {
       email,
       phone,
       address,
+      location,
       establishedYear,
       memberCount,
       otherEvents,
@@ -70,6 +71,18 @@ export const addClub = async (req, res) => {
         console.log("Error parsing socialMedia:", e);
       }
     }
+    
+    // Parse location if it's a string
+      let parsedLocation = { latitude: '', longitude: '' };
+      if (location) {
+        try {
+          parsedLocation = typeof location === 'string' 
+            ? JSON.parse(location) 
+            : location;
+        } catch (e) {
+          console.log("Error parsing location:", e);
+        }
+      }
 
     const newClub = await Club.create({
       clubName: clubName.trim(),
@@ -93,6 +106,10 @@ export const addClub = async (req, res) => {
         name: req.user.name,
         email: req.user.email
       },
+       location: {
+       latitude: parsedLocation.latitude || '',
+       longitude: parsedLocation.longitude || ''
+       },
       status: 'approved'
     });
 

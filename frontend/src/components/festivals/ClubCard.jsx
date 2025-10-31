@@ -248,13 +248,19 @@ export default function ClubCard({ club, onViewDetails }) {
                     </div>
                   </div>
                   <a 
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(club.address)}`}
+                    href={
+                      club.location?.latitude && club.location?.longitude
+                        ? `https://www.google.com/maps?q=${club.location.latitude},${club.location.longitude}`
+                        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(club.address)}`
+                    }
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center space-x-2 px-4 py-2 bg-gradient-to-r from-red-50 to-pink-50 hover:from-red-100 hover:to-pink-100 rounded-lg text-sm transition-all border border-red-200 group"
                   >
                     <MapPin size={16} className="text-red-600 group-hover:scale-110 transition-transform" />
-                    <span className="text-gray-700 font-semibold">View on Google Maps</span>
+                    <span className="text-gray-700 font-semibold">
+                      {club.location?.latitude && club.location?.longitude ? '📍 View Exact Location' : 'View on Google Maps'}
+                    </span>
                     <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>

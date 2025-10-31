@@ -63,6 +63,16 @@ const clubSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    location: {
+        latitude: {
+            type: String,
+            default: ''
+        },
+        longitude: {
+            type: String,
+            default: ''
+        }
+    },
     
     // Club Details
     establishedYear: {

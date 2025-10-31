@@ -3,6 +3,7 @@ import { Upload, FileText, Mail, Save, MapPin, Calendar, Users, Link as LinkIcon
 import FestivalTypeSelector from './FestivalTypeSelector';
 import ImageUploader from './ImageUploader';
 import BackButton from './BackButton';
+import LocationPicker from './LocationPicker';
 
 const ClubForm = ({ 
   formData, 
@@ -140,6 +141,14 @@ const ClubForm = ({
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors resize-none"
                   />
                   <p className="text-xs text-gray-500 mt-1">Provide a short address for visitors</p>
+                </div>
+
+                {/* GPS Location Picker */}
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <LocationPicker 
+                    formData={formData}
+                    onFormChange={onFormChange}
+                  />
                 </div>
               </div>
             </div>
