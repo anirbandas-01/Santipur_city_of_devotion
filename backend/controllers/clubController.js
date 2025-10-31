@@ -1,4 +1,4 @@
-// backend/controllers/clubController.js
+// backend/controllers/clubController.js - UPDATED WITH NEW FIELDS
 import Club from "../models/clubModel.js";
 import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
@@ -22,7 +22,18 @@ export const addClub = async (req, res) => {
   try {
     console.log("📩 POST /api/clubs/add - Adding new club");
     
-    const { clubName, festivalType, description, email } = req.body;
+    const { 
+      clubName, 
+      festivalType, 
+      description, 
+      email,
+      phone,
+      address,
+      establishedYear,
+      memberCount,
+      otherEvents,
+      socialMedia 
+    } = req.body;
     
     if (!clubName || !festivalType) {
       return res.status(400).json({ 
@@ -48,11 +59,34 @@ export const addClub = async (req, res) => {
       imageUrls = await uploadImagesToCloudinary(req.files);
     }
 
+    // Parse social media if it's a string
+    let parsedSocialMedia = {};
+    if (socialMedia) {
+      try {
+        parsedSocialMedia = typeof socialMedia === 'string' 
+          ? JSON.parse(socialMedia) 
+          : socialMedia;
+      } catch (e) {
+        console.log("Error parsing socialMedia:", e);
+      }
+    }
+
     const newClub = await Club.create({
       clubName: clubName.trim(),
       festivalType,
       description: description || '',
       email: email || req.user.email,
+      phone: phone || '',
+      address: address || '',
+      establishedYear: establishedYear || null,
+      memberCount: memberCount || null,
+      otherEvents: otherEvents || '',
+      socialMedia: {
+        facebook: parsedSocialMedia.facebook || '',
+        instagram: parsedSocialMedia.instagram || '',
+        youtube: parsedSocialMedia.youtube || '',
+        website: parsedSocialMedia.website || ''
+      },
       images: imageUrls,
       userId: req.user.id,
       owner: {
@@ -78,11 +112,6 @@ export const addClub = async (req, res) => {
   }
 };
 
-/**
- * Get all clubs (with filters)
- * GET /api/clubs
- * PUBLIC - Returns array directly for consistency
- */
 export const getClubs = async (req, res) => {
   try {
     const { festivalType, userId, email, status } = req.query;
@@ -90,25 +119,20 @@ export const getClubs = async (req, res) => {
 
     console.log('📊 GET /api/clubs with filters:', { festivalType, userId, email, status });
 
-    // Priority 1: Filter by userId (for user's own clubs)
     if (userId) {
       filter.userId = userId;
     } 
-    // Priority 2: Filter by email (for backward compatibility)
     else if (email) {
       filter.email = email;
     } 
-    // Priority 3: Public view - only approved clubs
     else {
       filter.status = 'approved';
     }
 
-    // Add festival type filter if provided
     if (festivalType) {
       filter.festivalType = festivalType;
     }
 
-    // Admin can override status filter
     if (status && req.user?.userType === 'admin') {
       filter.status = status;
     }
@@ -119,7 +143,6 @@ export const getClubs = async (req, res) => {
 
     console.log(`✅ Found ${clubs.length} clubs with filter:`, filter);
 
-    // ALWAYS return clubs array directly for consistency
     res.json(clubs);
 
   } catch (error) {
@@ -171,7 +194,19 @@ export const updateClub = async (req, res) => {
       });
     }
 
-    const { clubName, festivalType, description, email, existingImages } = req.body;
+    const { 
+      clubName, 
+      festivalType, 
+      description, 
+      email, 
+      phone,
+      address,
+      establishedYear,
+      memberCount,
+      otherEvents,
+      socialMedia,
+      existingImages 
+    } = req.body;
     
     if (!clubName || !festivalType) {
       return res.status(400).json({ 
@@ -200,10 +235,34 @@ export const updateClub = async (req, res) => {
       newImageUrls = await uploadImagesToCloudinary(req.files);
     }
 
+    // Parse social media if it's a string
+    let parsedSocialMedia = club.socialMedia || {};
+    if (socialMedia) {
+      try {
+        parsedSocialMedia = typeof socialMedia === 'string' 
+          ? JSON.parse(socialMedia) 
+          : socialMedia;
+      } catch (e) {
+        console.log("Error parsing socialMedia:", e);
+      }
+    }
+
+    // Update club fields
     club.clubName = clubName.trim();
     club.festivalType = festivalType;
     club.description = description || '';
     club.email = email || club.email;
+    club.phone = phone || '';
+    club.address = address || '';
+    club.establishedYear = establishedYear || null;
+    club.memberCount = memberCount || null;
+    club.otherEvents = otherEvents || '';
+    club.socialMedia = {
+      facebook: parsedSocialMedia.facebook || '',
+      instagram: parsedSocialMedia.instagram || '',
+      youtube: parsedSocialMedia.youtube || '',
+      website: parsedSocialMedia.website || ''
+    };
     club.images = [...keptImages, ...newImageUrls];
 
     await club.save();
@@ -260,10 +319,7 @@ export const deleteClub = async (req, res) => {
 export const getMyClubs = async (req, res) => {
   try {
     const clubs = await Club.getByUser(req.user.id);
-
-    // Return array directly for consistency
     res.json(clubs);
-
   } catch (error) {
     console.error('Get my clubs error:', error);
     res.status(500).json({ 

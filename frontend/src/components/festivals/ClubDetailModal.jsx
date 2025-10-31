@@ -1,6 +1,6 @@
-// frontend/src/components/festivals/ClubDetailModal.jsx
+// frontend/src/components/festivals/ClubDetailModal.jsx - WITH GOOGLE MAPS
 import { useState } from 'react'
-import { X, Mail, Calendar, Image as ImageIcon, ArrowLeft, ExternalLink } from 'lucide-react'
+import { X, Mail, Calendar, Image as ImageIcon, ArrowLeft, ExternalLink, MapPin, Phone, Users, Award, Globe, Facebook, Instagram, Youtube } from 'lucide-react'
 
 export default function ClubDetailModal({ club, onClose }) {
   const [selectedImage, setSelectedImage] = useState(0)
@@ -47,8 +47,26 @@ export default function ClubDetailModal({ club, onClose }) {
       .join(' ');
   }
 
+  const getSocialIcon = (platform) => {
+    const icons = {
+      facebook: <Facebook size={18} className="text-blue-600" />,
+      instagram: <Instagram size={18} className="text-pink-600" />,
+      youtube: <Youtube size={18} className="text-red-600" />,
+      website: <Globe size={18} className="text-purple-600" />
+    };
+    return icons[platform] || <Globe size={18} />;
+  }
+
   const defaultImage = 'https://images.unsplash.com/photo-1583309122708-cde2cd665952?w=800';
   const images = club.images && club.images.length > 0 ? club.images : [defaultImage];
+
+  // Check if social media links exist
+  const hasSocialMedia = club.socialMedia && (
+    club.socialMedia.facebook || 
+    club.socialMedia.instagram || 
+    club.socialMedia.youtube || 
+    club.socialMedia.website
+  );
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
@@ -75,6 +93,9 @@ export default function ClubDetailModal({ club, onClose }) {
             </div>
             <h2 className="text-3xl font-bold mb-2">{club.clubName}</h2>
             <p className="text-pink-100">{formatFestivalType(club.festivalType)}</p>
+            {club.establishedYear && (
+              <p className="text-pink-200 text-sm mt-2">Established in {club.establishedYear}</p>
+            )}
           </div>
         </div>
 
@@ -154,20 +175,20 @@ export default function ClubDetailModal({ club, onClose }) {
               </div>
             </div>
 
-            {/* Contact Information */}
+            {/* Contact & Location Information */}
             <div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3">Contact Information</h3>
+              <h3 className="text-xl font-bold text-gray-800 mb-3">Contact & Location</h3>
               <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl space-y-3">
                 {club.email && (
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                    <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
                       <Mail size={20} className="text-purple-600" />
                     </div>
-                    <div>
+                    <div className="flex-1 min-w-0">
                       <p className="text-sm text-gray-600 font-medium">Email Address</p>
                       <a 
                         href={`mailto:${club.email}`}
-                        className="text-purple-600 hover:text-purple-700 font-semibold flex items-center space-x-1"
+                        className="text-purple-600 hover:text-purple-700 font-semibold flex items-center space-x-1 break-all"
                       >
                         <span>{club.email}</span>
                         <ExternalLink size={14} />
@@ -176,8 +197,51 @@ export default function ClubDetailModal({ club, onClose }) {
                   </div>
                 )}
 
+                {club.phone && (
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Phone size={20} className="text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 font-medium">Phone Number</p>
+                      <a 
+                        href={`tel:${club.phone}`}
+                        className="text-green-600 hover:text-green-700 font-semibold"
+                      >
+                        {club.phone}
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {club.address && (
+                  <div className="space-y-2">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <MapPin size={20} className="text-red-600" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-gray-600 font-medium">Address</p>
+                        <p className="text-gray-800 font-semibold">{club.address}</p>
+                      </div>
+                    </div>
+                    
+                    {/* Google Maps Button */}
+                    <a 
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(club.address)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white rounded-lg transition-all shadow-md hover:shadow-lg group"
+                    >
+                      <MapPin size={18} className="group-hover:scale-110 transition-transform" />
+                      <span className="font-semibold">View on Google Maps</span>
+                      <ExternalLink size={16} />
+                    </a>
+                  </div>
+                )}
+
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center flex-shrink-0">
                     <Calendar size={20} className="text-pink-600" />
                   </div>
                   <div>
@@ -187,6 +251,78 @@ export default function ClubDetailModal({ club, onClose }) {
                 </div>
               </div>
             </div>
+
+            {/* Other Events */}
+            {club.otherEvents && (
+              <div>
+                <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
+                  <Award size={24} className="mr-2 text-orange-600" />
+                  Other Events Organized
+                </h3>
+                <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-4 rounded-xl border border-orange-200">
+                  <p className="text-gray-700 leading-relaxed">{club.otherEvents}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Social Media Links */}
+            {hasSocialMedia && (
+              <div>
+                <h3 className="text-xl font-bold text-gray-800 mb-3">Connect With Us</h3>
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl">
+                  <div className="grid grid-cols-2 gap-3">
+                    {club.socialMedia.facebook && (
+                      <a 
+                        href={club.socialMedia.facebook} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center space-x-2 px-4 py-3 bg-white hover:bg-blue-50 rounded-lg transition-all border border-blue-200 group"
+                      >
+                        {getSocialIcon('facebook')}
+                        <span className="text-gray-700 font-semibold">Facebook</span>
+                        <ExternalLink size={14} className="ml-auto text-gray-400 group-hover:text-blue-600" />
+                      </a>
+                    )}
+                    {club.socialMedia.instagram && (
+                      <a 
+                        href={club.socialMedia.instagram} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center space-x-2 px-4 py-3 bg-white hover:bg-pink-50 rounded-lg transition-all border border-pink-200 group"
+                      >
+                        {getSocialIcon('instagram')}
+                        <span className="text-gray-700 font-semibold">Instagram</span>
+                        <ExternalLink size={14} className="ml-auto text-gray-400 group-hover:text-pink-600" />
+                      </a>
+                    )}
+                    {club.socialMedia.youtube && (
+                      <a 
+                        href={club.socialMedia.youtube} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center space-x-2 px-4 py-3 bg-white hover:bg-red-50 rounded-lg transition-all border border-red-200 group"
+                      >
+                        {getSocialIcon('youtube')}
+                        <span className="text-gray-700 font-semibold">YouTube</span>
+                        <ExternalLink size={14} className="ml-auto text-gray-400 group-hover:text-red-600" />
+                      </a>
+                    )}
+                    {club.socialMedia.website && (
+                      <a 
+                        href={club.socialMedia.website} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center space-x-2 px-4 py-3 bg-white hover:bg-purple-50 rounded-lg transition-all border border-purple-200 group"
+                      >
+                        {getSocialIcon('website')}
+                        <span className="text-gray-700 font-semibold">Website</span>
+                        <ExternalLink size={14} className="ml-auto text-gray-400 group-hover:text-purple-600" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Additional Info */}
             <div>
@@ -200,12 +336,31 @@ export default function ClubDetailModal({ club, onClose }) {
                   </p>
                 </div>
 
-                <div className="bg-green-50 p-4 rounded-xl">
+                {club.memberCount && (
+                  <div className="bg-green-50 p-4 rounded-xl">
+                    <p className="text-sm text-gray-600 mb-1">Club Members</p>
+                    <p className="text-gray-800 font-semibold flex items-center">
+                      <Users size={20} className="mr-2 text-green-600" />
+                      {club.memberCount} Members
+                    </p>
+                  </div>
+                )}
+
+                <div className="bg-purple-50 p-4 rounded-xl">
                   <p className="text-sm text-gray-600 mb-1">Total Images</p>
                   <p className="text-gray-800 font-semibold">
                     {images.length} {images.length === 1 ? 'Photo' : 'Photos'}
                   </p>
                 </div>
+
+                {club.establishedYear && (
+                  <div className="bg-orange-50 p-4 rounded-xl">
+                    <p className="text-sm text-gray-600 mb-1">Club Age</p>
+                    <p className="text-gray-800 font-semibold">
+                      {new Date().getFullYear() - club.establishedYear} Years Old
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 

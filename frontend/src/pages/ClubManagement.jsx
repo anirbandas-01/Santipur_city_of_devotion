@@ -1,4 +1,4 @@
-// frontend/src/pages/ClubManagement.jsx - COMPLETE FIXED VERSION
+// frontend/src/pages/ClubManagement.jsx - UPDATED WITH NEW FIELDS
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -11,7 +11,7 @@ import { getCurrentUser, getAuthHeader, isClubUser } from '../utils/auth';
 export default function ClubManagement() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Start with loading true
+  const [loading, setLoading] = useState(true);
   const [existingClub, setExistingClub] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [toast, setToast] = useState(null);
@@ -21,6 +21,17 @@ export default function ClubManagement() {
     festivalType: '',
     description: '',
     email: '',
+    phone: '',
+    address: '',
+    establishedYear: '',
+    memberCount: '',
+    otherEvents: '',
+    socialMedia: {
+      facebook: '',
+      instagram: '',
+      youtube: '',
+      website: ''
+    },
     images: []
   });
   
@@ -49,21 +60,14 @@ export default function ClubManagement() {
   };
 
   useEffect(() => {
-    console.log('ClubManagement mounted'); // Debug
-    
     const currentUser = getCurrentUser();
-    console.log('Current user:', currentUser); // Debug
     
-    // Check authentication
     if (!currentUser) {
-      console.log('No user found, redirecting to login'); // Debug
       navigate('/login');
       return;
     }
 
-    // Check if user is club type
     if (!isClubUser()) {
-      console.log('Not a club user, redirecting'); // Debug
       showToast('Access denied. This page is for club users only.', 'error');
       setTimeout(() => navigate('/'), 2000);
       return;
@@ -77,7 +81,6 @@ export default function ClubManagement() {
 
   const fetchExistingClub = async (userId) => {
     try {
-      console.log('Fetching club for userId:', userId); // Debug
       setLoading(true);
       
       const res = await axios.get(
@@ -85,12 +88,8 @@ export default function ClubManagement() {
         { headers: getAuthHeader() }
       );
       
-      console.log('Fetch club response:', res.data); // Debug
-      
-      // Backend returns array directly
       if (res.data && Array.isArray(res.data) && res.data.length > 0) {
         const club = res.data[0];
-        console.log('Club found:', club); // Debug
         
         setExistingClub(club);
         setFormData({
@@ -98,21 +97,27 @@ export default function ClubManagement() {
           festivalType: club.festivalType,
           description: club.description || '',
           email: club.email,
+          phone: club.phone || '',
+          address: club.address || '',
+          establishedYear: club.establishedYear || '',
+          memberCount: club.memberCount || '',
+          otherEvents: club.otherEvents || '',
+          socialMedia: {
+            facebook: club.socialMedia?.facebook || '',
+            instagram: club.socialMedia?.instagram || '',
+            youtube: club.socialMedia?.youtube || '',
+            website: club.socialMedia?.website || ''
+          },
           images: []
         });
         setExistingImages(club.images || []);
         setPreviewImages(club.images || []);
         setNewImageFiles([]);
       } else {
-        console.log('No clubs found for user'); // Debug
         setExistingClub(null);
       }
     } catch (error) {
       console.error('Error fetching club:', error);
-      if (error.response) {
-        console.error('Response error:', error.response.data);
-      }
-      // Don't show error toast for "no club found" - it's expected
       if (error.response?.status !== 404) {
         showToast('Failed to load club data', 'error');
       }
@@ -124,17 +129,14 @@ export default function ClubManagement() {
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     
-    // Check total image count
     const totalImages = previewImages.length + files.length;
     if (totalImages > 10) {
       showToast(`You can upload maximum 10 images. You have ${previewImages.length} images already.`, 'error');
       return;
     }
 
-    // Add new files
     setNewImageFiles(prev => [...prev, ...files]);
     
-    // Create preview
     files.forEach(file => {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -147,17 +149,14 @@ export default function ClubManagement() {
   const removeImage = (index) => {
     const imageUrl = previewImages[index];
     
-    // Check if this is an existing image or new one
     if (existingImages.includes(imageUrl)) {
       setExistingImages(prev => prev.filter(img => img !== imageUrl));
     } else {
-      // Find and remove from new image files
       const existingCount = existingImages.length;
       const newImageIndex = index - existingCount;
       setNewImageFiles(prev => prev.filter((_, i) => i !== newImageIndex));
     }
     
-    // Remove from preview
     setPreviewImages(prev => prev.filter((_, i) => i !== index));
   };
 
@@ -184,12 +183,20 @@ export default function ClubManagement() {
       submitData.append('description', formData.description);
       submitData.append('email', formData.email);
       
-      // Add existing images that weren't deleted
+      // Add new fields
+      if (formData.phone) submitData.append('phone', formData.phone);
+      if (formData.address) submitData.append('address', formData.address);
+      if (formData.establishedYear) submitData.append('establishedYear', formData.establishedYear);
+      if (formData.memberCount) submitData.append('memberCount', formData.memberCount);
+      if (formData.otherEvents) submitData.append('otherEvents', formData.otherEvents);
+      
+      // Add social media as JSON string
+      submitData.append('socialMedia', JSON.stringify(formData.socialMedia));
+      
       if (existingClub) {
         submitData.append('existingImages', JSON.stringify(existingImages));
       }
       
-      // Add new image files
       newImageFiles.forEach(image => {
         submitData.append('images', image);
       });
@@ -199,8 +206,6 @@ export default function ClubManagement() {
         : `${import.meta.env.VITE_API_URL}/clubs/add`;
       
       const method = existingClub ? 'put' : 'post';
-
-      console.log('Submitting to:', endpoint); // Debug
 
       await axios[method](endpoint, submitData, {
         headers: {
@@ -241,7 +246,6 @@ export default function ClubManagement() {
   const handleBack = () => {
     if (existingClub && isEditing) {
       setIsEditing(false);
-      // Reset to original images
       setPreviewImages(existingClub.images || []);
       setExistingImages(existingClub.images || []);
       setNewImageFiles([]);
@@ -264,7 +268,6 @@ export default function ClubManagement() {
     navigate('/festivals');
   };
 
-  // Loading state
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center pt-24">
@@ -276,7 +279,6 @@ export default function ClubManagement() {
     );
   }
 
-  // Show success screen
   if (uploadSuccess) {
     return (
       <SuccessScreen 
@@ -287,7 +289,6 @@ export default function ClubManagement() {
     );
   }
 
-  // Show club view when club exists and not editing
   if (existingClub && !isEditing) {
     return (
       <>
@@ -304,7 +305,6 @@ export default function ClubManagement() {
     );
   }
 
-  // Show form (create or edit mode)
   return (
     <>
       <ClubForm

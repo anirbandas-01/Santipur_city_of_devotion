@@ -1,26 +1,23 @@
+// backend/models/clubModel.js - UPDATED WITH NEW FIELDS
 import mongoose from "mongoose";
 
 const clubSchema = new mongoose.Schema({
-    clubName:  
-      {
-         type: String, 
-         required: [true, "Club name is required"],
-         trim: true
-      },
-      festivalType:
-      {
+    clubName: {
+        type: String, 
+        required: [true, "Club name is required"],
+        trim: true
+    },
+    festivalType: {
         type: String, 
         required: [true, "Festival type is required"]
-      },
-      description: 
-      {
+    },
+    description: {
         type: String,
         default: '',
         maxlength: 2000
-      }, 
-      images: 
-      {
-        type : [String],
+    }, 
+    images: {
+        type: [String],
         default: [],
         validate: {
             validator: function(arr) {
@@ -28,31 +25,20 @@ const clubSchema = new mongoose.Schema({
             },
             message: 'Maximum 10 images allowed'
         }
-      } ,
-      email: 
-      { 
+    },
+    email: { 
         type: String,
         required: true,
         trim: true,
         lowercase: true
-      },  
-      /* status: 
-      {
-        type: String,
-        default: "pending"
-      },
-      dateAdded: 
-      {
-        type: Date,
-        default: Date.now
-      } */
-     userId: {
+    },
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: [true, 'User ID is required'],
-        index: true // Index for faster queries
+        index: true
     },
-     owner: {
+    owner: {
         name: {
             type: String,
             required: true
@@ -62,13 +48,13 @@ const clubSchema = new mongoose.Schema({
             required: true
         }
     },
-     status: {
+    status: {
         type: String,
         enum: ['pending', 'approved', 'rejected'],
-        default: 'approved' // Auto-approve for now, can be changed later
+        default: 'approved'
     },
     
-    // Additional club details
+    // Contact Information
     phone: {
         type: String,
         default: ''
@@ -77,10 +63,22 @@ const clubSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    
+    // Club Details
     establishedYear: {
         type: Number,
         min: 1900,
         max: new Date().getFullYear()
+    },
+    memberCount: {
+        type: Number,
+        min: 1,
+        default: null
+    },
+    otherEvents: {
+        type: String,
+        default: '',
+        maxlength: 1000
     },
     
     // Social media links
@@ -107,14 +105,14 @@ const clubSchema = new mongoose.Schema({
         default: ''
     }
 
-}, { timestamps: true});
-
+}, { timestamps: true });
 
 // Indexes for better query performance
 clubSchema.index({ festivalType: 1 });
 clubSchema.index({ status: 1 });
 clubSchema.index({ userId: 1 });
 clubSchema.index({ createdAt: -1 });
+clubSchema.index({ establishedYear: 1 });
 
 // Compound index for common queries
 clubSchema.index({ status: 1, festivalType: 1 });
@@ -127,6 +125,12 @@ clubSchema.virtual('isApproved').get(function() {
 // Virtual field for follower count
 clubSchema.virtual('followerCount').get(function() {
     return this.followers ? this.followers.length : 0;
+});
+
+// Virtual field for club age
+clubSchema.virtual('clubAge').get(function() {
+    if (!this.establishedYear) return null;
+    return new Date().getFullYear() - this.establishedYear;
 });
 
 // Method to check if a user owns this club
@@ -150,5 +154,12 @@ clubSchema.statics.getApproved = function(filter = {}) {
     return this.find({ ...filter, status: 'approved' }).sort({ createdAt: -1 });
 };
 
+// Static method to get clubs by establishment year range
+clubSchema.statics.getByYearRange = function(startYear, endYear) {
+    return this.find({
+        establishedYear: { $gte: startYear, $lte: endYear },
+        status: 'approved'
+    }).sort({ establishedYear: -1 });
+};
 
 export default mongoose.model("Club", clubSchema);
