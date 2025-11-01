@@ -1,4 +1,4 @@
-// backend/models/clubModel.js - UPDATED WITH NEW FIELDS
+// backend/models/clubModel.js - UPDATED WITH TEMPLE FIELD
 import mongoose from "mongoose";
 
 const clubSchema = new mongoose.Schema({
@@ -52,6 +52,12 @@ const clubSchema = new mongoose.Schema({
         type: String,
         enum: ['pending', 'approved', 'rejected'],
         default: 'approved'
+    },
+    
+    // NEW FIELD: Temple (Mandir) - Optional
+    isTemple: {
+        type: Boolean,
+        default: false
     },
     
     // Contact Information
@@ -123,9 +129,11 @@ clubSchema.index({ status: 1 });
 clubSchema.index({ userId: 1 });
 clubSchema.index({ createdAt: -1 });
 clubSchema.index({ establishedYear: 1 });
+clubSchema.index({ isTemple: 1 }); // NEW INDEX
 
-// Compound index for common queries
+// Compound indexes
 clubSchema.index({ status: 1, festivalType: 1 });
+clubSchema.index({ status: 1, isTemple: 1 }); // NEW COMPOUND INDEX
 
 // Virtual field to check if club is approved
 clubSchema.virtual('isApproved').get(function() {
@@ -162,6 +170,15 @@ clubSchema.statics.getByUser = function(userId) {
 // Static method to get approved clubs
 clubSchema.statics.getApproved = function(filter = {}) {
     return this.find({ ...filter, status: 'approved' }).sort({ createdAt: -1 });
+};
+
+// NEW: Static method to get temple clubs only
+clubSchema.statics.getTemples = function(filter = {}) {
+    return this.find({ 
+        ...filter, 
+        status: 'approved', 
+        isTemple: true 
+    }).sort({ createdAt: -1 });
 };
 
 // Static method to get clubs by establishment year range

@@ -1,4 +1,4 @@
-// backend/controllers/clubController.js - UPDATED WITH NEW FIELDS
+// backend/controllers/clubController.js - UPDATED WITH isTemple FIELD
 import Club from "../models/clubModel.js";
 import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
@@ -33,7 +33,8 @@ export const addClub = async (req, res) => {
       establishedYear,
       memberCount,
       otherEvents,
-      socialMedia 
+      socialMedia,
+      isTemple // NEW FIELD
     } = req.body;
     
     if (!clubName || !festivalType) {
@@ -73,16 +74,16 @@ export const addClub = async (req, res) => {
     }
     
     // Parse location if it's a string
-      let parsedLocation = { latitude: '', longitude: '' };
-      if (location) {
-        try {
-          parsedLocation = typeof location === 'string' 
-            ? JSON.parse(location) 
-            : location;
-        } catch (e) {
-          console.log("Error parsing location:", e);
-        }
+    let parsedLocation = { latitude: '', longitude: '' };
+    if (location) {
+      try {
+        parsedLocation = typeof location === 'string' 
+          ? JSON.parse(location) 
+          : location;
+      } catch (e) {
+        console.log("Error parsing location:", e);
       }
+    }
 
     const newClub = await Club.create({
       clubName: clubName.trim(),
@@ -94,6 +95,7 @@ export const addClub = async (req, res) => {
       establishedYear: establishedYear || null,
       memberCount: memberCount || null,
       otherEvents: otherEvents || '',
+      isTemple: isTemple === 'true' || isTemple === true, // NEW FIELD
       socialMedia: {
         facebook: parsedSocialMedia.facebook || '',
         instagram: parsedSocialMedia.instagram || '',
@@ -106,14 +108,14 @@ export const addClub = async (req, res) => {
         name: req.user.name,
         email: req.user.email
       },
-       location: {
-       latitude: parsedLocation.latitude || '',
-       longitude: parsedLocation.longitude || ''
-       },
+      location: {
+        latitude: parsedLocation.latitude || '',
+        longitude: parsedLocation.longitude || ''
+      },
       status: 'approved'
     });
 
-    console.log("✅ Club created successfully:", newClub.clubName);
+    console.log("✅ Club created successfully:", newClub.clubName, "| isTemple:", newClub.isTemple);
 
     res.status(201).json({
       message: "Club created successfully!",
@@ -131,10 +133,10 @@ export const addClub = async (req, res) => {
 
 export const getClubs = async (req, res) => {
   try {
-    const { festivalType, userId, email, status } = req.query;
+    const { festivalType, userId, email, status, isTemple } = req.query;
     let filter = {};
 
-    console.log('📊 GET /api/clubs with filters:', { festivalType, userId, email, status });
+    console.log('📊 GET /api/clubs with filters:', { festivalType, userId, email, status, isTemple });
 
     if (userId) {
       filter.userId = userId;
@@ -152,6 +154,11 @@ export const getClubs = async (req, res) => {
 
     if (status && req.user?.userType === 'admin') {
       filter.status = status;
+    }
+
+    // NEW: Filter for temples
+    if (isTemple !== undefined) {
+      filter.isTemple = isTemple === 'true' || isTemple === true;
     }
 
     const clubs = await Club.find(filter)
@@ -222,7 +229,8 @@ export const updateClub = async (req, res) => {
       memberCount,
       otherEvents,
       socialMedia,
-      existingImages 
+      existingImages,
+      isTemple // NEW FIELD
     } = req.body;
     
     if (!clubName || !festivalType) {
@@ -274,6 +282,7 @@ export const updateClub = async (req, res) => {
     club.establishedYear = establishedYear || null;
     club.memberCount = memberCount || null;
     club.otherEvents = otherEvents || '';
+    club.isTemple = isTemple === 'true' || isTemple === true; // NEW FIELD
     club.socialMedia = {
       facebook: parsedSocialMedia.facebook || '',
       instagram: parsedSocialMedia.instagram || '',
@@ -284,7 +293,7 @@ export const updateClub = async (req, res) => {
 
     await club.save();
 
-    console.log("✅ Club updated successfully:", club.clubName);
+    console.log("✅ Club updated successfully:", club.clubName, "| isTemple:", club.isTemple);
 
     res.json({
       message: "Club updated successfully!",

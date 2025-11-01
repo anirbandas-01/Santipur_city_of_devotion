@@ -1,9 +1,10 @@
-// frontend/src/components/club/ClubForm.jsx - ENHANCED VERSION
+// frontend/src/components/club/ClubForm.jsx - WITH TEMPLE TOGGLE
 import { Upload, FileText, Mail, Save, MapPin, Calendar, Users, Link as LinkIcon, Award } from 'lucide-react';
 import FestivalTypeSelector from './FestivalTypeSelector';
 import ImageUploader from './ImageUploader';
 import BackButton from './BackButton';
 import LocationPicker from './LocationPicker';
+import TempleToggle from './TempleToggle';
 
 const ClubForm = ({ 
   formData, 
@@ -89,6 +90,12 @@ const ClubForm = ({
                 </div>
               </div>
             </div>
+
+            {/* NEW SECTION: Temple Toggle */}
+            <TempleToggle
+              isTemple={formData.isTemple || false}
+              onChange={(value) => onFormChange({ ...formData, isTemple: value })}
+            />
 
             {/* SECTION 2: Contact & Location */}
             <div className="bg-gradient-to-r from-green-50 to-teal-50 p-6 rounded-2xl">

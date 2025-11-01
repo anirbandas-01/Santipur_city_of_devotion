@@ -1,4 +1,4 @@
-// frontend/src/pages/ClubManagement.jsx - UPDATED WITH NEW FIELDS
+// frontend/src/pages/ClubManagement.jsx - UPDATED WITH isTemple
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -30,6 +30,7 @@ export default function ClubManagement() {
     establishedYear: '',
     memberCount: '',
     otherEvents: '',
+    isTemple: false, // NEW FIELD
     socialMedia: {
       facebook: '',
       instagram: '',
@@ -110,6 +111,7 @@ export default function ClubManagement() {
           establishedYear: club.establishedYear || '',
           memberCount: club.memberCount || '',
           otherEvents: club.otherEvents || '',
+          isTemple: club.isTemple || false, // NEW FIELD
           socialMedia: {
             facebook: club.socialMedia?.facebook || '',
             instagram: club.socialMedia?.instagram || '',
@@ -190,8 +192,9 @@ export default function ClubManagement() {
       submitData.append('festivalType', formData.festivalType);
       submitData.append('description', formData.description);
       submitData.append('email', formData.email);
+      submitData.append('isTemple', formData.isTemple); // NEW FIELD
       
-      // Add new fields
+      // Add other fields
       if (formData.phone) submitData.append('phone', formData.phone);
       if (formData.address) submitData.append('address', formData.address);
       
