@@ -18,6 +18,7 @@ import ClubManagement from './pages/ClubManagement';
 import ClubDashboard from './pages/ClubDashboard';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import DevotionPage from './pages/DevotionPage';
 
 //signup and login 
 import Signup from './components/auth/Signup';
@@ -45,6 +46,7 @@ const router = createBrowserRouter([
         { path: "/club-management", element: <ClubManagement /> }, 
         { path: "/profile", element: <Profile /> },
         { path: "/settings", element: <Settings /> },
+        {path: "/devotion", element: <DevotionPage /> }
       ],
     },
       { path: "/signup", element: <Signup /> },
